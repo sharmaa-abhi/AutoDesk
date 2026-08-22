@@ -2,18 +2,18 @@
 
 /* ===== DESIGN SYSTEM TOKENS ===== */
 :root {
-  /* Surface Colors */
-  --bg-canvas: #0b0d11;
-  --bg-panel: #12151b;
-  --bg-panel-elevated: #181c24;
-  --bg-card-hover: #1e2330;
-  --bg-surface-active: #252b3a;
-  --bg-glass: rgba(18, 21, 27, 0.72);
+  /* Surface Colors — Deep OLED Void / Pitch Black System */
+  --bg-canvas: #050508;
+  --bg-panel: #0a0c10;
+  --bg-panel-elevated: #10141d;
+  --bg-card-hover: #161c28;
+  --bg-surface-active: #1e2638;
+  --bg-glass: rgba(10, 12, 16, 0.75);
 
   /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-active: rgba(0, 229, 255, 0.35);
-  --border-hover: rgba(255, 255, 255, 0.16);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-active: rgba(0, 229, 255, 0.40);
+  --border-hover: rgba(255, 255, 255, 0.14);
 
   /* Accents */
   --accent-cyan: #00e5ff;
@@ -83,16 +83,16 @@ body {
 /* ===== GLASSMORPHISM ===== */
 .glass {
   background: var(--bg-glass);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(14px) saturate(180%);
-  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
 }
 
 .glass-card {
-  background: rgba(18, 21, 27, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  background: rgba(10, 12, 16, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
 }
 
 /* ===== GLOW EFFECTS ===== */

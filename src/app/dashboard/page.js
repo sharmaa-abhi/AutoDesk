@@ -230,7 +230,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#080b10] text-text-gold font-sans flex flex-col dot-grid">
+    <div className="min-h-screen bg-canvas text-text-gold font-sans flex flex-col dot-grid">
       <Navbar />
 
       <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 pt-24 pb-12">

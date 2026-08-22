@@ -63,12 +63,13 @@ autodesk-engine/
 
 ---
 
-## 🎨 Design System
-
+## 🎨 Design System (Deep OLED Void)
+ 
 | Token | Value | Usage |
 |:------|:------|:------|
-| `--bg-canvas` | `#0B0D11` | App background |
-| `--bg-panel` | `#12151B` | Cards & panels |
+| `--bg-canvas` | `#050508` | App background (Pitch Black) |
+| `--bg-panel` | `#0A0C10` | Cards & panels |
+| `--bg-panel-elevated` | `#10141D` | Modals & elevated cards |
 | `--accent-cyan` | `#00E5FF` | Primary actions |
 | `--accent-amber` | `#FFB300` | Warnings |
 | `--accent-crimson` | `#FF2A55` | Errors |

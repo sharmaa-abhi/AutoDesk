@@ -5,46 +5,46 @@
 
 ---
 
-## 1. 🖤 Surface / Background Colors
+## 1. 🖤 Surface / Background Colors (Deep OLED Void System)
 
 <table>
 <tr>
 <th>Preview</th><th>Token</th><th>Hex</th><th>Usage</th>
 </tr>
 <tr>
-<td><code style="background:#0B0D11; color:#ffffff; padding:4px 12px; border-radius:4px;">&nbsp;&nbsp;&nbsp;#0B0D11&nbsp;&nbsp;&nbsp;</code></td>
+<td><code style="background:#050508; color:#ffffff; padding:4px 12px; border-radius:4px;">&nbsp;&nbsp;&nbsp;#050508&nbsp;&nbsp;&nbsp;</code></td>
 <td><code>--bg-canvas</code></td>
-<td><b style="color:#FFD700;">#0B0D11</b></td>
-<td>Main app background</td>
+<td><b style="color:#FFD700;">#050508</b></td>
+<td>Main app background (Pitch Black / True Void)</td>
 </tr>
 <tr>
-<td><code style="background:#12151B; color:#ffffff; padding:4px 12px; border-radius:4px;">&nbsp;&nbsp;&nbsp;#12151B&nbsp;&nbsp;&nbsp;</code></td>
+<td><code style="background:#0A0C10; color:#ffffff; padding:4px 12px; border-radius:4px;">&nbsp;&nbsp;&nbsp;#0A0C10&nbsp;&nbsp;&nbsp;</code></td>
 <td><code>--bg-panel</code></td>
-<td><b style="color:#FFD700;">#12151B</b></td>
-<td>Sidebars, card panels</td>
+<td><b style="color:#FFD700;">#0A0C10</b></td>
+<td>Sidebars, card panels, container matte</td>
 </tr>
 <tr>
-<td><code style="background:#181C24; color:#ffffff; padding:4px 12px; border-radius:4px;">&nbsp;&nbsp;&nbsp;#181C24&nbsp;&nbsp;&nbsp;</code></td>
+<td><code style="background:#10141D; color:#ffffff; padding:4px 12px; border-radius:4px;">&nbsp;&nbsp;&nbsp;#10141D&nbsp;&nbsp;&nbsp;</code></td>
 <td><code>--bg-panel-elevated</code></td>
-<td><b style="color:#FFD700;">#181C24</b></td>
+<td><b style="color:#FFD700;">#10141D</b></td>
 <td>Modals, dropdowns, elevated cards</td>
 </tr>
 <tr>
-<td><code style="background:#1E2330; color:#ffffff; padding:4px 12px; border-radius:4px;">&nbsp;&nbsp;&nbsp;#1E2330&nbsp;&nbsp;&nbsp;</code></td>
+<td><code style="background:#161C28; color:#ffffff; padding:4px 12px; border-radius:4px;">&nbsp;&nbsp;&nbsp;#161C28&nbsp;&nbsp;&nbsp;</code></td>
 <td><code>--bg-card-hover</code></td>
-<td><b style="color:#FFD700;">#1E2330</b></td>
+<td><b style="color:#FFD700;">#161C28</b></td>
 <td>Card hover state</td>
 </tr>
 <tr>
-<td><code style="background:#252B3A; color:#ffffff; padding:4px 12px; border-radius:4px;">&nbsp;&nbsp;&nbsp;#252B3A&nbsp;&nbsp;&nbsp;</code></td>
+<td><code style="background:#1E2638; color:#ffffff; padding:4px 12px; border-radius:4px;">&nbsp;&nbsp;&nbsp;#1E2638&nbsp;&nbsp;&nbsp;</code></td>
 <td><code>--bg-surface-active</code></td>
-<td><b style="color:#FFD700;">#252B3A</b></td>
+<td><b style="color:#FFD700;">#1E2638</b></td>
 <td>Active / selected surface</td>
 </tr>
 <tr>
-<td><code style="background:#12151B; color:#ffffff; padding:4px 12px; border-radius:4px; opacity:0.8;">&nbsp;Glass 72%&nbsp;</code></td>
+<td><code style="background:#0A0C10; color:#ffffff; padding:4px 12px; border-radius:4px; opacity:0.8;">&nbsp;Glass 75%&nbsp;</code></td>
 <td><code>--bg-glass</code></td>
-<td><b style="color:#FFD700;">rgba(18,21,27,0.72)</b></td>
+<td><b style="color:#FFD700;">rgba(10,12,16,0.75)</b></td>
 <td>Glassmorphism overlays & tooltips</td>
 </tr>
 </table>
@@ -311,9 +311,9 @@
 
 | Property | Value |
 |:---------|:------|
-| **Background** | `rgba(18, 21, 27, 0.75)` |
-| **Border** | `1px solid rgba(255, 255, 255, 0.12)` |
-| **Backdrop Filter** | `blur(14px) saturate(180%)` |
+| **Background** | `rgba(10, 12, 16, 0.75)` |
+| **Border** | `1px solid rgba(255, 255, 255, 0.08)` |
+| **Backdrop Filter** | `blur(16px) saturate(180%)` |
 | **Box Shadow** | `0 8px 32px 0 rgba(0, 0, 0, 0.6)` |
 | **Panel Shadow** | `0 12px 36px rgba(0, 0, 0, 0.45)` |
 
@@ -323,18 +323,18 @@
 
 ```css
 :root {
-  /* ── Surface Colors ── */
-  --bg-canvas:          #0b0d11;
-  --bg-panel:           #12151b;
-  --bg-panel-elevated:  #181c24;
-  --bg-card-hover:      #1e2330;
-  --bg-surface-active:  #252b3a;
-  --bg-glass:           rgba(18, 21, 27, 0.72);
+  /* ── Surface Colors (Deep OLED Void System) ── */
+  --bg-canvas:          #050508;
+  --bg-panel:           #0a0c10;
+  --bg-panel-elevated:  #10141d;
+  --bg-card-hover:      #161c28;
+  --bg-surface-active:  #1e2638;
+  --bg-glass:           rgba(10, 12, 16, 0.75);
 
   /* ── Borders & Grids ── */
-  --border-subtle:      rgba(255, 255, 255, 0.08);
-  --border-active:      rgba(0, 229, 255, 0.35);
-  --border-hover:       rgba(255, 255, 255, 0.16);
+  --border-subtle:      rgba(255, 255, 255, 0.06);
+  --border-active:      rgba(0, 229, 255, 0.40);
+  --border-hover:       rgba(255, 255, 255, 0.14);
   --grid-dot:           rgba(255, 255, 255, 0.04);
   --grid-crosshair:     rgba(255, 255, 255, 0.035);
 
@@ -354,8 +354,8 @@
   --text-muted:         #545d68;
 
   /* ── Glassmorphism & Shadows ── */
-  --glass-blur:         blur(14px);
-  --panel-shadow:       0 12px 36px rgba(0, 0, 0, 0.45);
+  --glass-blur:         blur(16px);
+  --panel-shadow:       0 12px 36px rgba(0, 0, 0, 0.55);
 }
 ```
 

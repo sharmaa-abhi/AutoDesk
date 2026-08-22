@@ -19,14 +19,14 @@
 
 ---
 
-## 1. 🎨 Visual Identity & Color Palette
+## 1. 🎨 Visual Identity & Color Palette (Deep OLED Void)
 
 | Token | Hex / RGBA | Preview / Purpose | Description |
 | :--- | :--- | :--- | :--- |
-| `--bg-canvas` | `#0b0d11` | ⬛ Deep Charcoal / Slate-Black | Primary application background |
-| `--bg-panel` | `#12151b` | ◼️ Matte Container Panel | Non-reflective panel background |
-| `--bg-panel-elevated` | `#181c24` | ◾ Elevated Card / Bento Item | Floating container surface |
-| `--border-subtle` | `rgba(255, 255, 255, 0.08)` | ▫️ 1px Ultra-thin outline | Crisp mathematical boundary |
+| `--bg-canvas` | `#050508` | ⬛ Deep OLED Pitch Black | Primary application background (Void) |
+| `--bg-panel` | `#0a0c10` | ◼️ Obsidian Matte Panel | Non-reflective panel background |
+| `--bg-panel-elevated` | `#10141d` | ◾ Elevated Void Card | Floating container surface |
+| `--border-subtle` | `rgba(255, 255, 255, 0.06)` | ▫️ 1px Ultra-thin outline | Crisp mathematical boundary |
 | `--text-primary` | `#f3f4f6` | ⚪ Stark White | Primary headings & values |
 | `--text-secondary` | `#8b949e` | 🔘 Ash-Gray | Muted metric labels & units |
 | `--accent-cyan` | `#00e5ff` | 🔷 Electric Cyan | Safe probability & curve baseline |
@@ -177,15 +177,15 @@ flowchart TD
 
 ```css
 :root {
-  /* Surface Colors */
-  --bg-canvas: #0b0d11;
-  --bg-panel: #12151b;
-  --bg-panel-elevated: #181c24;
-  --bg-glass: rgba(18, 21, 27, 0.72);
+  /* Surface Colors (Deep OLED Void) */
+  --bg-canvas: #050508;
+  --bg-panel: #0a0c10;
+  --bg-panel-elevated: #10141d;
+  --bg-glass: rgba(10, 12, 16, 0.75);
 
   /* Borders & Grids */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-active: rgba(0, 229, 255, 0.35);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-active: rgba(0, 229, 255, 0.40);
   --grid-crosshair: rgba(255, 255, 255, 0.035);
 
   /* Precision Data Accents */
@@ -202,8 +202,8 @@ flowchart TD
   --text-muted: #545d68;
 
   /* Glassmorphism & Shadows */
-  --glass-blur: blur(14px);
-  --panel-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  --glass-blur: blur(16px);
+  --panel-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
 }
 
 /* Card / Panel Base Style */

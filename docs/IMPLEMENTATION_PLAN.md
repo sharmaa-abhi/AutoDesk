@@ -9,7 +9,7 @@ Build a stunning, pixel-perfect frontend for **AutoDesk Engine** — a college e
 - **Lucide React** (icons)
 
 ## Design System (from DESIGN_LAYOUT.md)
-- Dark theme: `#0B0D11` canvas, `#12151B` panels, `#181C24` elevated
+- Dark theme (Deep OLED Void): `#050508` canvas, `#0A0C10` panels, `#10141D` elevated
 - Accents: Cyan `#00E5FF`, Amber `#FFB300`, Crimson `#FF2A55`, Emerald `#00E676`
 - Fonts: Inter (sans) + JetBrains Mono (mono)
 - Glassmorphism overlays, dot-matrix grid background

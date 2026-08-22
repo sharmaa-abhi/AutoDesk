@@ -123,7 +123,7 @@ export default function TacticalEngineCanvas({
       </div>
 
       {/* Center 2D Tactical Field Canvas */}
-      <div className="relative flex-1 p-6 bg-[#080b10] overflow-hidden flex flex-col justify-between min-h-[460px]">
+      <div className="relative flex-1 p-6 bg-canvas overflow-hidden flex flex-col justify-between min-h-[460px]">
         {/* Tactical Pitch Background Grid Lines Overlay */}
         <div
           className="absolute inset-0 pointer-events-none opacity-40"
