@@ -132,101 +132,169 @@ export default function DashboardPage() {
     logged: 251,
   });
 
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const selectedEvent = events.find((e) => e.id === selectedEventId) || events[0];
 
-  const handleApproveEvent = (eventId) => {
-    setEvents((prev) =>
-      prev.map((e) => (e.id === eventId ? { ...e, status: "SUCCESS" } : e))
-    );
+  const handleApproveEvent = async (eventId) => {
+    setIsProcessing(true);
+    const target = events.find((e) => e.id === eventId) || selectedEvent;
 
-    setStats((prev) => ({
-      ...prev,
-      completed: prev.completed + 1,
-      pending: Math.max(0, prev.pending - 1),
-      logged: prev.logged + 1,
-    }));
+    try {
+      const res = await fetch('/api/pipeline', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'approve',
+          userName: target?.userName || 'Student',
+          userEmail: target?.userEmail || 'sharmaa24434@gmail.com',
+          requestId: eventId,
+          eventName: 'National GenAI & Web3 Hackathon 2026',
+        }),
+      });
+      const data = await res.json();
 
-    const newLog = {
-      runId: `RUN-20260822-00${runLogs.length + 43}`,
-      timestamp: new Date().toLocaleTimeString(),
-      action: `Human Approved: PDF Certificate Generated for ${selectedEvent?.userName}`,
-      trigger: "Notion HITL Station",
-      duration: "1,280",
-      status: "SUCCESS",
-    };
+      setEvents((prev) =>
+        prev.map((e) => (e.id === eventId ? { ...e, status: 'SUCCESS' } : e))
+      );
 
-    setRunLogs((prev) => [newLog, ...prev]);
+      setStats((prev) => ({
+        ...prev,
+        completed: prev.completed + 1,
+        pending: Math.max(0, prev.pending - 1),
+        logged: prev.logged + 1,
+      }));
+
+      const newLog = {
+        runId: data.runId || `RUN-20260822-00${runLogs.length + 43}`,
+        timestamp: new Date().toLocaleTimeString(),
+        action: `Live Approved: Certificate Dispatched to ${target?.userEmail || target?.userName}`,
+        trigger: 'Notion HITL Cockpit',
+        duration: `${data.durationMs || 1240}`,
+        status: 'SUCCESS',
+      };
+
+      setRunLogs((prev) => [newLog, ...prev]);
+    } catch (err) {
+      console.error('Approval failed:', err);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
-  const handleRejectEvent = (eventId) => {
-    setEvents((prev) =>
-      prev.map((e) => (e.id === eventId ? { ...e, status: "FAILED" } : e))
-    );
+  const handleRejectEvent = async (eventId) => {
+    setIsProcessing(true);
+    try {
+      const res = await fetch('/api/pipeline', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'reject',
+          requestId: eventId,
+        }),
+      });
+      const data = await res.json();
 
-    setStats((prev) => ({
-      ...prev,
-      pending: Math.max(0, prev.pending - 1),
-      logged: prev.logged + 1,
-    }));
+      setEvents((prev) =>
+        prev.map((e) => (e.id === eventId ? { ...e, status: 'FAILED' } : e))
+      );
 
-    const newLog = {
-      runId: `RUN-20260822-00${runLogs.length + 43}`,
-      timestamp: new Date().toLocaleTimeString(),
-      action: `Operator Rejected Request ${eventId} (Reason: Attendance threshold not met)`,
-      trigger: "Notion HITL Station",
-      duration: "640",
-      status: "SUCCESS",
-    };
+      setStats((prev) => ({
+        ...prev,
+        pending: Math.max(0, prev.pending - 1),
+        logged: prev.logged + 1,
+      }));
 
-    setRunLogs((prev) => [newLog, ...prev]);
+      const newLog = {
+        runId: data.runId || `RUN-20260822-00${runLogs.length + 43}`,
+        timestamp: new Date().toLocaleTimeString(),
+        action: `Operator Rejected Request ${eventId} (Attendance unverified)`,
+        trigger: 'Notion HITL Cockpit',
+        duration: `${data.durationMs || 420}`,
+        status: 'REJECTED',
+      };
+
+      setRunLogs((prev) => [newLog, ...prev]);
+    } catch (err) {
+      console.error('Reject failed:', err);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
-  const handleSimulateWebhook = (type) => {
+  const handleSimulateWebhook = async (type) => {
+    setIsProcessing(true);
     const nextNum = events.length + 109;
     const newId = `REQ-${nextNum}`;
 
-    let newEvent;
-    if (type === "GARBAGE_INPUT") {
-      newEvent = {
-        id: newId,
-        minute: "68",
-        time: new Date().toLocaleTimeString(),
-        userName: "Unknown Sender",
-        userEmail: "invalid-payload-format",
-        title: "Garbage Data Ingested",
-        rawMessage: "??? $$$ --DROP TABLE requests;",
-        category: "UNCLASSIFIED_DATA",
-        confidence: 34,
-        status: "NEEDS_FIX",
-        attendanceVerified: false,
-        priority: "CRITICAL",
-        actionPreview: "SENT_TO_HUMAN_REVIEW",
+    let payload;
+    if (type === 'GARBAGE_INPUT') {
+      payload = {
+        action: 'ingest',
+        requestId: newId,
+        userName: 'Unknown Sender',
+        userEmail: 'invalid-payload-format',
+        rawMessage: '??? $$$ --DROP TABLE requests;',
       };
     } else {
-      newEvent = {
-        id: newId,
-        minute: "68",
-        time: new Date().toLocaleTimeString(),
-        userName: "Aman Dixit",
-        userEmail: "aman.d@college.ac.in",
-        title: "Workshop Certificate Fast-Track",
-        rawMessage: "Attended full day workshop, need certificate urgently for scholarship submission.",
-        category: "CERTIFICATE_ISSUE",
-        confidence: 97,
-        status: "WAITING_APPROVAL",
-        attendanceVerified: true,
-        priority: "HIGH",
-        actionPreview: "GENERATE_PDF + EMAIL",
+      payload = {
+        action: 'ingest',
+        requestId: newId,
+        userName: 'Aman Dixit',
+        userEmail: 'sharmaa24434@gmail.com',
+        rawMessage: 'Attended full day AI workshop yesterday, need verified certificate urgently for scholarship submission.',
       };
     }
 
-    setEvents((prev) => [newEvent, ...prev]);
-    setSelectedEventId(newId);
+    try {
+      const res = await fetch('/api/pipeline', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
 
-    setStats((prev) => ({
-      ...prev,
-      pending: prev.pending + 1,
-    }));
+      const newEvent = {
+        id: newId,
+        minute: `${Math.floor(Math.random() * 80 + 10)}`,
+        time: new Date().toLocaleTimeString(),
+        userName: payload.userName,
+        userEmail: payload.userEmail,
+        title: data.ai?.title || 'Workshop Certificate Ingest',
+        rawMessage: payload.rawMessage,
+        category: data.ai?.category || (type === 'GARBAGE_INPUT' ? 'UNCLASSIFIED_DATA' : 'CERTIFICATE_ISSUE'),
+        confidence: data.ai?.confidence || (type === 'GARBAGE_INPUT' ? 34 : 97),
+        status: data.status || (type === 'GARBAGE_INPUT' ? 'NEEDS_FIX' : 'WAITING_APPROVAL'),
+        attendanceVerified: data.ai?.attendanceVerified ?? (type !== 'GARBAGE_INPUT'),
+        priority: data.ai?.priority || (type === 'GARBAGE_INPUT' ? 'CRITICAL' : 'HIGH'),
+        actionPreview: data.ai?.actionPreview || 'GENERATE_PDF + EMAIL',
+      };
+
+      setEvents((prev) => [newEvent, ...prev]);
+      setSelectedEventId(newId);
+
+      setStats((prev) => ({
+        ...prev,
+        pending: prev.pending + (newEvent.status === 'SUCCESS' ? 0 : 1),
+        completed: prev.completed + (newEvent.status === 'SUCCESS' ? 1 : 0),
+        logged: prev.logged + 1,
+      }));
+
+      const newLog = {
+        runId: data.runId || `RUN-20260822-00${runLogs.length + 43}`,
+        timestamp: new Date().toLocaleTimeString(),
+        action: `Live Ingestion: Gemini Analyzed & Synced to Notion (${newId})`,
+        trigger: 'Webhook Ingest Gateway',
+        duration: `${data.durationMs || 1420}`,
+        status: data.status === 'NEEDS_FIX' ? 'ALERT' : 'SUCCESS',
+      };
+
+      setRunLogs((prev) => [newLog, ...prev]);
+    } catch (err) {
+      console.error('Webhook simulation failed:', err);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (

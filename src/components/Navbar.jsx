@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Zap, Activity, Users, Home } from "lucide-react";
+import { Menu, X, Zap, Activity, Users, Home, Sparkles } from "lucide-react";
+import SubmitRequestModal from "@/components/SubmitRequestModal";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -14,6 +15,7 @@ const navLinks = [
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -71,6 +73,14 @@ export default function Navbar() {
             );
           })}
           
+          <button
+            onClick={() => setModalOpen(true)}
+            className="px-3.5 py-1.5 rounded-lg bg-gold/10 text-gold border border-gold/30 hover:bg-gold/20 hover:border-gold/50 transition-all text-xs font-mono font-semibold flex items-center gap-1.5"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-gold" />
+            Submit Ticket
+          </button>
+
           <Link
             href="/dashboard"
             className="px-4 py-2 rounded-lg bg-cyan-accent/10 text-cyan-accent border border-cyan-accent/30 hover:bg-cyan-accent/20 hover:border-cyan-accent/50 hover:shadow-[0_0_20px_rgba(0,229,255,0.2)] transition-all duration-300 text-xs font-mono font-semibold flex items-center gap-2"
@@ -88,6 +98,8 @@ export default function Navbar() {
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
+
+      <SubmitRequestModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
 
       {/* Mobile Menu */}
       <AnimatePresence>
@@ -115,6 +127,16 @@ export default function Navbar() {
                   )}
                 </Link>
               ))}
+              <button
+                onClick={() => {
+                  setMobileOpen(false);
+                  setModalOpen(true);
+                }}
+                className="px-4 py-2.5 rounded-lg bg-gold/10 text-gold border border-gold/30 text-xs font-mono font-semibold text-center flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-gold" />
+                Submit Student Ticket ✨
+              </button>
               <Link
                 href="/dashboard"
                 onClick={() => setMobileOpen(false)}

@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
+import SubmitRequestModal from "@/components/SubmitRequestModal";
 
 export default function Hero() {
+  const [modalOpen, setModalOpen] = useState(false);
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden dot-grid pt-20">
       {/* Floating Orbs */}
@@ -60,20 +63,23 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.8 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <a
-            href="#how-it-works"
+          <button
+            onClick={() => setModalOpen(true)}
             className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-accent to-[#006994] text-canvas font-bold text-sm hover:shadow-[0_0_30px_rgba(0,229,255,0.3)] transition-all duration-300 transform hover:scale-105"
           >
-            See How It Works
+            <Sparkles className="w-4 h-4 text-canvas" />
+            Submit Live Ticket
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </a>
+          </button>
           <a
-            href="/about"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-border-subtle text-gold font-semibold text-sm hover:border-gold/30 hover:bg-gold/5 transition-all duration-300"
+            href="/dashboard"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-cyan-accent/30 text-cyan-accent font-semibold text-sm hover:bg-cyan-accent/10 transition-all duration-300"
           >
-            Meet the Team
+            Open Live Cockpit ⚡
           </a>
         </motion.div>
+
+        <SubmitRequestModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
 
         {/* Bottom Formula */}
         <motion.div
