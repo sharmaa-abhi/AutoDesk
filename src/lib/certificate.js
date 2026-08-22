@@ -3,7 +3,7 @@
  */
 export function generateCertificateHTML({
   studentName = 'Student Participant',
-  eventName = 'National GenAI & Web3 Hackathon 2026',
+  eventName = 'Automate India Hackathon 2026',
   certificateId = `CERT-${Date.now().toString(36).toUpperCase()}`,
   issueDate = new Date().toLocaleDateString('en-US', {
     month: 'long',

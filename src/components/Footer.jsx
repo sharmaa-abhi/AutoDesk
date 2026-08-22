@@ -22,7 +22,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-text-muted text-xs max-w-xs text-center md:text-left">
-              An autonomous backend automation service built for the Notion Track hackathon.
+              An autonomous backend automation service built for the Automate India Hackathon.
             </p>
           </div>
 
@@ -62,7 +62,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="mt-8 pt-6 border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-text-muted text-xs">
-            © 2026 AutoDesk Engine. Built with 🔥 for the Notion Track Hackathon.
+            © 2026 AutoDesk Engine. Built with 🔥 for Automate India.
           </p>
           <div className="flex items-center gap-2 text-text-muted text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-emerald-accent animate-pulse" />

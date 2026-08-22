@@ -149,7 +149,7 @@ export default function DashboardPage() {
           userName: target?.userName || 'Student',
           userEmail: target?.userEmail || 'sharmaa24434@gmail.com',
           requestId: eventId,
-          eventName: 'National GenAI & Web3 Hackathon 2026',
+          eventName: 'Automate India',
         }),
       });
       const data = await res.json();

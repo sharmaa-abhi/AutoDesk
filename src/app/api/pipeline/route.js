@@ -23,7 +23,7 @@ export async function POST(request) {
       userName = 'Rahul Sharma',
       userEmail = 'sharmaa24434@gmail.com',
       rawMessage = "Sir I attended the 2-day GenAI workshop but didn't receive my certificate yet. Please verify attendance.",
-      eventName = 'National GenAI & Web3 Hackathon 2026',
+      eventName = 'Automate India',
       requestId = `REQ-${Math.floor(100 + Math.random() * 900)}`,
     } = body;
 

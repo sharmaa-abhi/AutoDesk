@@ -24,7 +24,7 @@ export default function Hero() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-panel border border-border-subtle text-text-secondary text-xs font-mono mb-8"
         >
           <Sparkles className="w-3.5 h-3.5 text-cyan-accent" />
-          <span>Hackathon MVP — Notion Track</span>
+          <span>Automate India 2026 — Notion Track</span>
           <span className="px-2 py-0.5 rounded-full bg-cyan-accent/10 text-cyan-accent text-[10px] font-semibold">
             LIVE
           </span>

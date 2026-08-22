@@ -29,7 +29,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
           userName: name || "Student Participant",
           userEmail: email || "sharmaa24434@gmail.com",
           rawMessage: message,
-          eventName: "National GenAI & Web3 Hackathon 2026",
+          eventName: "Automate India",
         }),
       });
 

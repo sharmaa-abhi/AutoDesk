@@ -126,4 +126,4 @@ All deep architectural diagrams, specs, and hackathon rules are documented in th
 
 ## 📜 License & Hackathon Credit
 
-Built with 🔥 for the **Notion Track Hackathon — 2026**.
+Built with 🔥 for **Automate India 2026** (Notion Track).
