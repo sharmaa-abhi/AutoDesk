@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ⚡ AutoDesk Engine
 
-## Getting Started
+> **Kill One Boring Job. Completely.**
 
-First, run the development server:
+An autonomous backend automation service that eliminates repetitive college tasks — from certificate requests to attendance tracking. Built for the **Notion Track Hackathon**.
+
+---
+
+## 🚀 Quick Start
 
 ```bash
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Open in browser
+# http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+autodesk-engine/
+├── docs/                           # 📖 Documentation
+│   ├── COLOR_SYSTEM.md             #    Complete color palette & tokens
+│   ├── DESIGN_LAYOUT.md            #    UI wireframes & design specs
+│   ├── FLOWCHARTS.md               #    System architecture diagrams
+│   ├── IMPLEMENTATION_PLAN.md      #    Build plan & checklist
+│   ├── NOTION_TRACK_GUIDE.md       #    Hackathon theme rules & guide
+│   ├── Notion_Track_Complete_Conversation.md  #  Full problem breakdown
+│   └── color-palette.html          #    Interactive color swatch viewer
+│
+├── src/                            # 💻 Source Code
+│   ├── app/                        #    Next.js App Router
+│   │   ├── globals.css             #    Design system tokens & animations
+│   │   ├── layout.js               #    Root layout (Inter + JetBrains Mono)
+│   │   ├── page.js                 #    🏠 Home / Landing page
+│   │   └── about/
+│   │       └── page.js             #    👥 About / Team page
+│   │
+│   └── components/                 #    Reusable UI Components
+│       ├── Navbar.jsx              #    Fixed glassmorphism navbar
+│       ├── Hero.jsx                #    Hero section with floating orbs
+│       ├── HowItWorks.jsx          #    6-step pipeline flow
+│       ├── Features.jsx            #    4 bento feature cards
+│       ├── Architecture.jsx        #    System blueprint flowchart
+│       ├── StatsStrip.jsx          #    Animated counter stats
+│       ├── Footer.jsx              #    Footer with system status
+│       ├── TeamCard.jsx            #    Glass team member card
+│       └── TechStack.jsx           #    Tech stack badges
+│
+├── public/                         #    Static assets
+├── .env.example                    #    Frontend env template
+├── .env.backend.example            #    Backend env template
+├── next.config.mjs                 #    Next.js configuration
+├── package.json                    #    Dependencies
+└── README.md                       #    ← You are here
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🎨 Design System
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Token | Value | Usage |
+|:------|:------|:------|
+| `--bg-canvas` | `#0B0D11` | App background |
+| `--bg-panel` | `#12151B` | Cards & panels |
+| `--accent-cyan` | `#00E5FF` | Primary actions |
+| `--accent-amber` | `#FFB300` | Warnings |
+| `--accent-crimson` | `#FF2A55` | Errors |
+| `--accent-emerald` | `#00E676` | Success |
+| `--text-gold` | `#FFD700` | Heading text |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> See [`docs/COLOR_SYSTEM.md`](docs/COLOR_SYSTEM.md) for the full palette.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Technology | Purpose |
+|:-----------|:--------|
+| **Next.js** | Frontend framework (App Router) |
+| **Tailwind CSS v4** | Styling |
+| **Framer Motion** | Animations |
+| **Lucide React** | Icons |
+| **Inter + JetBrains Mono** | Typography |
+
+---
+
+## 📊 System Flow
+
+```
+⚡ Trigger → 💻 Your Code → 🧠 AI → 🙋 Approval → 🌍 Action → 📜 Run Log
+```
+
+> See [`docs/FLOWCHARTS.md`](docs/FLOWCHARTS.md) for full architecture diagrams.
+
+---
+
+## 👥 Team
+
+- **Abhi Sharma** — Full-Stack Developer & System Architect
+- **Team Member 2** — *(to be updated)*
+
+---
+
+## 📜 License
+
+Built with 🔥 for the Notion Track Hackathon — 2026.
