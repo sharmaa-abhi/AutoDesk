@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Linkedin, Globe } from "lucide-react";
+import { Code2, Link, Globe } from "lucide-react";
 
 export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {
   return (
@@ -36,7 +36,7 @@ export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {
             rel="noopener noreferrer"
             className="w-9 h-9 rounded-lg bg-panel border border-border-subtle flex items-center justify-center text-text-secondary hover:text-gold hover:border-gold/20 transition-all duration-200"
           >
-            <Github className="w-4 h-4" />
+            <Code2 className="w-4 h-4" />
           </a>
         )}
         {links.linkedin && (
@@ -46,7 +46,7 @@ export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {
             rel="noopener noreferrer"
             className="w-9 h-9 rounded-lg bg-panel border border-border-subtle flex items-center justify-center text-text-secondary hover:text-cyan-accent hover:border-cyan-accent/20 transition-all duration-200"
           >
-            <Linkedin className="w-4 h-4" />
+            <Link className="w-4 h-4" />
           </a>
         )}
         {links.website && (

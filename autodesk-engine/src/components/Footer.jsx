@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Zap, Github, ExternalLink } from "lucide-react";
+import { Zap, Code2, ExternalLink } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -46,7 +46,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="text-text-secondary hover:text-gold transition-colors"
             >
-              <Github className="w-5 h-5" />
+              <Code2 className="w-5 h-5" />
             </a>
             <a
               href="https://notion.so"
