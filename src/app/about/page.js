@@ -10,7 +10,7 @@ export const metadata = {
 
 const teamMembers = [
   {
-    name: "Abhi Sharma",
+    name: "Abhishek Sharma",
     role: "Full-Stack Developer & System Architect",
     bio: "Passionate about building real automation systems that solve actual problems. Specializes in backend engineering, AI integration, and creating pixel-perfect interfaces.",
     links: {
@@ -19,11 +19,12 @@ const teamMembers = [
     },
   },
   {
-    name: "Team Member",
-    role: "Developer",
-    bio: "A dedicated team member contributing to the AutoDesk Engine project. Bringing creativity and technical skills to the hackathon.",
+    name: "Akash Gautam",
+    role: "Full-Stack Developer & AI Systems Engineer",
+    bio: "Dedicated to building high-performance autonomous pipelines, intelligent human-in-the-loop workflows, and seamless user experiences.",
     links: {
       github: "https://github.com",
+      linkedin: "https://linkedin.com",
     },
   },
 ];

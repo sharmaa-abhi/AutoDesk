@@ -119,7 +119,8 @@ All deep architectural diagrams, specs, and hackathon rules are documented in th
 
 ## 👥 Team
 
-- **Abhi Sharma** — *Full-Stack Developer & System Architect*
+- **Abhishek Sharma** — *Full-Stack Developer & System Architect*
+- **Akash Gautam** — *Full-Stack Developer & AI Systems Engineer*
 
 ---
 

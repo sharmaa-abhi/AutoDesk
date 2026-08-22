@@ -35,8 +35,8 @@ Sections in order:
 
 1. **Page Header** — "The Team Behind AutoDesk Engine"
 2. **Team Cards** — 2 glassmorphism cards with name, role, links
-   - Abhi Sharma (placeholder for photo)
-   - Member 2 (placeholder)
+   - Abhishek Sharma
+   - Akash Gautam
 3. **Tech Stack Section** — Visual grid of tech used (Next.js, Tailwind, Gemini AI, Notion API, Node.js, Resend)
 4. **Project Story** — Short paragraph about the hackathon problem
 5. **Footer** — same as Home
