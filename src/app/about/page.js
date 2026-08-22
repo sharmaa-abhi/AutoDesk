@@ -15,7 +15,7 @@ const teamMembers = [
     bio: "Passionate about building real automation systems that solve actual problems. Specializes in backend engineering, AI integration, and creating pixel-perfect interfaces.",
     links: {
       github: "https://github.com",
-      linkedin: "https://linkedin.com",
+      linkedin: "https://www.linkedin.com/in/abhishek-sharma-88876b389/",
     },
   },
   {
@@ -24,7 +24,7 @@ const teamMembers = [
     bio: "Dedicated to building high-performance autonomous pipelines, intelligent human-in-the-loop workflows, and seamless user experiences.",
     links: {
       github: "https://github.com",
-      linkedin: "https://linkedin.com",
+      linkedin: "https://www.linkedin.com/in/akash-gautam-07664230a/",
     },
   },
 ];
