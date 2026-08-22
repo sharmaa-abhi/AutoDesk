@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import { Client } from '@notionhq/client';
+import { getResolvedDatabaseId } from '@/lib/notion';
 
 export async function GET() {
   try {
     const notionApiKey = process.env.NOTION_API_KEY;
-    const dbId = process.env.NOTION_REQUESTS_DATABASE_ID;
+    const dbId = getResolvedDatabaseId(process.env.NOTION_REQUESTS_DATABASE_ID);
 
     if (!notionApiKey) {
       return NextResponse.json(
@@ -15,14 +16,42 @@ export async function GET() {
 
     const notion = new Client({ auth: notionApiKey });
 
-    // Test retrieving database schema or querying entries
-    const dbInfo = await notion.databases.retrieve({ database_id: dbId });
+    // Test creating a live verification entry
+    const testPage = await notion.pages.create({
+      parent: { database_id: dbId },
+      properties: {
+        Name: [
+          {
+            text: {
+              content: `🧪 Connection Test — ${new Date().toLocaleTimeString()}`,
+            },
+          },
+        ],
+      },
+      children: [
+        {
+          object: 'block',
+          type: 'callout',
+          callout: {
+            rich_text: [
+              {
+                text: {
+                  content: '✅ Notion Database connection verified successfully!',
+                },
+              },
+            ],
+            icon: { emoji: '🚀' },
+          },
+        },
+      ],
+    });
 
     return NextResponse.json({
       success: true,
-      message: 'Notion Database successfully connected!',
-      databaseTitle: dbInfo.title?.[0]?.plain_text || 'Untitled',
-      properties: Object.keys(dbInfo.properties || {}),
+      message: 'Notion Database successfully connected and verified!',
+      databaseId: dbId,
+      createdPageId: testPage.id,
+      pageUrl: testPage.url,
     });
   } catch (error) {
     return NextResponse.json(
