@@ -14,7 +14,7 @@ This master audit document provides a granular, end-to-end verification and tech
  │                                AUTODESK ENGINE WORKFLOW ARCHITECTURE                            │
  ├──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────────────┤
  │ 1. INGEST    │ 2. SANITIZE  │ 3. CLASSIFY  │ 4. ROUTE/HITL│ 5. GENERATE  │ 6. DISPATCH & AUDIT  │
- │ Webhook / API│ MD5 Dedup    │ Gemini AI    │ Notion Queue │ Puppeteer    │ SMTP / Resend        │
+ │ Webhook / API│ MD5 Dedup    │ Gemini AI    │ Notion Queue │ HTML Template│ Resend / SMTP        │
  │ Inbound Data │ Sanitization │ NLP / Intent │ Human Action │ Cert Engine  │ Notion Run Log Proof │
  └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┴──────────────────────┘
 ```
@@ -110,22 +110,24 @@ Converts unstructured, colloquial, or multilingual complaint text into structure
 - **Prompt Format**: Zero-shot JSON instruction enforcing strict schema adherence.
 - **Deterministic Heuristic Fallback**: Active in case of missing API keys, rate limits, or network timeouts.
 
-#### 🧠 Output Schema Specification
+#### 🧠 Output Schema Specification (matches `gemini.js` prompt contract)
 ```json
 {
-  "category": "CERTIFICATE_REQUEST",
-  "urgency": "HIGH",
-  "sentiment": "FRUSTRATED",
+  "title": "Certificate Request GenAI",
+  "category": "CERTIFICATE_ISSUE",
   "confidence": 94,
-  "attendanceVerified": true,
-  "extractedName": "Rahul Sharma",
-  "extractedEmail": "rahul.sharma@example.com",
-  "extractedEvent": "GenAI Workshop",
   "priority": "HIGH",
   "status": "WAITING_APPROVAL",
-  "recommendedAction": "Verify Attendance & Issue Certificate"
+  "attendanceVerified": true,
+  "sentiment": "FRUSTRATED",
+  "actionPreview": "GENERATE_PDF + EMAIL",
+  "extractedName": "Rahul Sharma",
+  "extractedEmail": "rahul.sharma@example.com",
+  "reasoning": "Student attended AI workshop and is requesting certificate reissue."
 }
 ```
+
+> **Note**: Allowed categories are: `CERTIFICATE_ISSUE`, `DUPLICATE_REGISTRATION`, `ATTENDANCE_VERIFICATION`, `CALENDAR_RESCHEDULE`, `UNCLASSIFIED_DATA`. Confidence is bounded `50–99`. Model used: `gemini-3.6-flash`.
 
 #### 🛡️ AI Fallback Audit
 - [x] If `GEMINI_API_KEY` is missing or invalid, engine invokes local keyword classifier (`src/lib/gemini.js`).
@@ -142,19 +144,18 @@ Creates real-time operational records in Notion databases to serve as the unifie
 #### ⚙️ Technical Implementation
 - **SDK**: `@notionhq/client` Client initialized with `NOTION_API_KEY`.
 - **Module File**: [`src/lib/notion.js`](file:///src/lib/notion.js)
-- **Target Database**: `NOTION_REQUESTS_DB_ID`
+- **Target Database**: `NOTION_REQUESTS_DATABASE_ID`
 
-#### 🗄️ Database Property Schema
-| Property Name | Notion Type | Description / Sample Value |
-|:--------------|:------------|:---------------------------|
-| `Title` / `Name` | `title` | Student Request Title (`REQ-742: Rahul Sharma`) |
-| `Student Name` | `rich_text` | Extracted Full Name |
-| `Student Email` | `email` | Extracted & Normalized Email |
-| `Category` | `select` | `Certificate Request`, `Attendance Fix`, etc. |
-| `Status` | `select` | `Waiting Approval`, `Approved`, `Rejected`, `Completed` |
-| `Priority` | `select` | `High`, `Medium`, `Low` |
-| `Confidence` | `number` | Confidence percentage (`94`) |
-| `Raw Message` | `rich_text` | Unaltered original student input |
+#### 🗄️ Page Creation Schema
+Notion pages are created with a `Name` title property and structured block children (no separate column properties):
+
+| Block | Notion Type | Content Format |
+|:------|:------------|:---------------|
+| **Page Title** | `title` (Name property) | `"{userName} — {title \| category}"` |
+| **Metadata Callout** | `callout` block (⚡ emoji) | `"🏷️ CATEGORY: {category} \| ⚡ PRIORITY: {priority} \| 📊 CONFIDENCE: {confidence}% \| 🔄 STATUS: {status}"` |
+| **Details Paragraph** | `paragraph` block | `"👤 Student Name: {userName}\n📧 Email: {userEmail}\n📝 Message: {rawMessage}"` |
+
+> **Fallback**: If `NOTION_API_KEY` or database ID is not configured, returns a mock response `{ mock: true, id: 'NOTION-MOCK-...' }` without failing the pipeline.
 
 #### 🛡️ Audit Verification Points
 - [x] Notion API Client handles missing keys gracefully by falling back to simulation mode for dev environments.
@@ -183,8 +184,8 @@ flowchart TD
 | State Transition | Trigger | Action Executed |
 |:-----------------|:--------|:----------------|
 | `NEW` ➔ `WAITING_APPROVAL` | Ingestion completes with review flag | Pushed to Operator Queue |
-| `WAITING_APPROVAL` ➔ `APPROVED` | Operator clicks "Approve" | Generates PDF + Dispatches Email |
-| `WAITING_APPROVAL` ➔ `REJECTED` | Operator clicks "Reject" | Logs Rejection Reason in Run Log |
+| `WAITING_APPROVAL` ➔ `APPROVED` | Operator clicks "Approve" via dashboard | Generates HTML certificate + Dispatches Email |
+| `WAITING_APPROVAL` ➔ `REJECTED` | Operator clicks "Reject" via dashboard | Logs Rejection to Notion Run Log |
 | `WAITING_APPROVAL` ➔ `OVERRIDDEN`| Operator edits name/email + approves | Executes with overridden parameters |
 
 ---
@@ -195,18 +196,19 @@ flowchart TD
 Autonomous rendering of tamper-proof, high-resolution vector certificates embedded with verifiable metadata.
 
 #### ⚙️ Technical Implementation
-- **Template Engine**: [`src/lib/certificate.js`](file:///src/lib/certificate.js)
-- **Styling Architecture**: Mathematical CSS grid, vector borders, gold-foil gradients, and official security seals.
-- **Embedded Security Tokens**:
-  - `Certificate ID`: `CERT-<BASE36_TIMESTAMP>`
-  - `Verification Hash`: SHA-256 integrity signature
-  - `Issue Timestamp`: ISO 8601 UTC timestamp
-  - `Issuer Stamp`: AutoDesk Engine Digital Certification Seal
+- **Template Engine**: [`src/lib/certificate.js`](file:///src/lib/certificate.js) — Pure HTML/CSS template string rendering via `generateCertificateHTML()`.
+- **Rendering Method**: Server-side HTML string generation (no headless browser / Puppeteer).
+- **Styling**: Radial gradient background (`#10141D` → `#0A0C10`), amber border (`#FFB300`), cyan corner decorations, gold heading text.
+- **Embedded Metadata Fields**:
+  - `Certificate ID`: `CERT-<BASE36_TIMESTAMP>` (e.g., `CERT-LZ5K2M8Q`)
+  - `Issue Date`: Localized via `new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })`
+  - `Verification Label`: `CRYPTOGRAPHICALLY VERIFIED` badge
+  - `Issuer Signature`: `AutoDesk Autonomous Engine` — Automated HITL Verification Authority
 
 #### 🛡️ Generation Verification Points
-- [x] Responsive layout with print-ready A4 dimensions (`1122px x 793px`).
-- [x] Complete isolation of user input to prevent CSS/HTML injection.
-- [x] Dynamic student name and event name interpolation.
+- [x] Certificate card is `800px` wide with `50px 60px` padding, `24px` border radius.
+- [x] Dynamic `${studentName}` and `${eventName}` interpolation with CSS-isolated styling.
+- [x] Complete standalone HTML document (includes `<!DOCTYPE html>`, `<head>`, inline `<style>` block).
 
 ---
 
@@ -217,10 +219,10 @@ Transmits the verified certificate directly to the student's email inbox with de
 
 #### ⚙️ Technical Implementation
 - **Dispatch Module**: [`src/lib/mailer.js`](file:///src/lib/mailer.js) and [`src/lib/resend.js`](file:///src/lib/resend.js)
-- **Providers Supported**:
-  1. **Resend API**: Modern REST transactional delivery (`RESEND_API_KEY`)
-  2. **Nodemailer SMTP**: Standard RFC 5321 SMTP gateway (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`)
-  3. **Universal Mock Streamer**: Fallback logging for sandboxed testing
+- **Dispatch Chain** (priority order in `sendUniversalEmail()`):
+  1. **Resend API** (attempted first if `RESEND_API_KEY` is set and not placeholder): REST delivery via `resend.emails.send()`
+  2. **Gmail SMTP** (fallback if Resend fails or is unconfigured): Nodemailer via `service: 'gmail'` with `SMTP_USER` + `SMTP_PASS`
+  3. **Error**: Throws `"No email provider configured"` if neither provider is available
 
 #### 🛡️ Dispatch Audit
 - [x] Multipart email format (Rich HTML body + plain text preview).

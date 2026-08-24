@@ -85,22 +85,24 @@ If a duplicate arrives within 24h:
 ### 🎯 Objective
 Extract intent, name, event details, sentiment, urgency, and evaluate confidence.
 
-### 🧠 Gemini Flash Extraction Contract
+### 🧠 Gemini Flash Extraction Contract (matches `gemini.js` prompt)
 ```json
 {
-  "category": "CERTIFICATE_REQUEST",
-  "urgency": "HIGH",
-  "sentiment": "URGENT",
+  "title": "Certificate Request AI Bootcamp",
+  "category": "CERTIFICATE_ISSUE",
   "confidence": 96,
-  "attendanceVerified": true,
-  "extractedName": "Ananya Verma",
-  "extractedEmail": "ananya.v@university.edu.in",
-  "extractedEvent": "National AI Bootcamp 2026",
   "priority": "HIGH",
   "status": "WAITING_APPROVAL",
-  "recommendedAction": "Verify Attendance & Issue Certificate"
+  "attendanceVerified": true,
+  "sentiment": "URGENT",
+  "actionPreview": "GENERATE_PDF + EMAIL",
+  "extractedName": "Ananya Verma",
+  "extractedEmail": "ananya.v@university.edu.in",
+  "reasoning": "Student attended full AI bootcamp and urgently needs certificate for college submission."
 }
 ```
+
+> **Model**: `gemini-3.6-flash` via `@google/genai` SDK. Allowed categories: `CERTIFICATE_ISSUE`, `DUPLICATE_REGISTRATION`, `ATTENDANCE_VERIFICATION`, `CALENDAR_RESCHEDULE`, `UNCLASSIFIED_DATA`.
 
 ### ⏱️ Latency Benchmark
 - **Target**: `< 1,200ms`
@@ -124,19 +126,24 @@ Create structured tickets in Notion. Route high-confidence requests for automati
 
 ---
 
-## 5. Stage 5: Certificate PDF & HTML Vector Render Audit
+## 5. Stage 5: Certificate HTML Template Render Audit
 
 ### 🎯 Objective
-Generate a print-ready vector document with unique ID, cryptographic signature, and styled layout.
+Generate a styled HTML certificate document with unique ID and verifiable metadata via server-side template string rendering.
 
-### 🎨 Rendering Specifications
-- **Dimensions**: `1122px x 793px` (Landscape A4)
-- **Primary Font**: `Cinzel`, `Inter`, `Cinzel Decorative`
+### 🎨 Rendering Specifications (from `certificate.js`)
+- **Method**: Pure HTML/CSS template string via `generateCertificateHTML()` — no headless browser or Puppeteer
+- **Card Width**: `800px` with `50px 60px` padding
+- **Background**: Radial gradient `#10141D` → `#0A0C10`, bordered with `2px solid #FFB300`
+- **Border Radius**: `24px`
+- **Primary Font**: `Segoe UI`, Tahoma, Geneva, Verdana, sans-serif
+- **Heading Font**: System default (bold `32px`, `#FFD700` gold, uppercase, `letter-spacing: 3px`)
+- **Recipient Name**: `38px`, white `#FFFFFF`, underlined with amber `#FFB300`
 - **Dynamic Variables**:
-  - `studentName`: Formatted in Gold Gradient
-  - `eventName`: Injected with dynamic uppercase styling
-  - `certificateId`: Formatted as `CERT-XXXX-XXXX`
-  - `date`: Formatted with dynamic localized date string
+  - `studentName`: Interpolated in recipient name div
+  - `eventName`: Injected with cyan `#00E5FF` event title styling
+  - `certificateId`: Format `CERT-<BASE36_TIMESTAMP>` (e.g., `CERT-LZ5K2M8Q`)
+  - `issueDate`: Localized via `toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })`
 
 ---
 

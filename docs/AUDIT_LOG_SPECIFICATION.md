@@ -13,17 +13,20 @@ Every action taken by the AutoDesk Engine—whether autonomous AI triage, MD5 sp
 
 ## 🗄️ Notion Run Log Database Schema
 
-The Notion Run Log database requires the following structured properties:
+The `logRunToNotion()` function in [`src/lib/notion.js`](file:///src/lib/notion.js) creates Notion pages with a `Name` title property and structured block children. The target database is specified by `NOTION_RUN_LOG_DATABASE_ID`.
 
-| Property Name | Notion Property Type | Format / Allowed Values | Purpose |
-|:--------------|:---------------------|:------------------------|:--------|
-| `Run ID` / `Name` | `title` | `RUN-<TIMESTAMP>` or `RUN-YYYYMMDD-XXXX` | Unique primary key for each run |
-| `Action Taken` | `rich_text` | Descriptive summary of executed task | What the backend actually did |
-| `Trigger Source` | `select` | `Webhook Ingestion`, `Notion Operator Cockpit`, `Sanitization & Dedup Gate`, `Cron Sync Worker` | The exact event that kicked off the run |
-| `Duration (ms)` | `number` | Positive integer (e.g. `842`) | Execution latency in milliseconds |
-| `Status` | `select` | `SUCCESS`, `BLOCKED`, `WAITING_APPROVAL`, `REJECTED`, `FAILED` | Final outcome status |
-| `Created Time` | `created_time` | ISO 8601 UTC timestamp | Automatically inserted by Notion server |
-| `Created By` | `created_by` | Notion Bot Integration Token | Proves automated code execution |
+### Page Structure (as written by `notion.pages.create()`)
+
+| Element | Notion Type | Content Format |
+|:--------|:------------|:---------------|
+| **Page Title** | `title` (Name property) | `"📜 {runId} — {status}"` (e.g., `📜 RUN-1724458900123 — SUCCESS`) |
+| **Telemetry Callout** | `callout` block (✅ or ⚠️ emoji) | `"⏱️ Execution Duration: {duration}ms \| 🎯 Trigger: {trigger} \| 🚦 Status: {status}"` |
+| **Action Summary** | `paragraph` block | `"Action Summary: {action}\nTimestamp: {ISO 8601 UTC}"` |
+| **Created Time** | Notion auto-field | ISO 8601 UTC timestamp (automatically set by Notion server) |
+| **Created By** | Notion auto-field | Notion Bot Integration Token (proves automated execution) |
+
+> **Fallback**: If `NOTION_API_KEY` or `NOTION_RUN_LOG_DATABASE_ID` is not set, returns `{ mock: true, runId: 'RUN-...' }` without failing.
+
 
 ---
 
