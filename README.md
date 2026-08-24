@@ -108,6 +108,10 @@ Built with a high-contrast mathematical dark theme:
 
 All deep architectural diagrams, specs, and hackathon rules are documented in the [`docs/`](docs/) directory:
 
+- [docs/WORKFLOW_AUDIT_MASTER.md](docs/WORKFLOW_AUDIT_MASTER.md) — 📋 Master end-to-end technical & operational audit of all 9 workflows.
+- [docs/AUDIT_PIPELINE_STAGES.md](docs/AUDIT_PIPELINE_STAGES.md) — 🔬 Deep-dive stage-by-stage payload schemas, latency benchmarks & trace matrix.
+- [docs/SECURITY_AND_COMPLIANCE_AUDIT.md](docs/SECURITY_AND_COMPLIANCE_AUDIT.md) — 🔒 Security posture, MD5 dedup, bot token authenticity & "Repo Deletion Test" audit.
+- [docs/AUDIT_LOG_SPECIFICATION.md](docs/AUDIT_LOG_SPECIFICATION.md) — 📜 Notion Run Log telemetry specifications, schema catalog & verification standards.
 - [docs/FLOWCHARTS.md](docs/FLOWCHARTS.md) — Complete visual Mermaid architecture diagrams for every state machine.
 - [docs/NOTION_TRACK_GUIDE.md](docs/NOTION_TRACK_GUIDE.md) — Comprehensive guide on Notion Track rules & evaluation criteria.
 - [docs/COLOR_SYSTEM.md](docs/COLOR_SYSTEM.md) — Complete UI color ramps, contrast tokens, and CSS variables.
