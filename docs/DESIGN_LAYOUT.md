@@ -1,7 +1,8 @@
-# 📐 UI Design & Layout Specification — Mortality & Lifespan Analytics Engine
+# 📐 UI Design & Layout Specification — AutoDesk Engine
 
 > **Design Theme**: High-precision, mathematical elegance styled in the vein of Matiks.  
-> **Domain**: Mortality Analytics, Historical Demography & Life-Expectancy Calculation Engine (Gompertz-Makeham Models).
+> **Domain**: Autonomous Certificate Request Automation & Human-in-the-Loop Backend (HITL Pipeline).
+
 
 ---
 

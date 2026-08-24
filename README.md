@@ -39,7 +39,7 @@ AutoDesk Engine replaces that entire chaotic manual cycle with an **autonomous 5
 4. **🔀 Smart Routing**:
    - **Low-Risk Requests** (*Verified attendance*) ➔ **Auto-Executes instantly**.
    - **High-Risk / Edge Cases** (*Missing attendance / Malformed name*) ➔ **Pushed to Notion Human Queue** for 1-click `Approve` / `Reject`.
-5. **🚀 Real-World Action**: Puppeteer generates a tamper-proof signed PDF certificate and sends it via Email (SMTP/Resend).
+5. **🚀 Real-World Action**: HTML template engine generates a styled, signed certificate and sends it via Email (Resend / Gmail SMTP).
 6. **📜 Tamper-Proof Audit**: Every single run is written automatically to the **Notion Run Log** with real timestamps and execution metrics.
 
 ---
