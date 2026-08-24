@@ -50,13 +50,13 @@ AutoDesk Engine is designed with an uncompromising defense-in-depth model that g
 
 ### 🚨 Threat Models & Mitigation Strategies
 
-#### A. Cross-Site Scripting (XSS) & Malicious Payloads
+#### A. Injection via Malicious Input Text
 - **Risk**: A malicious student inputs `<script>alert('pwned')</script>` or SQL-like payload into the complaint or name box.
-- **Mitigation**: All text inputs are sanitized, stripped of executable tags, and trimmed before entering the pipeline.
+- **Mitigation**: Certificate HTML is rendered via template literals with inline CSS isolation. Text inputs are passed through `.toLowerCase().trim()` normalization during deduplication hashing. The certificate template renders user-provided strings directly within styled HTML divs, limiting execution context.
 
 #### B. Email Injection & Header Manipulation
 - **Risk**: Carriage return (`\r\n`) injection into email fields to trigger mass BCC spamming.
-- **Mitigation**: Email strings are validated against standard RFC 5322 regex and strictly normalized to lowercase strings.
+- **Mitigation**: Email strings are normalized to lowercase via `.toLowerCase().trim()`. Resend SDK and Nodemailer handle further validation at the transport layer.
 
 #### C. Denial of Service (DoS) / Spam Floods
 - **Risk**: Automated scripts firing thousands of certificate requests per second.
@@ -83,10 +83,12 @@ All sensitive credentials are strictly decoupled into environment variables and 
 | Environment Variable | Scope | Risk Level | Protection Mechanism |
 |:---------------------|:------|:-----------|:---------------------|
 | `NOTION_API_KEY` | Server-side only | 🔴 High | Masked in server runtime; zero browser exposure |
-| `NOTION_REQUESTS_DB_ID`| Server-side only | 🟡 Medium | Server-side database reference |
-| `NOTION_RUN_LOG_DB_ID` | Server-side only | 🟡 Medium | Server-side database reference |
+| `NOTION_REQUESTS_DATABASE_ID`| Server-side only | 🟡 Medium | Server-side database reference |
+| `NOTION_RUN_LOG_DATABASE_ID` | Server-side only | 🟡 Medium | Server-side database reference |
 | `GEMINI_API_KEY` | Server-side only | 🔴 High | Secure AI gateway access |
 | `RESEND_API_KEY` | Server-side only | 🔴 High | Transactional email provider token |
+| `SMTP_USER` | Server-side only | 🔴 High | Gmail SMTP username (fallback provider) |
+| `SMTP_PASS` | Server-side only | 🔴 High | Gmail app-specific password (fallback provider) |
 
 ---
 
