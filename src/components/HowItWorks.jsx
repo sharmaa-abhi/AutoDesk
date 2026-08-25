@@ -118,18 +118,18 @@ export default function HowItWorks() {
             <motion.div
               key={step.title}
               variants={itemVariants}
-              className={`group relative p-6 rounded-2xl bg-panel border border-border-subtle hover:border-[rgba(255,255,255,0.16)] transition-all duration-300 ${step.glow}`}
+              className={`group relative p-6 rounded-xl bg-panel border border-border-subtle hover:border-[rgba(255,255,255,0.16)] transition-all duration-300 ${step.glow}`}
             >
-              {/* Step Number */}
-              <div className="absolute top-4 right-4 text-text-muted font-mono text-xs">
+              {/* Step Number Badge */}
+              <span className="card-label absolute top-4 right-4">
                 {String(i + 1).padStart(2, "0")}
-              </div>
+              </span>
 
               {/* Icon */}
               <div
                 className={`w-12 h-12 rounded-xl ${step.bg} border ${step.border} flex items-center justify-center mb-4`}
               >
-                <step.icon className={`w-5 h-5 ${step.color}`} />
+                <step.icon className={`w-5 h-5 ${step.color}`} aria-hidden="true" focusable="false" />
               </div>
 
               {/* Content */}
@@ -142,7 +142,7 @@ export default function HowItWorks() {
 
               {/* Connector Arrow (except last in row) */}
               {i < steps.length - 1 && (
-                <div className="hidden lg:block absolute -right-3 top-1/2 transform -translate-y-1/2 text-text-muted z-10">
+                <div className="hidden lg:block absolute -right-3 top-1/2 transform -translate-y-1/2 text-text-muted z-10" aria-hidden="true">
                   {(i + 1) % 3 !== 0 && <span className="text-lg">→</span>}
                 </div>
               )}
@@ -156,20 +156,37 @@ export default function HowItWorks() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-10 mx-auto max-w-2xl p-5 rounded-2xl bg-panel border border-emerald-accent/20 flex items-center gap-4"
+          className="mt-10 mx-auto max-w-2xl p-5 rounded-xl bg-panel border border-emerald-accent/20 flex items-center gap-4"
         >
           <div className="w-12 h-12 rounded-xl bg-emerald-accent/10 border border-emerald-accent/20 flex items-center justify-center flex-shrink-0">
-            <ScrollText className="w-5 h-5 text-emerald-accent" />
+            <ScrollText className="w-5 h-5 text-emerald-accent" aria-hidden="true" focusable="false" />
           </div>
           <div>
-            <h4 className="font-bold text-emerald-accent text-sm">
-              📜 Tamper-Proof Run Log
+            <h4 className="font-bold text-emerald-accent text-sm flex items-center gap-2">
+              <svg
+                className="w-4 h-4 text-emerald-accent flex-shrink-0"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
+              </svg>
+              <span>Tamper-Proof Run Log</span>
             </h4>
             <p className="text-text-secondary text-xs mt-1">
               Every action automatically writes a timestamped row to Notion — written by your bot token, not by hand.
             </p>
           </div>
-          <div className="ml-auto px-3 py-1 rounded-full bg-emerald-accent/10 text-emerald-accent text-[10px] font-mono font-bold flex-shrink-0">
+          <div className="ml-auto px-3 py-1 rounded-md bg-emerald-accent/10 text-emerald-accent text-xs font-mono font-bold flex-shrink-0 border border-emerald-accent/20">
             PROOF ✓
           </div>
         </motion.div>

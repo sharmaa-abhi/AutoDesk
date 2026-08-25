@@ -46,11 +46,15 @@ export default function EventStreamTimeline({
       <div className="p-4 border-b border-border-subtle bg-panel-elevated/80 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-cyan-accent animate-ping" />
-          <h2 className="text-sm font-bold text-text-white uppercase tracking-wider flex items-center gap-1.5">
-            Match Stream <span className="text-cyan-accent text-xs font-mono">LIVE</span>
+          <h2 className="text-sm font-bold text-text-white uppercase tracking-wider flex items-center gap-2">
+            <span>Match Stream</span>
+            <span className="badge-live">
+              <span className="badge-live-dot animate-pulse" aria-hidden="true" />
+              <span>LIVE</span>
+            </span>
           </h2>
         </div>
-        <span className="text-[11px] font-mono text-text-muted">
+        <span className="text-xs font-mono text-text-muted">
           {events.length} INCIDENTS
         </span>
       </div>

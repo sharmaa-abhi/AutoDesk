@@ -74,7 +74,7 @@ export default function AboutPage() {
       {/* Our Story */}
       <section className="relative px-6 pb-20">
         <div className="max-w-3xl mx-auto">
-          <div className="p-8 rounded-2xl bg-panel border border-border-subtle">
+          <div className="p-8 rounded-xl bg-panel border border-border-subtle">
             <h2 className="text-2xl font-bold text-gold mb-4">📖 The Problem We're Solving</h2>
             <div className="space-y-4 text-text-secondary text-sm leading-relaxed">
               <p>
@@ -93,7 +93,7 @@ export default function AboutPage() {
               </p>
               <p>
                 No manual copying. No lost requests. No typing{" "}
-                <code className="text-gold bg-gold/10 px-1.5 py-0.5 rounded text-xs font-mono">python app.py</code>{" "}
+                <code className="text-gold bg-gold/10 px-1.5 py-0.5 rounded-md text-xs font-mono">python app.py</code>{" "}
                 — the system runs 24/7 on its own.
               </p>
             </div>

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Activity } from "lucide-react";
 import SubmitRequestModal from "@/components/SubmitRequestModal";
 
 export default function Hero() {
@@ -23,10 +24,11 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-panel border border-border-subtle text-text-secondary text-xs font-mono mb-8"
         >
-          <Sparkles className="w-3.5 h-3.5 text-cyan-accent" />
+          <Sparkles className="w-3.5 h-3.5 text-cyan-accent" aria-hidden="true" focusable="false" />
           <span>Automate India 2026 — Notion Track</span>
-          <span className="px-2 py-0.5 rounded-full bg-cyan-accent/10 text-cyan-accent text-[10px] font-semibold">
-            LIVE
+          <span className="badge-live">
+            <span className="badge-live-dot animate-pulse" aria-hidden="true" />
+            <span>LIVE</span>
           </span>
         </motion.div>
 
@@ -64,19 +66,24 @@ export default function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <button
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="ticket-dialog"
+            aria-expanded={modalOpen}
             onClick={() => setModalOpen(true)}
-            className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-accent to-[#006994] text-canvas font-bold text-sm hover:shadow-[0_0_30px_rgba(0,229,255,0.3)] transition-all duration-300 transform hover:scale-105"
+            className="group btn-primary btn-primary-lg"
           >
-            <Sparkles className="w-4 h-4 text-canvas" />
-            Submit Live Ticket
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <Sparkles className="w-4 h-4 text-canvas" aria-hidden="true" focusable="false" />
+            <span>Submit Live Ticket</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" focusable="false" />
           </button>
-          <a
+          <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-cyan-accent/30 text-cyan-accent font-semibold text-sm hover:bg-cyan-accent/10 transition-all duration-300"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-cyan-accent/30 text-cyan-accent font-semibold text-sm hover:bg-cyan-accent/10 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-cyan-accent"
           >
-            Open Live Cockpit ⚡
-          </a>
+            <Activity className="w-4 h-4" aria-hidden="true" focusable="false" />
+            <span>Open Live Cockpit</span>
+          </Link>
         </motion.div>
 
         <SubmitRequestModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
@@ -89,18 +96,19 @@ export default function Hero() {
           className="mt-16 inline-flex items-center gap-2 sm:gap-3 flex-wrap justify-center px-6 py-3 rounded-xl bg-panel/60 border border-border-subtle font-mono text-xs sm:text-sm"
         >
           <span className="text-cyan-accent">⚡ Trigger</span>
-          <span className="text-text-muted">→</span>
+          <span className="text-text-muted" aria-hidden="true">→</span>
           <span className="text-gold">💻 Your Code</span>
-          <span className="text-text-muted">→</span>
+          <span className="text-text-muted" aria-hidden="true">→</span>
           <span className="text-violet-accent">🧠 AI</span>
-          <span className="text-text-muted">→</span>
+          <span className="text-text-muted" aria-hidden="true">→</span>
           <span className="text-amber-accent">🙋 Approval</span>
-          <span className="text-text-muted">→</span>
+          <span className="text-text-muted" aria-hidden="true">→</span>
           <span className="text-emerald-accent">🌍 Action</span>
-          <span className="text-text-muted">→</span>
+          <span className="text-text-muted" aria-hidden="true">→</span>
           <span className="text-crimson-accent">📜 Run Log</span>
         </motion.div>
       </div>
     </section>
   );
 }
+

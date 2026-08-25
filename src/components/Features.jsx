@@ -103,20 +103,18 @@ export default function Features() {
               key={f.title}
               variants={cardVariants}
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              className={`group relative p-8 rounded-2xl bg-panel border border-border-subtle hover:border-[rgba(255,255,255,0.14)] transition-all duration-300`}
+              className="group relative p-8 rounded-xl bg-panel border border-border-subtle hover:border-[rgba(255,255,255,0.14)] transition-all duration-300"
             >
-              {/* Tag */}
-              <span
-                className={`absolute top-5 right-5 text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${f.tagColor}`}
-              >
+              {/* Card Metadata Tag */}
+              <span className="card-label absolute top-5 right-5">
                 {f.tag}
               </span>
 
               {/* Icon */}
               <div
-                className={`w-14 h-14 rounded-2xl ${f.bg} border ${f.border} flex items-center justify-center mb-5`}
+                className={`w-14 h-14 rounded-xl ${f.bg} border ${f.border} flex items-center justify-center mb-5`}
               >
-                <f.icon className={`w-6 h-6 ${f.color}`} />
+                <f.icon className={`w-6 h-6 ${f.color}`} aria-hidden="true" focusable="false" />
               </div>
 
               {/* Content */}

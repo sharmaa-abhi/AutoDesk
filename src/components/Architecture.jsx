@@ -3,14 +3,14 @@
 import { motion } from "framer-motion";
 
 const nodes = [
-  { id: "user", label: "👤 User", sub: "Submits complaint", x: "50%", y: "0%", color: "text-text-white", bg: "bg-panel", border: "border-text-secondary/30" },
-  { id: "webhook", label: "🌐 Webhook", sub: "POST /api/trigger", x: "50%", y: "14%", color: "text-cyan-accent", bg: "bg-cyan-accent/8", border: "border-cyan-accent/20" },
-  { id: "validate", label: "🛡️ Validate", sub: "Sanitize & deduplicate", x: "50%", y: "28%", color: "text-gold", bg: "bg-gold/8", border: "border-gold/20" },
-  { id: "ai", label: "🧠 Gemini AI", sub: "Extract intent & classify", x: "50%", y: "42%", color: "text-violet-accent", bg: "bg-violet-accent/8", border: "border-violet-accent/20" },
-  { id: "notion", label: "🗄️ Notion DB", sub: "Create request card", x: "25%", y: "58%", color: "text-amber-accent", bg: "bg-amber-accent/8", border: "border-amber-accent/20" },
-  { id: "human", label: "🙋 Approval", sub: "Approve / Reject / Override", x: "25%", y: "72%", color: "text-emerald-accent", bg: "bg-emerald-accent/8", border: "border-emerald-accent/20" },
-  { id: "action", label: "🚀 Actions", sub: "Email + PDF + API", x: "75%", y: "58%", color: "text-crimson-accent", bg: "bg-crimson-accent/8", border: "border-crimson-accent/20" },
-  { id: "runlog", label: "📜 Run Log", sub: "Tamper-proof audit trail", x: "50%", y: "86%", color: "text-emerald-accent", bg: "bg-emerald-accent/8", border: "border-emerald-accent/20" },
+  { id: "user", label: "👤 User", sub: "Submits complaint", category: "INPUT", type: "input" },
+  { id: "webhook", label: "🌐 Webhook", sub: "POST /api/pipeline", category: "INPUT", type: "input" },
+  { id: "validate", label: "🛡️ Validate", sub: "Sanitize & deduplicate", category: "PROCESSING", type: "process" },
+  { id: "ai", label: "🧠 Gemini AI", sub: "Extract intent & classify", category: "PROCESSING", type: "process" },
+  { id: "notion", label: "🗄️ Notion DB", sub: "Create request card", category: "PROCESSING", type: "process" },
+  { id: "human", label: "🙋 Approval", sub: "Approve / Reject / Override", category: "PROCESSING", type: "process" },
+  { id: "action", label: "🚀 Actions", sub: "Email + PDF + API", category: "OUTPUT", type: "output" },
+  { id: "runlog", label: "📜 Run Log", sub: "Tamper-proof audit trail", category: "OUTPUT", type: "output" },
 ];
 
 export default function Architecture() {
@@ -23,7 +23,7 @@ export default function Architecture() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <span className="text-xs font-mono text-emerald-accent bg-emerald-accent/10 px-3 py-1 rounded-full border border-emerald-accent/20">
             ARCHITECTURE
@@ -34,6 +34,22 @@ export default function Architecture() {
           <p className="text-text-secondary max-w-xl mx-auto">
             The complete end-to-end pipeline — from user complaint to automated proof.
           </p>
+
+          {/* Semantic Category Legend */}
+          <div className="flex items-center justify-center gap-4 sm:gap-6 flex-wrap mt-6 text-xs font-mono">
+            <span className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-accent" aria-hidden="true" />
+              <span className="text-text-secondary">INPUT (Ingestion)</span>
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-violet-accent" aria-hidden="true" />
+              <span className="text-text-secondary">PROCESSING (Engine & AI)</span>
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-accent" aria-hidden="true" />
+              <span className="text-text-secondary">OUTPUT (Action & Audit)</span>
+            </span>
+          </div>
         </motion.div>
 
         {/* Architecture Diagram */}
@@ -42,10 +58,10 @@ export default function Architecture() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="relative bg-panel rounded-3xl border border-border-subtle p-8 sm:p-12 overflow-hidden"
+          className="relative bg-panel rounded-2xl border border-border-subtle p-8 sm:p-12 overflow-hidden"
         >
           {/* Dot grid inside */}
-          <div className="absolute inset-0 dot-grid opacity-50 rounded-3xl" />
+          <div className="absolute inset-0 dot-grid opacity-50 rounded-2xl" aria-hidden="true" />
 
           {/* Vertical Flow */}
           <div className="relative z-10 flex flex-col items-center gap-4">
@@ -74,7 +90,7 @@ export default function Architecture() {
             >
               {/* Left Branch: Notion + Approval */}
               <div className="flex-1 flex flex-col items-center gap-4">
-                <div className="text-cyan-accent text-xs font-mono mb-1">↓ High Risk</div>
+                <div className="text-violet-accent text-xs font-mono mb-1 font-semibold">↓ High Risk (Review)</div>
                 <FlowNode node={nodes[4]} delay={0.6} />
                 <FlowArrow delay={0.7} />
                 <FlowNode node={nodes[5]} delay={0.75} />
@@ -82,7 +98,7 @@ export default function Architecture() {
 
               {/* Right Branch: Direct Action */}
               <div className="flex-1 flex flex-col items-center gap-4">
-                <div className="text-amber-accent text-xs font-mono mb-1">↓ Low Risk</div>
+                <div className="text-emerald-accent text-xs font-mono mb-1 font-semibold">↓ Low Risk (Verified)</div>
                 <FlowNode node={nodes[6]} delay={0.6} />
                 <div className="h-[40px]" />
                 <div className="text-text-muted text-xs font-mono">↓ auto-execute</div>
@@ -97,7 +113,7 @@ export default function Architecture() {
               transition={{ delay: 0.85, duration: 0.3 }}
               className="flex items-center gap-2 text-text-muted text-xs font-mono my-2"
             >
-              ← both paths merge →
+              <span aria-hidden="true">←</span> both paths merge <span aria-hidden="true">→</span>
             </motion.div>
 
             {/* Run Log */}
@@ -121,15 +137,25 @@ export default function Architecture() {
 }
 
 function FlowNode({ node, delay }) {
+  const typeClass =
+    node.type === "input"
+      ? "blueprint-input"
+      : node.type === "process"
+      ? "blueprint-process"
+      : "blueprint-output";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.4 }}
-      className={`w-full max-w-xs px-5 py-3.5 rounded-xl ${node.bg} border ${node.border} text-center`}
+      className={`w-full max-w-xs px-5 py-3 rounded-xl border text-center transition-colors ${typeClass}`}
     >
-      <div className={`font-bold text-sm ${node.color}`}>{node.label}</div>
+      <div className="flex items-center justify-center mb-1">
+        <span className="blueprint-category-badge">{node.category}</span>
+      </div>
+      <div className="font-bold text-sm text-text-white">{node.label}</div>
       <div className="text-text-secondary text-xs mt-0.5">{node.sub}</div>
     </motion.div>
   );
@@ -143,6 +169,8 @@ function FlowArrow({ delay }) {
       viewport={{ once: true }}
       transition={{ delay, duration: 0.3 }}
       className="w-[2px] h-8 bg-gradient-to-b from-cyan-accent/60 to-transparent origin-top"
+      aria-hidden="true"
     />
   );
 }
+

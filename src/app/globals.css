@@ -10,10 +10,16 @@
   --bg-surface-active: #1e2638;
   --bg-glass: rgba(10, 12, 16, 0.75);
 
-  /* Borders */
+  /* Borders & Radii */
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-active: rgba(0, 229, 255, 0.40);
   --border-hover: rgba(255, 255, 255, 0.14);
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
 
   /* Accents */
   --accent-cyan: #00e5ff;
@@ -60,6 +66,12 @@
 
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
 }
 
 /* ===== BASE STYLES ===== */
@@ -237,3 +249,153 @@ body {
   background: rgba(0, 229, 255, 0.2);
   color: var(--text-gold);
 }
+
+/* ===== REUSABLE DESIGN SYSTEM UTILITIES & COMPONENTS ===== */
+
+/* 1. Primary Button Styling (Unified CTA) */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--bg-canvas);
+  background: linear-gradient(135deg, var(--accent-cyan) 0%, #006994 100%);
+  border: 1px solid var(--accent-cyan);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1ae0ff 0%, #0077aa 100%);
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-primary-sm {
+  padding: 0.375rem 0.875rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+}
+
+.btn-primary-md {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+}
+
+.btn-primary-lg {
+  padding: 0.875rem 2rem;
+  font-size: 0.875rem;
+}
+
+/* 2. Unified Status Badge (LIVE) */
+.badge-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 230, 118, 0.12);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1rem;
+}
+
+.badge-live-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background-color: var(--accent-emerald);
+}
+
+/* 3. Unified Card Metadata Label */
+.card-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+}
+
+/* 4. System Blueprint Semantic Classes */
+.blueprint-input {
+  background: rgba(0, 229, 255, 0.08);
+  border-color: rgba(0, 229, 255, 0.3);
+  color: var(--accent-cyan);
+}
+
+.blueprint-process {
+  background: rgba(124, 77, 255, 0.08);
+  border-color: rgba(124, 77, 255, 0.3);
+  color: var(--accent-violet);
+}
+
+.blueprint-output {
+  background: rgba(0, 230, 118, 0.08);
+  border-color: rgba(0, 230, 118, 0.3);
+  color: var(--accent-emerald);
+}
+
+.blueprint-category-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+}
+
+.blueprint-input .blueprint-category-badge {
+  background: rgba(0, 229, 255, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+}
+
+.blueprint-process .blueprint-category-badge {
+  background: rgba(124, 77, 255, 0.15);
+  color: var(--accent-violet);
+  border: 1px solid rgba(124, 77, 255, 0.3);
+}
+
+.blueprint-output .blueprint-category-badge {
+  background: rgba(0, 230, 118, 0.15);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+}
+

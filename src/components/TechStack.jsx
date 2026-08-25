@@ -40,7 +40,7 @@ export default function TechStack() {
           className={`px-5 py-3 rounded-xl ${tech.bg} border ${tech.border} flex flex-col items-center gap-1 min-w-[100px] cursor-default`}
         >
           <span className={`text-sm font-bold ${tech.color}`}>{tech.name}</span>
-          <span className="text-text-muted text-[10px] font-mono">
+          <span className="text-text-muted text-xs font-mono">
             {tech.category}
           </span>
         </motion.div>

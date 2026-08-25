@@ -86,12 +86,12 @@ export default function StatsStrip() {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="group p-6 rounded-2xl bg-panel border border-border-subtle hover:border-[rgba(255,255,255,0.14)] transition-all duration-300 text-center"
+              className="group p-6 rounded-xl bg-panel border border-border-subtle hover:border-[rgba(255,255,255,0.14)] transition-all duration-300 text-center"
             >
               <div
-                className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center mx-auto mb-4`}
+                className={`w-10 h-10 rounded-lg ${stat.bg} flex items-center justify-center mx-auto mb-4`}
               >
-                <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                <stat.icon className={`w-5 h-5 ${stat.color}`} aria-hidden="true" focusable="false" />
               </div>
               <div className={stat.color}>
                 <AnimatedCounter
