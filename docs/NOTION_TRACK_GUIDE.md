@@ -145,19 +145,22 @@ College event attendees submit complaints like:
 3. **AI Extraction:** Gemini API parses intent (`Certificate Issue`), sentiment (`Frustrated`), priority (`Medium`).
 4. **Notion Entry:** Backend creates a card in `📥 Pending Requests` database.
 5. **Human Approval:** Event manager opens Notion, sees AI-recommended resolution, and changes status to `Approved`.
-6. **Backend Action:** Backend picks up `Approved` status ➔ verifies attendance record ➔ dynamically generates PDF Certificate ➔ sends Email with PDF attachment.
+6. **Backend Action:** Operator clicks "Approve" in the dashboard cockpit → frontend calls `/api/pipeline` with `action: "approve"` → backend verifies attendance record → dynamically generates HTML Certificate via `generateCertificateHTML()` → sends Email via Resend (or Gmail SMTP fallback).
 7. **Proof Log:** Backend writes a row into `📜 Run Log` in Notion with execution timestamp and status.
 
 ---
 
 ## 🛠️ 6. Recommended Tech Stack
 
-- **Backend:** Node.js (Express) or Python (FastAPI)
-- **AI Engine:** Google Gemini API (`@google/genai` or `google-generativeai`)
-- **Control Interface:** Notion API (`@notionhq/client`)
-- **Triggers:** Custom Form Webhook / Inbound Webhook / Scheduled Cron Jobs (`node-cron`)
-- **Actions:** Resend / Nodemailer (Emails), PDFKit / Puppeteer (PDFs)
-- **Hosting:** Render / Railway / Vercel (Always-on free tier)
+- **Full-Stack Framework:** Next.js 16 (App Router) — handles frontend + API routes in one server
+- **Styling:** Tailwind CSS v4
+- **Animations:** Framer Motion
+- **Icons:** Lucide React
+- **AI Engine:** Google Gemini AI (`@google/genai` — `gemini-3.6-flash`)
+- **Control Interface:** Notion API (`@notionhq/client` v5.26)
+- **Email Dispatch:** Resend (`resend` v6.22) with Nodemailer Gmail SMTP fallback
+- **Certificate Generation:** Pure HTML/CSS template string via `generateCertificateHTML()`
+- **Hosting:** Vercel (recommended) / Render / Railway
 
 ---
 

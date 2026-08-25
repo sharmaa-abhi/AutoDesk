@@ -3,7 +3,7 @@
 > **"Kill One Boring Job. Completely."**  
 > An autonomous, Human-in-the-Loop backend service built for the **Notion Track Hackathon**.
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![Notion API](https://img.shields.io/badge/Notion_API-Integrated-000000?style=for-the-badge&logo=notion)](https://developers.notion.com/)
 [![Gemini AI](https://img.shields.io/badge/Google_Gemini-AI_Engine-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/)
@@ -62,9 +62,11 @@ This repo includes a Next.js web experience designed with the **Deep OLED Void /
 
 | Route | Page | Purpose |
 |:------|:-----|:--------|
-| [`/`](file:///src/app/page.js) | **🏠 Landing Page** | High-impact product overview, bento features, interactive pipeline flowchart, and real-time stats. |
+| [`/`](file:///src/app/page.js) | **🏠 Landing Page** | High-impact product overview, bento features, interactive pipeline flowchart, real-time stats, and a **Submit Live Ticket** modal that triggers the full Gemini AI → Notion → Email pipeline. |
 | [`/dashboard`](file:///src/app/dashboard/page.js) | **🎛️ Live Tactical Cockpit** | Interactive simulator where you can test webhooks, trigger garbage payloads, and approve/reject requests in real time. |
 | [`/about`](file:///src/app/about/page.js) | **👥 About & Team** | Team background, system architecture philosophy, and technology stack. |
+
+> 💡 **Submit Ticket Modal**: Available from both the **Navbar** and the **Hero section CTA** on any page. Students can type a raw complaint, and the system runs the full pipeline live — Gemini AI classification → Notion DB write → certificate generation → email dispatch.
 
 ---
 
@@ -78,10 +80,17 @@ cd Notion.AI
 # 2. Install dependencies
 npm install
 
-# 3. Start development server
+# 3. Configure environment variables
+# Copy the backend example and fill in your API keys:
+cp .env.backend.example .env.local
+# Required keys: NOTION_API_KEY, NOTION_REQUESTS_DATABASE_ID,
+#   NOTION_RUN_LOG_DATABASE_ID, GEMINI_API_KEY
+# Plus either RESEND_API_KEY or SMTP_USER + SMTP_PASS for email
+
+# 4. Start development server
 npm run dev
 
-# 4. Open in browser
+# 5. Open in browser
 # http://localhost:3000
 ```
 

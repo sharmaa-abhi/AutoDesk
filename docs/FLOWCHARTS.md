@@ -71,14 +71,20 @@ flowchart TD
     
     Form --> Payload["📦 Raw Payload<br/>• Name: 'Abhishek'<br/>• Email: 'abhi@test.com'<br/>• Text: 'Certificate nahi mila sir!'<br/>• Timestamp: ISO 8601"]
     
-    Payload --> Endpoint{"🌐 POST /api/v1/trigger"}
+    Payload --> Endpoint{"🌐 POST /api/pipeline<br/>action: 'ingest'"}
     
-    Endpoint --> AuthCheck{"Is Source Authenticated / Valid Webhook?"}
-    AuthCheck -- "❌ No (Bad Secret/Origin)" --> Ret401["⛔ 401 Unauthorized / Reject"]
-    AuthCheck -- "✅ Yes" --> Queue["📥 Inbound Processing Queue"]
+    Endpoint --> HashCheck{"MD5 Duplicate Check<br/>(In-Memory Cache, 24h Window)"}
+    HashCheck -- "⚠️ Duplicate Detected" --> DupBlock["🛡️ Return DUPLICATE_FILTERED<br/>+ Log to Notion Run Log"]
+    HashCheck -- "✅ Unique Request" --> AIStage["🧠 Gemini AI Classification"]
     
-    Queue --> Ack["⚡ Immediate 202 Accepted Response to Client"]
-    Ack --> AsyncWorker["🚀 Background Async Worker Starts"]
+    AIStage --> NotionWrite["🗄️ Create Notion Request Page"]
+    NotionWrite --> RouteDecision{"AI Confidence ≥ 90% &<br/>Attendance Verified?"}
+    RouteDecision -- "✅ Yes (Low Risk)" --> AutoExec["⚡ Auto-Execute:<br/>Generate Certificate + Send Email"]
+    RouteDecision -- "❌ No (High Risk)" --> Queue["🗄️ Queue: WAITING_APPROVAL"]
+    
+    AutoExec --> LogRun["📜 Log to Notion Run Log"]
+    Queue --> LogRun
+    LogRun --> Response["📤 Return Full JSON Response<br/>(AI result + Notion entry + Email status)"]
 ```
 
 ---
@@ -182,53 +188,54 @@ flowchart TD
 
 ---
 
-## 7. ⚙️ Section 7: Notion Sync & Background Worker Engine
+## 7. 🎛️ Section 7: Dashboard-Driven Human-in-the-Loop (HITL) Execution
 
 ```mermaid
 flowchart TD
-    subgraph PollingWorker ["⚙️ Background Poller (Runs every 30s)"]
-        Timer["⏰ Interval Tick"] --> Query["🔌 notion.databases.query()<br/>Filter: Status IN ['Approved', 'Overridden', 'Rejected']<br/>AND ProcessedFlag == False"]
-        
-        Query --> ResultCount{"Found matching rows?"}
-        
-        ResultCount -- "0 Rows" --> Idle["💤 Sleep until next interval"]
-        ResultCount -- "> 0 Rows" --> Lock["🔒 Acquire In-Memory Mutex Lock<br/>(Prevent race conditions)"]
-        
-        Lock --> LoopRows["Iterate each approved item"]
-        
-        LoopRows --> DispatchWork["🚀 Send Item to Action Dispatcher"]
-        DispatchWork --> MarkProcessing["Update Notion Property:<br/>ProcessedFlag = True<br/>Status = 'In Progress'"]
-        MarkProcessing --> ReleaseLock["🔓 Release Mutex Lock"]
+    subgraph DashboardHITL ["🎛️ Dashboard Cockpit (React Client)"]
+        View["🔍 Operator Reviews Event Stream"]
+        View --> Card["📋 Request Card (e.g. REQ-108)<br/>Shows AI Classification, Confidence,<br/>Attendance Status, Action Preview"]
+        Card --> Decision{"Operator Clicks Action Button"}
     end
+
+    Decision -- "✅ Approve" --> ApproveCall["🔌 POST /api/pipeline<br/>action: 'approve'<br/>userName, userEmail, eventName"]
+    Decision -- "❌ Reject" --> RejectCall["🔌 POST /api/pipeline<br/>action: 'reject'<br/>requestId"]
+
+    ApproveCall --> GenCert["📄 generateCertificateHTML()"]
+    GenCert --> SendEmail["📧 sendUniversalEmail()<br/>(Resend → Gmail SMTP fallback)"]
+    SendEmail --> LogApprove["📜 logRunToNotion()<br/>Status: SUCCESS"]
+
+    RejectCall --> LogReject["📜 logRunToNotion()<br/>Status: REJECTED"]
+
+    LogApprove --> UpdateUI["🔄 Dashboard State Updates<br/>(Event status, stats, run logs)"]
+    LogReject --> UpdateUI
 ```
 
 ---
 
-## 8. 🌍 Section 8: Real-World Action Execution Pipeline
+## 8. 🌐 Section 8: Certificate Generation & Email Dispatch Pipeline
 
 ```mermaid
 flowchart TD
     In["🚀 Approved Request Dispatched"] --> ActionType{"Determine Action Type"}
 
-    subgraph PDFGeneration ["📄 PDF Generation Engine"]
-        ActionType -- "Certificate / Receipt" --> Template["Load HTML/SVG Certificate Template"]
-        Template --> InjectData["Inject Name, Date, Certificate ID"]
-        InjectData --> PDFEngine["Render via Puppeteer / PDFKit"]
-        PDFEngine --> Buffer["Store in Buffer / Cloud Storage"]
+    subgraph CertGeneration ["📄 Certificate Generation Engine"]
+        ActionType -- "Certificate / Receipt" --> Template["Load HTML/CSS Certificate Template<br/>(generateCertificateHTML in certificate.js)"]
+        Template --> InjectData["Inject studentName, eventName,<br/>certificateId (CERT-BASE36), issueDate"]
+        InjectData --> HTMLOutput["Render Complete Standalone HTML Document<br/>(Inline CSS, No External Dependencies)"]
     end
 
     subgraph EmailDispatch ["📧 Communication Engine"]
-        Buffer --> Mailer["Initialize Resend / Nodemailer Client"]
+        HTMLOutput --> Mailer["sendUniversalEmail() in mailer.js"]
         ActionType -- "Notification / Rejection" --> Mailer
-        Mailer --> FormatEmail["Build HTML Email Body + Attachments"]
-        FormatEmail --> SendSMTP["Send via SMTP / REST API"]
+        Mailer --> TryResend{"Resend API Configured?"}
+        TryResend -- "✅ Yes" --> ResendSend["Send via Resend API"]
+        TryResend -- "❌ No / Failed" --> TrySMTP{"Gmail SMTP Configured?"}
+        TrySMTP -- "✅ Yes" --> SMTPSend["Send via Nodemailer (Gmail)"]
+        TrySMTP -- "❌ No" --> MailError["❌ Throw: No email provider configured"]
     end
 
-    subgraph ExternalSync ["🔗 External Updates"]
-        SendSMTP --> ExtDB["Update Internal Database / Google Sheets"]
-    end
-
-    ExtDB --> FinalSuccess["✅ Real-World Action Finished Successfully"]
+    ResendSend & SMTPSend --> FinalSuccess["✅ Real-World Action Finished Successfully"]
 ```
 
 ---
@@ -256,24 +263,22 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    Exec["⚙️ Backend Attempting Action"] --> TryAction{"Execute API / SMTP Call"}
+    Exec["⚙️ Backend Attempting Action"] --> TryAction{"Execute API Call<br/>(Gemini / Notion / Email)"}
 
     TryAction -- "✅ Success" --> LogSuccess["📜 Write SUCCESS to Notion Run Log"]
 
-    TryAction -- "❌ Network / API Failure" --> ErrorCounter{"Retry Count < 3?"}
+    TryAction -- "❌ Gemini API Failure" --> AIFallback["⚠️ Local Heuristic Fallback:<br/>• Keyword-based category detection<br/>• Default confidence: 85<br/>• Tags: AI_FALLBACK"]
+    AIFallback --> ContinuePipeline["🔄 Pipeline Continues with Fallback Data"]
 
-    ErrorCounter -- "Yes (Retryable)" --> Backoff["⏳ Wait with Exponential Backoff<br/>(2s ➔ 4s ➔ 8s)"]
-    Backoff --> TryAction
+    TryAction -- "❌ Notion API Failure" --> NotionMock["⚠️ Mock Mode Activated:<br/>Returns { mock: true, id: 'NOTION-MOCK-...' }<br/>Pipeline continues without blocking"]
+    NotionMock --> ContinuePipeline
 
-    ErrorCounter -- "No (Permanent Failure)" --> Escalation["🚨 ESCALATION PROTOCOL"]
+    TryAction -- "❌ Email Dispatch Failure" --> EmailWarn["⚠️ console.warn logged<br/>Pipeline returns success without email"]
+    EmailWarn --> ContinuePipeline
 
-    Escalation --> SetNotionFail["1. Update Notion Request Card:<br/>• Status = 'CRITICAL_FAILURE'<br/>• Error Log = Stacktrace snippet"]
+    ContinuePipeline --> LogRun["📜 Log Execution to Notion Run Log"]
 
-    Escalation --> AlertAdmin["2. Send Telegram / Email Alert to Admin"]
-
-    Escalation --> LogFail["3. Write FAILED Row in Notion Run Log<br/>with Error Details"]
-
-    LogFail --> HumanRescue["👨‍💻 Human Operator overrides or fixes in Notion"]
+    TryAction -- "❌ Unhandled Exception" --> CatchAll["🚨 500 Error Response<br/>{ success: false, error: message }"]
 ```
 
 ---
