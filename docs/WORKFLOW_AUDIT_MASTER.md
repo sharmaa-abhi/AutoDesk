@@ -9,6 +9,10 @@
 
 This master audit document provides a granular, end-to-end verification and technical audit of **all workflows, pipelines, sub-systems, state transitions, security boundaries, and telemetry logs** in the **AutoDesk Engine**.
 
+## Current Feature Set
+
+The live product includes three pages (`/`, `/dashboard`, `/about`), a submission modal, dashboard event filters, selected-request inspection, clean and garbage webhook simulation, and approve/reject controls. The server route supports `ingest`, `approve`, and `reject`; it performs MD5 deduplication, Gemini classification with fallback, Notion request/run logging, automatic routing, standalone HTML certificate generation, and Resend/Gmail SMTP delivery.
+
 ```
  ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
  │                                AUTODESK ENGINE WORKFLOW ARCHITECTURE                            │
@@ -24,13 +28,13 @@ This master audit document provides a granular, end-to-end verification and tech
 | Workflow ID | Workflow Name | Trigger Mechanism | Core Processing Engine | Primary Output / State Change | Audit Status |
 |:------------|:--------------|:------------------|:-----------------------|:------------------------------|:-------------|
 | **WF-01** | Ingestion & Gateway | HTTP POST `/api/pipeline` | Next.js API Route | Validated Request Payload | ✅ PASS |
-| **WF-02** | Sanitization & Deduplication | Inbound Event Stream | MD5 Hash + 24h In-Memory Cache | Clean Payload or Blocked 409 | ✅ PASS |
+| **WF-02** | Sanitization & Deduplication | Inbound Event Stream | MD5 Hash + 24h In-Memory Cache | Clean Payload or `DUPLICATE_FILTERED` response | ✅ PASS |
 | **WF-03** | AI Intelligence & Classification | Pipeline Orchestrator | Google Gemini Flash LLM | JSON Intent, Confidence & Priority | ✅ PASS |
-| **WF-04** | Notion Operations Center Sync | Background Sync / Webhook | Notion Client SDK (`@notionhq/client`) | Task Row Created (`WAITING_APPROVAL`) | ✅ PASS |
+| **WF-04** | Notion Operations Center Sync | Pipeline API route | Notion Client SDK (`@notionhq/client`) | Request row created (`WAITING_APPROVAL`) or mock response | ✅ PASS |
 | **WF-05** | Human-in-the-Loop (HITL) Approval | Operator UI / Notion Dashboard | Action Dispatcher Route | State: `APPROVED` / `REJECTED` | ✅ PASS |
 | **WF-06** | Dynamic Certificate Generation | Auto-Execute / Operator Approval | HTML/CSS Vector Template Engine | Tamper-Proof High-Res Certificate | ✅ PASS |
 | **WF-07** | Transactional Dispatch & Delivery | Generation Completion | Resend API / Nodemailer SMTP | Signed Email Delivered to Student | ✅ PASS |
-| **WF-08** | Tamper-Proof Audit & Run Logging | Completion / Failure Hook | Notion Bot Token API Integration | Immutable Row in Notion Run Log | ✅ PASS |
+| **WF-08** | Audit & Run Logging | Pipeline completion / rejection hook | Notion Bot Token API Integration | Append-only run record in Notion Run Log | ✅ PASS |
 | **WF-09** | Error Handling & Dead-Letter Escalation| Exception / Timeout Handler | Fallback Rules & Failure Logger | Alert Row + Critical Failure State | ✅ PASS |
 
 ---
@@ -46,7 +50,7 @@ Accepts unstructured or structured incoming requests from student forms, webhook
 
 #### ⚙️ Technical Specifications
 - **Target Endpoint**: `POST /api/pipeline`
-- **Controller File**: [`src/app/api/pipeline/route.js`](file:///src/app/api/pipeline/route.js)
+- **Controller File**: [`src/app/api/pipeline/route.js`](../src/app/api/pipeline/route.js)
 - **Supported Action Types**: `ingest`, `approve`, `reject`
 - **Latency Target**: `< 150ms` for initial gateway acknowledgement
 
@@ -106,7 +110,7 @@ Converts unstructured, colloquial, or multilingual complaint text into structure
 
 #### ⚙️ Technical Implementation
 - **AI Model**: Google Gemini Flash via `@google/genai` / REST API.
-- **Engine File**: [`src/lib/gemini.js`](file:///src/lib/gemini.js)
+- **Engine File**: [`src/lib/gemini.js`](../src/lib/gemini.js)
 - **Prompt Format**: Zero-shot JSON instruction enforcing strict schema adherence.
 - **Deterministic Heuristic Fallback**: Active in case of missing API keys, rate limits, or network timeouts.
 
@@ -143,7 +147,7 @@ Creates real-time operational records in Notion databases to serve as the unifie
 
 #### ⚙️ Technical Implementation
 - **SDK**: `@notionhq/client` Client initialized with `NOTION_API_KEY`.
-- **Module File**: [`src/lib/notion.js`](file:///src/lib/notion.js)
+- **Module File**: [`src/lib/notion.js`](../src/lib/notion.js)
 - **Target Database**: `NOTION_REQUESTS_DATABASE_ID`
 
 #### 🗄️ Page Creation Schema
@@ -193,11 +197,11 @@ flowchart TD
 ### 6. Workflow WF-06: Dynamic Document & Certificate Generation
 
 #### 🎯 Purpose & Scope
-Autonomous rendering of tamper-proof, high-resolution vector certificates embedded with verifiable metadata.
+Autonomous rendering of standalone HTML certificates with unique IDs and verifiable metadata.
 
 #### ⚙️ Technical Implementation
-- **Template Engine**: [`src/lib/certificate.js`](file:///src/lib/certificate.js) — Pure HTML/CSS template string rendering via `generateCertificateHTML()`.
-- **Rendering Method**: Server-side HTML string generation (no headless browser / Puppeteer).
+- **Template Engine**: [`src/lib/certificate.js`](../src/lib/certificate.js) — Pure HTML/CSS template string rendering via `generateCertificateHTML()`.
+- **Rendering Method**: Server-side HTML string generation (no headless browser or PDF renderer).
 - **Styling**: Radial gradient background (`#10141D` → `#0A0C10`), amber border (`#FFB300`), cyan corner decorations, gold heading text.
 - **Embedded Metadata Fields**:
   - `Certificate ID`: `CERT-<BASE36_TIMESTAMP>` (e.g., `CERT-LZ5K2M8Q`)
@@ -218,7 +222,7 @@ Autonomous rendering of tamper-proof, high-resolution vector certificates embedd
 Transmits the verified certificate directly to the student's email inbox with delivery confirmation.
 
 #### ⚙️ Technical Implementation
-- **Dispatch Module**: [`src/lib/mailer.js`](file:///src/lib/mailer.js) and [`src/lib/resend.js`](file:///src/lib/resend.js)
+- **Dispatch Module**: [`src/lib/mailer.js`](../src/lib/mailer.js) and [`src/lib/resend.js`](../src/lib/resend.js)
 - **Dispatch Chain** (priority order in `sendUniversalEmail()`):
   1. **Resend API** (attempted first if `RESEND_API_KEY` is set and not placeholder): REST delivery via `resend.emails.send()`
   2. **Gmail SMTP** (fallback if Resend fails or is unconfigured): Nodemailer via `service: 'gmail'` with `SMTP_USER` + `SMTP_PASS`
@@ -226,7 +230,7 @@ Transmits the verified certificate directly to the student's email inbox with de
 
 #### 🛡️ Dispatch Audit
 - [x] Multipart email format (Rich HTML body + plain text preview).
-- [x] Asynchronous non-blocking dispatch to keep API response times sub-second.
+- [x] Provider selection prefers Resend and falls back to Gmail SMTP when configured.
 - [x] Delivery telemetry (messageId, status, duration) returned to pipeline orchestrator.
 
 ---
@@ -237,8 +241,8 @@ Transmits the verified certificate directly to the student's email inbox with de
 Guarantees full observability and tamper-proof verification by logging every automated action directly to the Notion Run Log database.
 
 #### ⚙️ Technical Implementation
-- **Logging Method**: `logRunToNotion()` in [`src/lib/notion.js`](file:///src/lib/notion.js)
-- **Target Database**: `NOTION_RUN_LOG_DB_ID`
+- **Logging Method**: `logRunToNotion()` in [`src/lib/notion.js`](../src/lib/notion.js)
+- **Target Database**: `NOTION_RUN_LOG_DATABASE_ID`
 
 #### 📜 Notion Run Log Row Schema
 ```

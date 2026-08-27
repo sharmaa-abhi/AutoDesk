@@ -11,6 +11,15 @@
 ⚡ Trigger ➔ 💻 Your Backend Code ➔ 🧠 AI / Logic ➔ 🙋 Human Approval (in Notion) ➔ 🌍 Real Action ➔ 📜 Notion Run Log
 ```
 
+## Current AutoDesk Engine Features
+
+- Landing-page request modal and dashboard webhook simulator for live `ingest` requests.
+- Gemini intent extraction with a deterministic local fallback when the provider is unavailable.
+- MD5 email/message deduplication, Notion request creation, and Notion run logging.
+- Confidence plus attendance routing: verified high-confidence requests auto-dispatch; edge cases wait for an operator.
+- Dashboard `approve` and `reject` actions, standalone HTML certificate generation, and Resend/Gmail SMTP delivery.
+- Resend API operations for single sends, batches, lookup, updates, listing, and attachment retrieval.
+
 ---
 
 ## 🎯 1. What is the Goal?
@@ -145,7 +154,7 @@ College event attendees submit complaints like:
 3. **AI Extraction:** Gemini API parses intent (`Certificate Issue`), sentiment (`Frustrated`), priority (`Medium`).
 4. **Notion Entry:** Backend creates a card in `📥 Pending Requests` database.
 5. **Human Approval:** Event manager opens Notion, sees AI-recommended resolution, and changes status to `Approved`.
-6. **Backend Action:** Operator clicks "Approve" in the dashboard cockpit → frontend calls `/api/pipeline` with `action: "approve"` → backend verifies attendance record → dynamically generates HTML Certificate via `generateCertificateHTML()` → sends Email via Resend (or Gmail SMTP fallback).
+6. **Backend Action:** Operator clicks "Approve" in the dashboard cockpit → frontend calls `/api/pipeline` with `action: "approve"` → backend generates standalone HTML Certificate via `generateCertificateHTML()` → sends Email via Resend (or Gmail SMTP fallback).
 7. **Proof Log:** Backend writes a row into `📜 Run Log` in Notion with execution timestamp and status.
 
 ---

@@ -9,6 +9,10 @@
 
 AutoDesk Engine is designed with an uncompromising defense-in-depth model that guarantees security, data privacy, and verifiable authenticity for the Notion Track Hackathon.
 
+## Current Feature Set
+
+The application protects live submission and dashboard flows with server-side API routes, environment-only provider credentials, duplicate filtering, structured error responses, and a local classification fallback. It records request and execution activity in Notion when configured, generates standalone HTML certificates, and dispatches approved certificates through Resend or Gmail SMTP.
+
 ```
  ┌─────────────────────────────────────────────────────────────────────────────┐
  │                         SECURITY & INTEGRITY ARCHITECTURE                   │
@@ -29,7 +33,7 @@ AutoDesk Engine is designed with an uncompromising defense-in-depth model that g
 
 - **Zapier / Make / Native Notion Automation (Fails Evaluation)**:  
   If the repository is deleted and work continues, no real engineering occurred.
-- **AutoDesk Engine (Passes Evaluation with 100% Score)**:  
+- **AutoDesk Engine (code-dependent workflow)**:
   Deleting this repository **completely stops** all intelligence, validation, deduplication, certificate rendering, and email dispatching. **The custom Node.js code is the brain; Notion is strictly the operator cockpit and audit log.**
 
 ### 📊 Architectural Dependency Breakdown
@@ -52,7 +56,7 @@ AutoDesk Engine is designed with an uncompromising defense-in-depth model that g
 
 #### A. Injection via Malicious Input Text
 - **Risk**: A malicious student inputs `<script>alert('pwned')</script>` or SQL-like payload into the complaint or name box.
-- **Mitigation**: Certificate HTML is rendered via template literals with inline CSS isolation. Text inputs are passed through `.toLowerCase().trim()` normalization during deduplication hashing. The certificate template renders user-provided strings directly within styled HTML divs, limiting execution context.
+- **Mitigation**: Inputs are normalized for deduplication and provider clients validate email delivery. Certificate generation is a standalone HTML template, so user-provided values must still be treated as untrusted output and escaped before production use.
 
 #### B. Email Injection & Header Manipulation
 - **Risk**: Carriage return (`\r\n`) injection into email fields to trigger mass BCC spamming.

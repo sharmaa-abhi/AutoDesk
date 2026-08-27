@@ -3,6 +3,10 @@
 > **Design Theme:** High-precision, mathematical dark UI  
 > **Font Stack:** `Inter` (Sans) + `JetBrains Mono` (Mono)
 
+## Current Feature Context
+
+These tokens support the implemented landing page, animated pipeline and feature sections, About page, submission modal, and live dashboard cockpit. Cyan, amber, crimson, emerald, and violet distinguish pipeline actions, review states, errors, successes, and AI classification across the request workflow.
+
 ---
 
 ## 1. 🖤 Surface / Background Colors (Deep OLED Void System)

@@ -6,6 +6,10 @@
 
 # 1. Original Problem Statement — Theme: Notion Track
 
+## Implemented Project Feature Update
+
+The resulting AutoDesk Engine applies this brief to a working college certificate workflow. It now has a landing-page submission modal, a `/dashboard` tactical simulator, Gemini classification with local fallback, MD5 duplicate filtering, Notion request and run-log records, confidence/attendance-based auto-routing, operator approve/reject actions, standalone HTML certificate generation, and Resend/Gmail SMTP delivery. The live pipeline API actions are `ingest`, `approve`, and `reject`.
+
 ## 1. The Problem
 
 Every college, club, shop, and small agency in India has three or four jobs a person redoes by hand every week. Attendance registers. Requests dying in a WhatsApp group. Form responses copied into a sheet. A follow-up nobody sent. A PDF forwarded to seven people so one of them can retype it.

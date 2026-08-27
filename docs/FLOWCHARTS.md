@@ -2,6 +2,10 @@
 
 > **All-in-One Visual Blueprint**: Every phase, component, edge-case, state machine, and data pipeline in the Notion Track explained **in complete depth exclusively through Flowcharts and Visual Diagrams**.
 
+## Current Implementation Feature Set
+
+The live implementation centers on the Next.js `/api/pipeline` route and `/dashboard` simulator. Implemented actions are `ingest`, `approve`, and `reject`; supported integrations are Gemini, Notion, Resend, and Gmail SMTP. The live certificate workflow generates standalone HTML rather than a PDF or headless-browser artifact. Other providers and scheduled workers shown in conceptual diagrams are extension points, not currently wired runtime features.
+
 ---
 
 ## 📑 Master Table of Contents

@@ -18,6 +18,10 @@
 
 ## 1. Stage 1: Ingestion & Gateway Audit
 
+## Current Feature Set
+
+The implemented pipeline is exercised from the landing-page submission modal and the `/dashboard` live simulator. It supports `ingest`, `approve`, and `reject` actions, clean and garbage webhook simulations, Gemini classification with a deterministic fallback, Notion request/run-log writes, automatic routing, standalone HTML certificate generation, and Resend/Gmail SMTP delivery.
+
 ### 🎯 Objective
 Accept inbound requests from external webhooks (e.g. Google Forms, Typeform, WhatsApp bots) or internal simulator UI.
 
@@ -132,7 +136,7 @@ Create structured tickets in Notion. Route high-confidence requests for automati
 Generate a styled HTML certificate document with unique ID and verifiable metadata via server-side template string rendering.
 
 ### 🎨 Rendering Specifications (from `certificate.js`)
-- **Method**: Pure HTML/CSS template string via `generateCertificateHTML()` — no headless browser or Puppeteer
+- **Method**: Pure HTML/CSS template string via `generateCertificateHTML()` — no headless browser or PDF renderer is used
 - **Card Width**: `800px` with `50px 60px` padding
 - **Background**: Radial gradient `#10141D` → `#0A0C10`, bordered with `2px solid #FFB300`
 - **Border Radius**: `24px`

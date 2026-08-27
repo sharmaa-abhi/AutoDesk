@@ -2,6 +2,10 @@
 
 Build a stunning, production-grade full-stack application for **AutoDesk Engine** — a college event certificate request automation system. Three pages: **Home (Landing)** + **Dashboard (Live Simulator)** + **About/Team**. Fully functional backend with Gemini AI, Notion SDK, and Email dispatch.
 
+## Implemented Feature Update
+
+The planned surface is now implemented as a live request-to-action workflow: landing-page submissions call the pipeline, Gemini or its deterministic fallback classifies requests, duplicate payloads are filtered, Notion stores request and run records, high-confidence verified requests auto-dispatch, and uncertain requests remain available for dashboard approval or rejection. Certificates are generated as standalone HTML and delivered through Resend or Gmail SMTP fallback.
+
 ## Tech Stack
 - **Next.js 16** (App Router)
 - **Tailwind CSS v4**

@@ -9,11 +9,15 @@
 
 Every action taken by the AutoDesk Engine—whether autonomous AI triage, MD5 spam filtering, human operator approval, or email dispatch—generates a tamper-proof entry in the **Notion Run Log**. This document defines the schema, event catalog, and validation rules.
 
+## Current Feature Set
+
+The running application exposes a landing-page request modal and a live dashboard cockpit. Requests can be ingested, classified by Gemini or the local fallback, deduplicated, written to the Notion request database, auto-dispatched when confidence and attendance rules pass, or held for human approval. Operators can approve or reject selected events, while the dashboard updates event status, counters, and recent run logs. Certificate output is standalone HTML, and email delivery uses Resend first with Gmail SMTP fallback.
+
 ---
 
 ## 🗄️ Notion Run Log Database Schema
 
-The `logRunToNotion()` function in [`src/lib/notion.js`](file:///src/lib/notion.js) creates Notion pages with a `Name` title property and structured block children. The target database is specified by `NOTION_RUN_LOG_DATABASE_ID`.
+The `logRunToNotion()` function in [`src/lib/notion.js`](../src/lib/notion.js) creates Notion pages with a `Name` title property and structured block children. The target database is specified by `NOTION_RUN_LOG_DATABASE_ID`.
 
 ### Page Structure (as written by `notion.pages.create()`)
 

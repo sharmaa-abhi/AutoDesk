@@ -42,6 +42,17 @@ AutoDesk Engine replaces that entire chaotic manual cycle with an **autonomous 5
 5. **🚀 Real-World Action**: HTML template engine generates a styled, signed certificate and sends it via Email (Resend / Gmail SMTP).
 6. **📜 Tamper-Proof Audit**: Every single run is written automatically to the **Notion Run Log** with real timestamps and execution metrics.
 
+### Current Feature Set
+
+- Live request intake from the landing-page modal or direct `POST /api/pipeline` webhooks.
+- Gemini classification with a local fallback for intent, category, confidence, priority, attendance status, and action preview.
+- MD5 duplicate filtering for repeated email/message combinations during the 24-hour cache window.
+- Smart routing that auto-dispatches verified high-confidence requests and queues other requests for operator review.
+- Dashboard controls for approving or rejecting requests, plus event filters, counters, webhook simulation, and run-log telemetry.
+- Standalone HTML certificate generation with a unique certificate ID and issue date.
+- Transactional delivery through Resend with Gmail SMTP fallback, plus Resend operations for send, batch, lookup, update, and attachment actions.
+- Notion request records and run telemetry with mock-mode responses when integration credentials are unavailable.
+
 ---
 
 ## 🏆 Why This Wins the Notion Track ("The Repo Deletion Test")
@@ -62,9 +73,9 @@ This repo includes a Next.js web experience designed with the **Deep OLED Void /
 
 | Route | Page | Purpose |
 |:------|:-----|:--------|
-| [`/`](file:///src/app/page.js) | **🏠 Landing Page** | High-impact product overview, bento features, interactive pipeline flowchart, real-time stats, and a **Submit Live Ticket** modal that triggers the full Gemini AI → Notion → Email pipeline. |
-| [`/dashboard`](file:///src/app/dashboard/page.js) | **🎛️ Live Tactical Cockpit** | Interactive simulator where you can test webhooks, trigger garbage payloads, and approve/reject requests in real time. |
-| [`/about`](file:///src/app/about/page.js) | **👥 About & Team** | Team background, system architecture philosophy, and technology stack. |
+| [`/`](src/app/page.js) | **🏠 Landing Page** | Product overview, pipeline flow, live stats, and a **Submit Live Ticket** modal that triggers the Gemini AI → Notion → Email pipeline. |
+| [`/dashboard`](src/app/dashboard/page.js) | **🎛️ Live Tactical Cockpit** | Interactive simulator for clean or garbage webhook payloads, request inspection, and approve/reject actions. |
+| [`/about`](src/app/about/page.js) | **👥 About & Team** | Team background, system architecture philosophy, and technology stack. |
 
 > 💡 **Submit Ticket Modal**: Available from both the **Navbar** and the **Hero section CTA** on any page. Students can type a raw complaint, and the system runs the full pipeline live — Gemini AI classification → Notion DB write → certificate generation → email dispatch.
 

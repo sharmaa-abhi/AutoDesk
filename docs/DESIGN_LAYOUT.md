@@ -17,6 +17,10 @@
 4. [✨ Surfaces, Texture & Glassmorphism Tokens](#4-✨-surfaces-texture--glassmorphism-tokens)
 5. [💻 Design System CSS Tokens (Copy-Paste Ready)](#5-💻-design-system-css-tokens-copy-paste-ready)
 
+## Current Feature Set
+
+The implemented experience includes a landing-page submission modal, animated pipeline and feature sections, an About page, and a live tactical cockpit. The cockpit provides event filtering, request inspection, confidence and priority display, clean/garbage webhook simulation, approve/reject controls, counters, and recent run-log telemetry. The backend actions behind these controls are `ingest`, `approve`, and `reject`.
+
 ---
 
 ## 1. 🎨 Visual Identity & Color Palette (Deep OLED Void)
@@ -131,7 +135,7 @@ flowchart LR
 | `Hero` | `components/Hero.jsx` | Full-viewport hero with animated floating orbs (cyan, amber, violet, crimson). Bold headline "Kill One Boring Job. Completely." with gradient text. Two CTAs: "Submit Live Ticket" (opens modal) + "Open Live Cockpit" (links to dashboard). Bottom formula strip showing pipeline flow. |
 | `StatsStrip` | `components/StatsStrip.jsx` | Horizontal strip with live counters: Requests Processed, Uptime, Certificates Sent, Response Time. |
 | `HowItWorks` | `components/HowItWorks.jsx` | 5-stage pipeline visualization: Ingest → Classify → Approve → Execute → Audit. Each step with icon and description. |
-| `Features` | `components/Features.jsx` | Bento-style grid cards: AI Classification, HITL, Real-World Actions, Tamper-Proof Logs. Glassmorphism cards with hover effects. |
+| `Features` | `components/Features.jsx` | Bento-style grid cards: AI Classification, HITL, Real-World Actions, Tamper-Proof Logs. Cards use animated reveal and hover states. |
 | `Architecture` | `components/Architecture.jsx` | Visual system architecture diagram showing full pipeline flow. |
 
 ### C. Dashboard Cockpit Components (`/dashboard`)
@@ -150,7 +154,7 @@ Layout: 12-column CSS grid with `grid-cols-12`, split as 3/6/3.
 | Component | File | Purpose |
 |:----------|:-----|:--------|
 | `TeamCard` | `components/TeamCard.jsx` | Glassmorphism team member cards with name, role, bio, and social links (GitHub, LinkedIn). Staggered entrance animation. |
-| `TechStack` | `components/TechStack.jsx` | Animated grid of technology badges: Next.js, Tailwind CSS, Framer Motion, Node.js, Gemini AI, Notion API, Resend, PDFKit. Each badge color-coded by category. Hover lift effect. |
+| `TechStack` | `components/TechStack.jsx` | Animated grid of technologies used by the application, including Next.js, Tailwind CSS, Framer Motion, Gemini AI, Notion API, Resend, and SMTP support. |
 
 ---
 
