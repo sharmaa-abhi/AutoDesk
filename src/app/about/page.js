@@ -60,7 +60,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
           {teamMembers.map((member, i) => (
             <TeamCard
-              key={member.name + i}
+              key={member.name}
               name={member.name}
               role={member.role}
               bio={member.bio}

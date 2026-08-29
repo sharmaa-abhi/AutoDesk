@@ -5,12 +5,30 @@ import { createNotionRequest, logRunToNotion } from '@/lib/notion';
 import { sendUniversalEmail } from '@/lib/mailer';
 import { generateCertificateHTML } from '@/lib/certificate';
 
-// In-memory deduplication cache for recent hashes (24h window)
+// In-memory deduplication cache with TTL cleanup (24h window)
+const DEDUP_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 const deduplicationCache = new Map();
+
+function cleanExpiredEntries() {
+  const now = Date.now();
+  for (const [hash, timestamp] of deduplicationCache) {
+    if (now - timestamp > DEDUP_TTL_MS) {
+      deduplicationCache.delete(hash);
+    }
+  }
+}
 
 function getPayloadHash(email, message) {
   const normalized = `${(email || '').toLowerCase().trim()}_${(message || '').toLowerCase().trim()}`;
   return crypto.createHash('md5').update(normalized).digest('hex');
+}
+
+/**
+ * Basic email format check.
+ */
+function isValidEmail(email) {
+  if (!email || typeof email !== 'string') return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 export async function POST(request) {
@@ -19,19 +37,53 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const {
-      action = 'ingest',
-      userName = 'Rahul Sharma',
-      userEmail = 'sharmaa24434@gmail.com',
-      rawMessage = "Sir I attended the 2-day GenAI workshop but didn't receive my certificate yet. Please verify attendance.",
+      action,
+      userName,
+      userEmail,
+      rawMessage,
       eventName = 'Automate India',
-      requestId = `REQ-${Math.floor(100 + Math.random() * 900)}`,
+      requestId,
     } = body;
+
+    // =====================
+    // GLOBAL INPUT VALIDATION
+    // =====================
+    if (!action || !['ingest', 'approve', 'reject'].includes(action)) {
+      return NextResponse.json(
+        { success: false, error: `Invalid or missing action. Must be one of: ingest, approve, reject` },
+        { status: 400 }
+      );
+    }
 
     // ==========================================
     // ACTION 1: INGEST NEW TICKET / WEBHOOK
     // ==========================================
     if (action === 'ingest') {
-      const hash = getPayloadHash(userEmail, rawMessage);
+      // Validate required fields for ingest
+      if (!rawMessage || typeof rawMessage !== 'string' || !rawMessage.trim()) {
+        return NextResponse.json(
+          { success: false, error: 'rawMessage is required and must be a non-empty string.' },
+          { status: 400 }
+        );
+      }
+
+      if (!userName || typeof userName !== 'string' || !userName.trim()) {
+        return NextResponse.json(
+          { success: false, error: 'userName is required.' },
+          { status: 400 }
+        );
+      }
+
+      const isEmailValid = isValidEmail(userEmail);
+      const safeEmail = (userEmail || 'unspecified@student.edu').slice(0, 320);
+      const safeName = (userName || 'Anonymous Student').slice(0, 200);
+      const safeMessage = rawMessage.slice(0, 10000);
+      const safeRequestId = requestId || `REQ-${Math.floor(100 + Math.random() * 900)}`;
+
+      // Cleanup expired dedup entries
+      cleanExpiredEntries();
+
+      const hash = getPayloadHash(safeEmail, safeMessage);
       const isDuplicate = deduplicationCache.has(hash);
 
       if (isDuplicate) {
@@ -39,7 +91,7 @@ export async function POST(request) {
         const duration = Date.now() - startTime;
         await logRunToNotion({
           runId,
-          action: `MD5 Duplicate Blocked for ${userEmail}`,
+          action: `MD5 Duplicate Blocked for ${safeEmail}`,
           trigger: 'Sanitization & Dedup Gate',
           duration,
           status: 'BLOCKED',
@@ -50,7 +102,7 @@ export async function POST(request) {
           status: 'DUPLICATE_FILTERED',
           message: 'Duplicate submission blocked within 24h window.',
           hash,
-          requestId,
+          requestId: safeRequestId,
         });
       }
 
@@ -59,39 +111,39 @@ export async function POST(request) {
 
       // 1. Gemini AI Analysis
       const aiResult = await classifyRequest({
-        rawMessage,
-        userName,
-        userEmail,
+        rawMessage: safeMessage,
+        userName: safeName,
+        userEmail: safeEmail,
       });
 
       // 2. Push to Notion Database
       const notionEntry = await createNotionRequest({
         title: aiResult.title || 'Student Certificate Request',
-        userName: userName || aiResult.extractedName,
-        userEmail: userEmail || aiResult.extractedEmail,
+        userName: safeName || aiResult.extractedName,
+        userEmail: safeEmail || aiResult.extractedEmail,
         category: aiResult.category,
         confidence: aiResult.confidence,
         priority: aiResult.priority,
         status: aiResult.status || 'WAITING_APPROVAL',
-        rawMessage,
+        rawMessage: safeMessage,
       });
 
       let emailResult = null;
-      let finalStatus = aiResult.status || 'WAITING_APPROVAL';
+      let finalStatus = !isEmailValid ? 'NEEDS_FIX' : (aiResult.status || 'WAITING_APPROVAL');
 
       // 3. Smart Routing: If auto-approved / verified attendance
-      if (aiResult.attendanceVerified && aiResult.confidence >= 90 && finalStatus !== 'NEEDS_FIX') {
+      if (isEmailValid && aiResult.attendanceVerified && aiResult.confidence >= 90 && finalStatus !== 'NEEDS_FIX') {
         finalStatus = 'SUCCESS';
 
         const certHtml = generateCertificateHTML({
-          studentName: userName || aiResult.extractedName || 'Student Participant',
+          studentName: safeName || aiResult.extractedName || 'Student Participant',
           eventName,
           certificateId: `CERT-${Date.now().toString(36).toUpperCase()}`,
         });
 
         try {
           emailResult = await sendUniversalEmail({
-            to: userEmail || 'sharmaa24434@gmail.com',
+            to: safeEmail,
             subject: `🎓 Verified Certificate of Completion — ${eventName}`,
             html: certHtml,
           });
@@ -107,7 +159,7 @@ export async function POST(request) {
       await logRunToNotion({
         runId,
         action: finalStatus === 'SUCCESS'
-          ? `Auto-Dispatched Certificate to ${userName}`
+          ? `Auto-Dispatched Certificate to ${safeName}`
           : `Queued for Human Approval: ${aiResult.category}`,
         trigger: 'Webhook Ingestion Pipeline',
         duration,
@@ -116,7 +168,7 @@ export async function POST(request) {
 
       return NextResponse.json({
         success: true,
-        requestId,
+        requestId: safeRequestId,
         runId,
         durationMs: duration,
         status: finalStatus,
@@ -130,21 +182,27 @@ export async function POST(request) {
     // ACTION 2: HUMAN APPROVE (HITL COCKPIT)
     // ==========================================
     if (action === 'approve') {
+      const safeName = (userName || 'Student Participant').slice(0, 200);
+      const safeEmail = userEmail && isValidEmail(userEmail) ? userEmail : null;
+      const safeRequestId = requestId || `REQ-${Date.now()}`;
+
       const certHtml = generateCertificateHTML({
-        studentName: userName || 'Student Participant',
+        studentName: safeName,
         eventName,
         certificateId: `CERT-${Date.now().toString(36).toUpperCase()}`,
       });
 
       let emailResult = null;
-      try {
-        emailResult = await sendUniversalEmail({
-          to: userEmail || 'sharmaa24434@gmail.com',
-          subject: `🎓 Approved: Verified Certificate — ${eventName}`,
-          html: certHtml,
-        });
-      } catch (mailErr) {
-        console.warn('Email dispatch warning:', mailErr.message);
+      if (safeEmail) {
+        try {
+          emailResult = await sendUniversalEmail({
+            to: safeEmail,
+            subject: `🎓 Approved: Verified Certificate — ${eventName}`,
+            html: certHtml,
+          });
+        } catch (mailErr) {
+          console.warn('Email dispatch warning:', mailErr.message);
+        }
       }
 
       const duration = Date.now() - startTime;
@@ -152,7 +210,7 @@ export async function POST(request) {
 
       await logRunToNotion({
         runId,
-        action: `Operator Approved Certificate for ${userName} (${requestId})`,
+        action: `Operator Approved Certificate for ${safeName} (${safeRequestId})`,
         trigger: 'Notion Operator Cockpit',
         duration,
         status: 'SUCCESS',
@@ -160,7 +218,7 @@ export async function POST(request) {
 
       return NextResponse.json({
         success: true,
-        requestId,
+        requestId: safeRequestId,
         runId,
         status: 'SUCCESS',
         durationMs: duration,
@@ -172,12 +230,13 @@ export async function POST(request) {
     // ACTION 3: HUMAN REJECT
     // ==========================================
     if (action === 'reject') {
+      const safeRequestId = requestId || `REQ-${Date.now()}`;
       const duration = Date.now() - startTime;
       const runId = `RUN-${Date.now()}`;
 
       await logRunToNotion({
         runId,
-        action: `Operator Rejected Request ${requestId} (Attendance not verified)`,
+        action: `Operator Rejected Request ${safeRequestId} (Attendance not verified)`,
         trigger: 'Notion Operator Cockpit',
         duration,
         status: 'REJECTED',
@@ -185,7 +244,7 @@ export async function POST(request) {
 
       return NextResponse.json({
         success: true,
-        requestId,
+        requestId: safeRequestId,
         runId,
         status: 'REJECTED',
         durationMs: duration,

@@ -2,6 +2,27 @@ import nodemailer from 'nodemailer';
 import { sendEmail as sendViaResend } from './resend';
 
 /**
+ * Normalize attachments into each provider's expected format.
+ */
+function toNodemailerAttachments(attachments) {
+  if (!attachments || !attachments.length) return [];
+  return attachments.map((att) => ({
+    filename: att.filename || att.name || 'attachment',
+    content: att.content,
+    ...(att.contentType ? { contentType: att.contentType } : {}),
+    ...(att.path ? { path: att.path } : {}),
+  }));
+}
+
+function toResendAttachments(attachments) {
+  if (!attachments || !attachments.length) return [];
+  return attachments.map((att) => ({
+    filename: att.filename || att.name || 'attachment',
+    content: att.content,
+  }));
+}
+
+/**
  * Universal email dispatcher: Attempts Resend first; falls back to Gmail SMTP if configured.
  */
 export async function sendUniversalEmail({ to, subject, html, attachments = [] }) {
@@ -11,7 +32,12 @@ export async function sendUniversalEmail({ to, subject, html, attachments = [] }
   // 1. Try Resend if configured
   if (hasResend) {
     try {
-      const resendResult = await sendViaResend({ to, subject, html, attachments });
+      const resendResult = await sendViaResend({
+        to,
+        subject,
+        html,
+        attachments: toResendAttachments(attachments),
+      });
       return { provider: 'resend', result: resendResult };
     } catch (err) {
       console.warn('Resend failed, attempting SMTP fallback:', err.message);
@@ -33,7 +59,7 @@ export async function sendUniversalEmail({ to, subject, html, attachments = [] }
       to,
       subject,
       html,
-      attachments,
+      attachments: toNodemailerAttachments(attachments),
     });
 
     return { provider: 'gmail_smtp', result: info };

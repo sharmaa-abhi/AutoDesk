@@ -15,6 +15,11 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
+    if (!name.trim()) { setError("Please enter your name."); return; }
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
 
     setLoading(true);
     setError(null);
@@ -26,8 +31,8 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "ingest",
-          userName: name || "Student Participant",
-          userEmail: email || "sharmaa24434@gmail.com",
+          userName: name.trim(),
+          userEmail: email.trim(),
           rawMessage: message,
           eventName: "Automate India",
         }),

@@ -46,13 +46,15 @@ export async function createNotionRequest({
     const response = await notion.pages.create({
       parent: { database_id: dbId },
       properties: {
-        Name: [
-          {
-            text: {
-              content: pageTitle,
+        Name: {
+          title: [
+            {
+              text: {
+                content: pageTitle,
+              },
             },
-          },
-        ],
+          ],
+        },
       },
       children: [
         {
@@ -115,13 +117,15 @@ export async function logRunToNotion({
     const response = await notion.pages.create({
       parent: { database_id: dbId },
       properties: {
-        Name: [
-          {
-            text: {
-              content: logTitle,
+        Name: {
+          title: [
+            {
+              text: {
+                content: logTitle,
+              },
             },
-          },
-        ],
+          ],
+        },
       },
       children: [
         {

@@ -20,13 +20,15 @@ export async function GET() {
     const testPage = await notion.pages.create({
       parent: { database_id: dbId },
       properties: {
-        Name: [
-          {
-            text: {
-              content: `🧪 Connection Test — ${new Date().toLocaleTimeString()}`,
+        Name: {
+          title: [
+            {
+              text: {
+                content: `🧪 Connection Test — ${new Date().toLocaleTimeString()}`,
+              },
             },
-          },
-        ],
+          ],
+        },
       },
       children: [
         {
