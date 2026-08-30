@@ -103,6 +103,8 @@ export async function POST(request) {
           message: 'Duplicate submission blocked within 24h window.',
           hash,
           requestId: safeRequestId,
+          runId,
+          durationMs: duration,
         });
       }
 

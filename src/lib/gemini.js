@@ -15,7 +15,18 @@ function getClient() {
  */
 function safeParseJSON(raw) {
   let text = (raw || '').trim();
-  text = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
+
+  // 1. Strip markdown fences if present
+  text = text.replace(/```(?:json)?/gi, '').replace(/```/g, '').trim();
+
+  // 2. Extract outermost JSON object or array if surrounded by conversational text
+  const firstBrace = text.indexOf('{');
+  const lastBrace = text.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    text = text.slice(firstBrace, lastBrace + 1);
+  }
+
+  // 3. Remove trailing commas before closing brackets
   text = text.replace(/,\s*([}\]])/g, '$1');
   return JSON.parse(text);
 }
@@ -27,12 +38,14 @@ async function callGeminiGenerate(prompt) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) throw new Error('GEMINI_API_KEY is not configured in .env.local');
 
-  // Candidate models in order of priority (gemini-3.5-flash is ultra-fast & stable)
+  // Candidate models in order of priority (GA production models first for universal key compatibility)
   const candidateModels = [
+    'gemini-2.5-flash',
+    'gemini-2.0-flash',
+    'gemini-1.5-flash',
     'gemini-3.5-flash',
     'gemini-flash-lite-latest',
     'gemini-flash-latest',
-    'gemini-3.6-flash',
   ];
 
   let lastError = null;
@@ -72,15 +85,17 @@ async function callGeminiGenerate(prompt) {
   // Also attempt SDK fallback if direct fetch fails
   const client = getClient();
   if (client) {
-    try {
-      const sdkRes = await client.models.generateContent({
-        model: 'gemini-3.5-flash',
-        contents: prompt,
-      });
-      const text = typeof sdkRes.text === 'function' ? sdkRes.text() : sdkRes.text;
-      if (text) return text;
-    } catch (sdkErr) {
-      lastError = sdkErr;
+    for (const sdkModel of ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-3.5-flash']) {
+      try {
+        const sdkRes = await client.models.generateContent({
+          model: sdkModel,
+          contents: prompt,
+        });
+        const text = typeof sdkRes.text === 'function' ? sdkRes.text() : sdkRes.text;
+        if (text) return text;
+      } catch (sdkErr) {
+        lastError = sdkErr;
+      }
     }
   }
 
@@ -152,10 +167,21 @@ function buildFallback({ rawMessage, userName, userEmail }) {
   const msg = (rawMessage || '').toLowerCase();
 
   let category = 'UNCLASSIFIED_DATA';
-  if (msg.includes('certificate')) category = 'CERTIFICATE_ISSUE';
-  else if (msg.includes('duplicate') || msg.includes('twice')) category = 'DUPLICATE_REGISTRATION';
-  else if (msg.includes('attendance') || msg.includes('attended')) category = 'ATTENDANCE_VERIFICATION';
-  else if (msg.includes('reschedule') || msg.includes('calendar') || msg.includes('shift')) category = 'CALENDAR_RESCHEDULE';
+  let actionPreview = 'MANUAL_REVIEW';
+
+  if (msg.includes('certificate')) {
+    category = 'CERTIFICATE_ISSUE';
+    actionPreview = 'GENERATE_PDF + EMAIL';
+  } else if (msg.includes('duplicate') || msg.includes('twice')) {
+    category = 'DUPLICATE_REGISTRATION';
+    actionPreview = 'DEDUPLICATED';
+  } else if (msg.includes('attendance') || msg.includes('attended')) {
+    category = 'ATTENDANCE_VERIFICATION';
+    actionPreview = 'MANUAL_REVIEW';
+  } else if (msg.includes('reschedule') || msg.includes('calendar') || msg.includes('shift')) {
+    category = 'CALENDAR_RESCHEDULE';
+    actionPreview = 'CALENDAR_SYNC';
+  }
 
   return {
     title: 'Student Support Request',
@@ -165,7 +191,7 @@ function buildFallback({ rawMessage, userName, userEmail }) {
     status: 'WAITING_APPROVAL',
     attendanceVerified: false,
     sentiment: 'NEUTRAL',
-    actionPreview: 'MANUAL_REVIEW',
+    actionPreview,
     extractedName: userName || 'Student',
     extractedEmail: userEmail || '',
     reasoning: 'Fallback rule-based classification.',

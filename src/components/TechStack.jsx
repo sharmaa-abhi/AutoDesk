@@ -10,7 +10,7 @@ const techStack = [
   { name: "Gemini AI", category: "Intelligence", color: "text-amber-accent", bg: "bg-amber-accent/8", border: "border-amber-accent/15" },
   { name: "Notion API", category: "Database", color: "text-gold", bg: "bg-gold/8", border: "border-gold/15" },
   { name: "Resend", category: "Email", color: "text-crimson-accent", bg: "bg-crimson-accent/8", border: "border-crimson-accent/15" },
-  { name: "PDFKit", category: "PDF Gen", color: "text-orange-accent", bg: "bg-orange-accent/8", border: "border-orange-accent/15" },
+  { name: "HTML Engine", category: "Certificates", color: "text-orange-accent", bg: "bg-orange-accent/8", border: "border-orange-accent/15" },
 ];
 
 const containerVariants = {

@@ -1,3 +1,13 @@
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 /**
  * Generates an official, tamper-proof HTML / SVG Certificate of Completion.
  */
@@ -11,6 +21,11 @@ export function generateCertificateHTML({
     year: 'numeric',
   }),
 }) {
+  const safeName = escapeHtml(studentName);
+  const safeEvent = escapeHtml(eventName);
+  const safeCertId = escapeHtml(certificateId);
+  const safeDate = escapeHtml(issueDate);
+
   return `
 <!DOCTYPE html>
 <html>
@@ -143,17 +158,17 @@ export function generateCertificateHTML({
     <h1>Certificate of Completion</h1>
     <p class="subtext">This is proudly presented to</p>
 
-    <div class="recipient-name">${studentName}</div>
+    <div class="recipient-name">${safeName}</div>
 
     <p class="description">
       For outstanding participation, verified workshop completion, and active engagement in <br/>
-      <span class="event-title">${eventName}</span>.
+      <span class="event-title">${safeEvent}</span>.
     </p>
 
     <div class="footer-grid">
       <div class="meta-col">
-        <div>CERTIFICATE ID: <span>${certificateId}</span></div>
-        <div>ISSUE DATE: <span>${issueDate}</span></div>
+        <div>CERTIFICATE ID: <span>${safeCertId}</span></div>
+        <div>ISSUE DATE: <span>${safeDate}</span></div>
         <div>VERIFICATION: <span style="color: #00E676;">CRYPTOGRAPHICALLY VERIFIED</span></div>
       </div>
       <div class="sig-col">

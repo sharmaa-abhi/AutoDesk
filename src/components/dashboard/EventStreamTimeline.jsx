@@ -130,6 +130,11 @@ export default function EventStreamTimeline({
                       <AlertTriangle className="w-3 h-3" /> DATA FIX
                     </span>
                   )}
+                  {item.status === "FAILED" && (
+                    <span className="px-2 py-0.5 rounded-full bg-crimson-accent/20 text-crimson-accent border border-crimson-accent/30 font-bold text-[10px] flex items-center gap-1">
+                      <XCircle className="w-3 h-3" /> REJECTED
+                    </span>
+                  )}
                 </div>
 
                 {/* Event Title & User Payload Summary */}

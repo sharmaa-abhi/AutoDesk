@@ -111,7 +111,19 @@ export default function BentoMetrics({ stats, runLogs }) {
                 <span>{log.timestamp}</span>
               </div>
               <div className="text-text-white font-semibold flex items-center gap-1.5">
-                <span className="text-emerald-accent">✓</span>
+                <span
+                  className={
+                    log.status === "REJECTED"
+                      ? "text-crimson-accent font-bold"
+                      : log.status === "BLOCKED"
+                      ? "text-amber-accent font-bold"
+                      : log.status === "ALERT"
+                      ? "text-amber-accent font-bold"
+                      : "text-emerald-accent font-bold"
+                  }
+                >
+                  {log.status === "REJECTED" ? "✗" : log.status === "BLOCKED" ? "⊘" : log.status === "ALERT" ? "⚠" : "✓"}
+                </span>
                 <span className="truncate">{log.action}</span>
               </div>
               <div className="flex items-center justify-between text-[9px] text-text-muted mt-1 pt-1 border-t border-border-subtle/40">

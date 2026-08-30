@@ -137,9 +137,10 @@ export default function DashboardPage() {
   const selectedEvent = events.find((e) => e.id === selectedEventId) || events[0];
 
   const handleApproveEvent = async (eventId) => {
-    setIsProcessing(true);
     const target = events.find((e) => e.id === eventId) || selectedEvent;
+    if (!target || target.status === 'SUCCESS') return;
 
+    setIsProcessing(true);
     try {
       const res = await fetch('/api/pipeline', {
         method: 'POST',
@@ -153,6 +154,9 @@ export default function DashboardPage() {
         }),
       });
       const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Approval request failed');
+      }
 
       setEvents((prev) =>
         prev.map((e) => (e.id === eventId ? { ...e, status: 'SUCCESS' } : e))
@@ -161,7 +165,7 @@ export default function DashboardPage() {
       setStats((prev) => ({
         ...prev,
         completed: prev.completed + 1,
-        pending: Math.max(0, prev.pending - 1),
+        pending: target.status === 'WAITING_APPROVAL' ? Math.max(0, prev.pending - 1) : prev.pending,
         logged: prev.logged + 1,
       }));
 
@@ -183,6 +187,9 @@ export default function DashboardPage() {
   };
 
   const handleRejectEvent = async (eventId) => {
+    const target = events.find((e) => e.id === eventId) || selectedEvent;
+    if (!target || target.status === 'FAILED') return;
+
     setIsProcessing(true);
     try {
       const res = await fetch('/api/pipeline', {
@@ -194,6 +201,9 @@ export default function DashboardPage() {
         }),
       });
       const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Reject request failed');
+      }
 
       setEvents((prev) =>
         prev.map((e) => (e.id === eventId ? { ...e, status: 'FAILED' } : e))
@@ -201,7 +211,7 @@ export default function DashboardPage() {
 
       setStats((prev) => ({
         ...prev,
-        pending: Math.max(0, prev.pending - 1),
+        pending: target.status === 'WAITING_APPROVAL' ? Math.max(0, prev.pending - 1) : prev.pending,
         logged: prev.logged + 1,
       }));
 
@@ -253,6 +263,9 @@ export default function DashboardPage() {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Webhook simulation failed');
+      }
 
       const newEvent = {
         id: newId,

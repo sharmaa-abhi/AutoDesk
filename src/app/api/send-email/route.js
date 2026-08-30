@@ -8,9 +8,22 @@ import {
   listAttachments,
   getAttachment,
 } from '@/lib/resend';
+import { sendUniversalEmail } from '@/lib/mailer';
 
 export async function GET() {
   try {
+    const rawKey = process.env.RESEND_API_KEY;
+    const isResendConfigured = rawKey && !rawKey.includes('xxxxxxxxx');
+
+    if (!isResendConfigured) {
+      return NextResponse.json({
+        success: true,
+        message: 'Resend API key is not configured. System is currently using Gmail SMTP dispatcher.',
+        activeProvider: process.env.SMTP_USER ? 'gmail_smtp' : 'none',
+        data: [],
+      });
+    }
+
     const listResult = await listEmails();
     return NextResponse.json({ success: true, data: listResult });
   } catch (error) {
@@ -55,13 +68,11 @@ export async function POST(request) {
 
       case 'send':
       default:
-        result = await sendEmail({
+        result = await sendUniversalEmail({
           to: body.to || 'delivered@resend.dev',
           subject: body.subject || 'Certificate Delivery — AutoDesk Engine',
           html: body.html || '<p>Your request has been processed successfully!</p>',
-          from: body.from,
-          attachments: body.attachments,
-          scheduledAt: body.scheduledAt,
+          attachments: body.attachments || [],
         });
         break;
     }

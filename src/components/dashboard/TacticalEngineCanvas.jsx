@@ -220,6 +220,10 @@ export default function TacticalEngineCanvas({
                 <p className="text-[11px] text-text-muted mb-3 font-mono">
                   {selectedEvent?.status === "WAITING_APPROVAL"
                     ? "Paused in Notion — Requires human clearance"
+                    : selectedEvent?.status === "FAILED"
+                    ? "Operator rejected request — Attendance unverified"
+                    : selectedEvent?.status === "NEEDS_FIX"
+                    ? "Invalid data format — Flagged for manual correction"
                     : "Action processed and sealed with Run Log"}
                 </p>
 
@@ -238,9 +242,17 @@ export default function TacticalEngineCanvas({
                       <X className="w-3.5 h-3.5" /> REJECT
                     </button>
                   </div>
+                ) : selectedEvent?.status === "FAILED" ? (
+                  <div className="px-4 py-2 rounded-lg bg-crimson-accent/10 border border-crimson-accent/30 text-crimson-accent font-mono text-xs font-bold">
+                    ❌ REJECTED BY OPERATOR
+                  </div>
+                ) : selectedEvent?.status === "NEEDS_FIX" ? (
+                  <div className="px-4 py-2 rounded-lg bg-amber-accent/10 border border-amber-accent/30 text-amber-accent font-mono text-xs font-bold">
+                    ⚠️ REQUIRES DATA FIX
+                  </div>
                 ) : (
                   <div className="px-4 py-2 rounded-lg bg-emerald-accent/10 border border-emerald-accent/30 text-emerald-accent font-mono text-xs font-bold">
-                    ✅ EXECUTED & AUDITED #RUN-042
+                    ✅ EXECUTED & AUDITED #{selectedEvent?.id ? `RUN-${selectedEvent.id.replace('REQ-', '')}` : 'RUN-042'}
                   </div>
                 )}
               </div>
@@ -251,21 +263,27 @@ export default function TacticalEngineCanvas({
             <div className="space-y-2 font-mono text-xs">
               <div className="text-cyan-accent font-bold flex items-center gap-1.5">
                 <Terminal className="w-3.5 h-3.5" />
-                EXTRACTED JSON SCHEMA (Gemini 1.5 Flash Mode):
+                EXTRACTED JSON SCHEMA (Gemini AI Engine):
               </div>
               <pre className="p-3 rounded-lg bg-canvas text-[11px] text-emerald-accent overflow-x-auto border border-border-subtle leading-relaxed">
-{`{
-  "request_id": "${selectedEvent?.id || "REQ-108"}",
-  "user_name": "${selectedEvent?.userName || "Rahul Sharma"}",
-  "intent": "CERTIFICATE_MISSING",
-  "confidence_score": 0.94,
-  "requires_hitl_approval": true,
-  "action_spec": {
-    "type": "GENERATE_PDF_AND_DISPATCH_RESEND",
-    "template": "event_certificate_v2.html",
-    "recipient": "${selectedEvent?.userEmail || "rahul@test.com"}"
-  }
-}`}
+{JSON.stringify(
+  {
+    request_id: selectedEvent?.id || "REQ-108",
+    user_name: selectedEvent?.userName || "Rahul Sharma",
+    user_email: selectedEvent?.userEmail || "rahul@college.edu",
+    intent: selectedEvent?.category || "CERTIFICATE_ISSUE",
+    confidence_score: selectedEvent?.confidence ? Number((selectedEvent.confidence / 100).toFixed(2)) : 0.94,
+    status: selectedEvent?.status || "WAITING_APPROVAL",
+    attendance_verified: !!selectedEvent?.attendanceVerified,
+    action_spec: {
+      type: selectedEvent?.actionPreview || "GENERATE_PDF + EMAIL",
+      template: "event_certificate_v2.html",
+      recipient: selectedEvent?.userEmail || "rahul@college.edu",
+    },
+  },
+  null,
+  2
+)}
               </pre>
             </div>
           )}
@@ -291,7 +309,7 @@ export default function TacticalEngineCanvas({
                 </div>
                 <div className="p-2 rounded bg-canvas border border-border-subtle">
                   <span className="text-text-muted block text-[9px]">RUN LOG ATTACHED</span>
-                  <span className="text-cyan-accent font-bold">#RUN-20260822-0042</span>
+                  <span className="text-cyan-accent font-bold">#{selectedEvent?.id ? `RUN-${selectedEvent.id.replace('REQ-', '2026-')}` : 'RUN-20260822-0042'}</span>
                 </div>
               </div>
             </div>
