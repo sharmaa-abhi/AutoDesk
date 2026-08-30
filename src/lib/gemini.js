@@ -108,13 +108,15 @@ async function callGeminiGenerate(prompt) {
  * @param {string} [params.userEmail] - Student's email if provided
  */
 export async function classifyRequest({ rawMessage, userName = '', userEmail = '' }) {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error('GEMINI_API_KEY is not configured in .env.local');
-  }
-
   const safeMessage = (rawMessage || '').slice(0, 10000);
   const safeName = (userName || '').slice(0, 200);
   const safeEmail = (userEmail || '').slice(0, 320);
+
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) {
+    console.warn('GEMINI_API_KEY not found in environment. Using rule-based fallback.');
+    return buildFallback({ rawMessage: safeMessage, userName: safeName, userEmail: safeEmail });
+  }
 
   const prompt = `You are AutoDesk Engine's AI Classifier for college event student requests.
 Analyze the following student ticket:
@@ -144,16 +146,16 @@ Return ONLY valid JSON.`;
     const rawOutput = await callGeminiGenerate(prompt);
     const parsed = safeParseJSON(rawOutput);
 
-    if (!parsed.category || !parsed.priority) {
+    if (!parsed || !parsed.category || !parsed.priority) {
       return {
         ...buildFallback({ rawMessage: safeMessage, userName: safeName, userEmail: safeEmail }),
-        ...parsed,
+        ...(parsed || {}),
       };
     }
 
     return parsed;
   } catch (error) {
-    console.error('Gemini Classification Error:', error.message || error);
+    console.warn('Gemini Classification Notice:', error.message || error);
     return buildFallback({ rawMessage: safeMessage, userName: safeName, userEmail: safeEmail });
   }
 }
