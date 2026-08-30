@@ -343,7 +343,7 @@ export default function DashboardPage() {
 
           {/* Column 3: Right Panel (Deep Metrics & Bento Breakdown) [3 cols] */}
           <div className="lg:col-span-3 h-full">
-            <BentoMetrics stats={stats} runLogs={runLogs} />
+            <BentoMetrics stats={stats} runLogs={runLogs} onSimulateWebhook={handleSimulateWebhook} />
           </div>
         </div>
       </main>
