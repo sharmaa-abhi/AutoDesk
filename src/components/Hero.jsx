@@ -79,7 +79,7 @@ export default function Hero() {
 
           <Link
             href="/dashboard"
-            className="btn-secondary btn-primary-lg text-sm w-full sm:w-auto"
+            className="btn-secondary btn-secondary-lg text-sm w-full sm:w-auto"
           >
             <Activity className="w-4 h-4 text-[#dc2626]" aria-hidden="true" focusable="false" />
             <span>Open Live Cockpit</span>

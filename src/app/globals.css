@@ -233,6 +233,12 @@ body {
   font-weight: 600;
 }
 
+.btn-secondary-lg {
+  padding: 0.875rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
 /* 3. Success Button (Approve, complete, positive dispatches) */
 .btn-success {
   display: inline-flex;
