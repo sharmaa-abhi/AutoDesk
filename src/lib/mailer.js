@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { sendEmail as sendViaResend } from './resend';
+import { sendEmail as sendViaResend } from './resend.js';
 
 /**
  * Normalize attachments into each provider's expected format.
@@ -38,13 +38,22 @@ export async function sendUniversalEmail({ to, subject, html, attachments = [] }
         html,
         attachments: toResendAttachments(attachments),
       });
-      return { provider: 'resend', result: resendResult };
+
+      // Check if Resend SDK returned an error (e.g. sandbox domain restriction)
+      if (resendResult && resendResult.error) {
+        console.warn('Resend API notice:', resendResult.error.message);
+        throw new Error(resendResult.error.message || 'Resend delivery restricted');
+      }
+
+      if (resendResult && (resendResult.id || (resendResult.data && resendResult.data.id))) {
+        return { provider: 'resend', result: resendResult };
+      }
     } catch (err) {
-      console.warn('Resend failed, attempting SMTP fallback:', err.message);
+      console.warn('Resend delivery failed or restricted to account email. Cascading to Gmail SMTP:', err.message);
     }
   }
 
-  // 2. Try Gmail SMTP if credentials exist
+  // 2. Try Gmail SMTP if credentials exist (Delivers to ANY email address without domain restriction)
   if (hasSmtp) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
