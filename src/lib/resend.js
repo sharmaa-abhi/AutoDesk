@@ -69,7 +69,7 @@ export async function getEmail(id) {
 }
 
 /**
- * 4. Reschedule an Email
+ * 4. Reschedule / Update an Email
  * @param {Object} options
  * @param {string} options.id
  * @param {string} options.scheduledAt - ISO timestamp string
@@ -83,7 +83,25 @@ export async function updateEmail({ id, scheduledAt }) {
 }
 
 /**
- * 5. List Recent Sent Emails
+ * 5. Cancel a Scheduled Email
+ * @param {string} id
+ */
+export async function cancelEmail(id) {
+  const client = ensureClient();
+  return await client.emails.cancel(id);
+}
+
+/**
+ * 6. Share an Email (generate public web view link)
+ * @param {string} id
+ */
+export async function shareEmail(id) {
+  const client = ensureClient();
+  return await client.emails.share(id);
+}
+
+/**
+ * 7. List Recent Sent Emails
  */
 export async function listEmails() {
   const client = ensureClient();
@@ -91,7 +109,7 @@ export async function listEmails() {
 }
 
 /**
- * 6. List Email Attachments
+ * 8. List Email Attachments
  * @param {Object} options
  * @param {string} options.emailId
  */
@@ -101,7 +119,7 @@ export async function listAttachments({ emailId }) {
 }
 
 /**
- * 7. Get Specific Email Attachment
+ * 9. Get Specific Email Attachment
  * @param {Object} options
  * @param {string} options.id
  * @param {string} options.emailId
@@ -109,4 +127,13 @@ export async function listAttachments({ emailId }) {
 export async function getAttachment({ id, emailId }) {
   const client = ensureClient();
   return await client.emails.attachments.get({ id, emailId });
+}
+
+/**
+ * 10. Get Email Metrics / Analytics
+ * @param {Object} options
+ */
+export async function getEmailMetrics(options = {}) {
+  const client = ensureClient();
+  return await client.emails.metrics(options);
 }
