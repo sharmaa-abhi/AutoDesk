@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 const nodes = [
   { id: "user", label: "👤 Student / User", sub: "Submits natural complaint", category: "INPUT", type: "input" },
   { id: "webhook", label: "🌐 Webhook Gateway", sub: "POST /api/pipeline", category: "INPUT", type: "input" },
@@ -11,12 +13,45 @@ const nodes = [
   { id: "runlog", label: "📜 Notion Run Log", sub: "Tamper-proof audit proof", category: "OUTPUT", type: "output" },
 ];
 
+const nodeVariants = {
+  hidden: { opacity: 0, y: 16, scale: 0.96 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.35, ease: [0.21, 0.47, 0.32, 0.98] },
+  },
+};
+
+const arrowVariants = {
+  hidden: { opacity: 0, scaleY: 0 },
+  visible: {
+    opacity: 1,
+    scaleY: 1,
+    transition: { duration: 0.2 },
+  },
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.07, delayChildren: 0.1 },
+  },
+};
+
 export default function Architecture() {
   return (
     <section className="py-20 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto space-y-12">
         {/* Header */}
-        <div className="text-center space-y-3">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5 }}
+          className="text-center space-y-3"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
             <span>SYSTEM BLUEPRINT</span>
           </div>
@@ -42,28 +77,48 @@ export default function Architecture() {
               <span>OUTPUT (Action & Audit)</span>
             </span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Architecture Diagram Container */}
-        <div className="dev-card bg-white p-6 sm:p-10 relative overflow-hidden">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="dev-card bg-white p-6 sm:p-10 relative overflow-hidden"
+        >
           <div className="relative z-10 flex flex-col items-center gap-3">
             {/* Row 1: User */}
-            <FlowNode node={nodes[0]} />
-            <FlowArrow />
+            <motion.div variants={nodeVariants} className="w-full flex justify-center">
+              <FlowNode node={nodes[0]} />
+            </motion.div>
+            <motion.div variants={arrowVariants} className="origin-top">
+              <FlowArrow />
+            </motion.div>
 
             {/* Row 2: Webhook */}
-            <FlowNode node={nodes[1]} />
-            <FlowArrow />
+            <motion.div variants={nodeVariants} className="w-full flex justify-center">
+              <FlowNode node={nodes[1]} />
+            </motion.div>
+            <motion.div variants={arrowVariants} className="origin-top">
+              <FlowArrow />
+            </motion.div>
 
             {/* Row 3: Validate */}
-            <FlowNode node={nodes[2]} />
-            <FlowArrow />
+            <motion.div variants={nodeVariants} className="w-full flex justify-center">
+              <FlowNode node={nodes[2]} />
+            </motion.div>
+            <motion.div variants={arrowVariants} className="origin-top">
+              <FlowArrow />
+            </motion.div>
 
             {/* Row 4: AI */}
-            <FlowNode node={nodes[3]} />
+            <motion.div variants={nodeVariants} className="w-full flex justify-center">
+              <FlowNode node={nodes[3]} />
+            </motion.div>
 
             {/* Branch */}
-            <div className="flex items-start gap-4 sm:gap-8 w-full mt-2">
+            <motion.div variants={nodeVariants} className="flex items-start gap-4 sm:gap-8 w-full mt-2">
               {/* Left Branch: Notion + Approval */}
               <div className="flex-1 flex flex-col items-center gap-3">
                 <div className="text-[#dc2626] text-xs font-mono font-bold">↓ Needs Approval (High Risk)</div>
@@ -79,22 +134,27 @@ export default function Architecture() {
                 <div className="h-[44px]" />
                 <div className="text-[#71717a] text-xs font-mono">↓ auto-dispatch</div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Merge Arrow */}
-            <div className="text-[#71717a] text-xs font-mono my-2 font-bold">
+            <motion.div variants={nodeVariants} className="text-[#71717a] text-xs font-mono my-2 font-bold">
               ← Both Paths Merge →
-            </div>
+            </motion.div>
 
             {/* Run Log */}
-            <FlowNode node={nodes[7]} />
+            <motion.div variants={nodeVariants} className="w-full flex justify-center">
+              <FlowNode node={nodes[7]} />
+            </motion.div>
 
             {/* Final Badge */}
-            <div className="mt-4 px-4 py-2 rounded-full bg-[#ecfdf5] border-2 border-[#059669] text-[#065f46] text-xs font-mono font-bold shadow-[2px_2px_0px_#18181b]">
+            <motion.div
+              variants={nodeVariants}
+              className="mt-4 px-4 py-2 rounded-full bg-[#ecfdf5] border-2 border-[#059669] text-[#065f46] text-xs font-mono font-bold shadow-[2px_2px_0px_#18181b]"
+            >
               🏁 TAMPER-PROOF RUN LOG PROOF SEALED
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

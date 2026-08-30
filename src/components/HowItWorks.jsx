@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   Globe,
   Cpu,
@@ -43,12 +44,36 @@ const steps = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 28, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] },
+  },
+};
+
 export default function HowItWorks() {
   return (
     <section id="how-it-works" className="py-20 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header */}
-        <div className="text-center space-y-3">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5 }}
+          className="text-center space-y-3"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
             <span>SYSTEM PIPELINE</span>
           </div>
@@ -58,13 +83,20 @@ export default function HowItWorks() {
           <p className="text-sm sm:text-base text-[#52525b] max-w-xl mx-auto">
             From inbound trigger to tamper-proof proof — every step is automated, audited, and human-supervised.
           </p>
-        </div>
+        </motion.div>
 
         {/* Steps Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {steps.map((step, i) => (
-            <div
+            <motion.div
               key={step.title}
+              variants={itemVariants}
               className="dev-card bg-white p-6 relative flex flex-col justify-between"
             >
               <div>
@@ -84,12 +116,18 @@ export default function HowItWorks() {
                   {step.desc}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Tamper-Proof Audit Banner */}
-        <div className="dev-card bg-white p-5 flex flex-col sm:flex-row items-center gap-4 max-w-3xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="dev-card bg-white p-5 flex flex-col sm:flex-row items-center gap-4 max-w-3xl mx-auto"
+        >
           <div className="w-11 h-11 rounded-lg bg-[#059669] text-white flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0px_#18181b]">
             <ScrollText className="w-5 h-5 text-white" aria-hidden="true" focusable="false" />
           </div>
@@ -102,7 +140,7 @@ export default function HowItWorks() {
               Every action automatically writes a timestamped execution row to Notion — written via the Notion Integration Bot token, never manually entered.
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,11 +1,18 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { Zap, Code2, ExternalLink } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="border-t-2 border-[#18181b] bg-white mt-auto">
+    <motion.footer
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5 }}
+      className="border-t-2 border-[#18181b] bg-white mt-auto"
+    >
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-6 text-center md:text-left">
           {/* Left: Brand & Copyright */}
@@ -83,6 +90,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }
