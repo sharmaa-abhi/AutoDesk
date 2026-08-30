@@ -14,11 +14,9 @@ import {
   ArrowRight,
   Terminal,
   Send,
-  ExternalLink,
   Copy,
   CheckCheck,
   RefreshCw,
-  Clock,
 } from "lucide-react";
 
 export default function TacticalEngineCanvas({
@@ -36,41 +34,47 @@ export default function TacticalEngineCanvas({
   const [copied, setCopied] = useState(false);
   const [submitFeedback, setSubmitFeedback] = useState(null);
 
+  // Fix 19: Simplified execution flow with clean readable status labels
   const stages = [
     {
       id: 1,
-      title: "1. Ingest Gateway",
+      title: "1. Ingest",
       sub: "Sanitize & Hash",
       icon: Globe,
-      status: "PASS",
+      status: "✓ Ready",
     },
     {
       id: 2,
-      title: "2. Gemini Flash",
-      sub: "Extract Intent",
+      title: "2. Gemini AI",
+      sub: "Intent Extractor",
       icon: Brain,
-      status: `${selectedEvent?.confidence || 98}% CONF`,
+      status: `✓ ${selectedEvent?.confidence || 98}%`,
     },
     {
       id: 3,
       title: "3. Notion Queue",
       sub: "Operator Decision",
       icon: Database,
-      status: selectedEvent?.status || "PENDING",
+      status:
+        selectedEvent?.status === "SUCCESS"
+          ? "✓ Approved"
+          : selectedEvent?.status === "FAILED"
+          ? "✗ Rejected"
+          : "Review",
     },
     {
       id: 4,
       title: "4. Dispatcher",
-      sub: "Cert + Mailer",
+      sub: "Cert & Email",
       icon: Mail,
-      status: selectedEvent?.status === "SUCCESS" ? "SENT" : "READY",
+      status: selectedEvent?.status === "SUCCESS" ? "✓ Sent" : "Ready",
     },
     {
       id: 5,
       title: "5. Run Log",
       sub: "Notion Proof",
       icon: FileCheck,
-      status: "SEALED",
+      status: "✓ Sealed",
     },
   ];
 
@@ -131,6 +135,14 @@ export default function TacticalEngineCanvas({
     }
   };
 
+  const formatDisplayCategory = (cat) => {
+    if (!cat) return "Certificate Issue";
+    if (cat === "CERTIFICATE_ISSUE") return "Certificate Issue";
+    if (cat === "ATTENDANCE_FIX") return "Attendance Verification";
+    if (cat === "UNCLASSIFIED_DATA") return "Unclassified Data";
+    return cat.replace(/_/g, " ");
+  };
+
   const payloadData = {
     request_id: selectedEvent?.id || "REQ-108",
     user_name: selectedEvent?.userName || "Rahul Sharma",
@@ -142,7 +154,7 @@ export default function TacticalEngineCanvas({
     status: selectedEvent?.status || "WAITING_APPROVAL",
     attendance_verified: !!selectedEvent?.attendanceVerified,
     action_spec: {
-      type: selectedEvent?.actionPreview || "GENERATE_PDF + EMAIL",
+      type: selectedEvent?.actionPreview || "Generate PDF + Email",
       template: "event_certificate_v2.html",
       recipient: selectedEvent?.userEmail || "rahul.sharma24@gmail.com",
     },
@@ -159,31 +171,33 @@ export default function TacticalEngineCanvas({
       {/* Center Card 1: PROMINENT INPUT & ACTION SECTION */}
       <div className="dev-card bg-white p-6 sm:p-7">
         <div className="mb-5 pb-3 border-b-2 border-[#18181b]">
-          <h2 className="text-base font-black text-[#18181b] uppercase tracking-tight flex items-center gap-2">
+          <h2 className="text-base font-bold text-[#18181b] tracking-tight flex items-center gap-2">
             <span>Autonomous Request Automation Engine</span>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#18181b] text-white">
+            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[#18181b] text-white">
               LIVE
             </span>
           </h2>
-          <p className="text-xs text-[#52525b] mt-0.5">
+          <p className="text-xs sm:text-sm text-[#52525b] mt-1 leading-relaxed">
             Enter natural language student requests. The engine categorizes with Gemini AI, synchronizes Notion, and executes actions.
           </p>
         </div>
 
-        {/* Quick Fill Presets */}
-        <div className="mb-4">
-          <span className="text-[11px] font-mono uppercase font-bold text-[#71717a] block mb-2">
+        {/* Quick Fill Presets (Fix 20: Responsive CSS Grid, Equal Width/Height) */}
+        <div className="mb-5">
+          <span className="text-xs font-mono uppercase font-bold text-[#71717a] block mb-2">
             Quick Test Presets:
           </span>
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             {presets.map((p, idx) => (
               <button
                 key={idx}
                 type="button"
                 onClick={() => handleApplyPreset(p)}
-                className="text-xs font-mono px-3 py-1.5 rounded-lg border-2 border-[#18181b] bg-[#fcfbfa] hover:bg-[#f4f3ef] hover:shadow-[1.5px_1.5px_0px_#18181b] text-[#18181b] transition-all font-semibold"
+                className="btn-secondary btn-secondary-sm w-full text-xs font-mono text-left justify-start py-2.5 px-3 font-semibold h-full truncate"
+                title={`Preset ${idx + 1}: ${p.label}`}
               >
-                Preset {idx + 1}: {p.label}
+                <span className="font-bold text-[#dc2626] mr-1.5 flex-shrink-0">P{idx + 1}:</span>
+                <span className="truncate">{p.label}</span>
               </button>
             ))}
           </div>
@@ -191,9 +205,9 @@ export default function TacticalEngineCanvas({
 
         {/* Form Inputs */}
         <form onSubmit={handleRunPipeline} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="engine-username" className="block text-xs font-mono font-bold text-[#18181b] mb-1">
+              <label htmlFor="engine-username" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
                 STUDENT / SENDER NAME
               </label>
               <input
@@ -206,7 +220,7 @@ export default function TacticalEngineCanvas({
               />
             </div>
             <div>
-              <label htmlFor="engine-email" className="block text-xs font-mono font-bold text-[#18181b] mb-1">
+              <label htmlFor="engine-email" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
                 STUDENT EMAIL ADDRESS
               </label>
               <input
@@ -214,14 +228,14 @@ export default function TacticalEngineCanvas({
                 type="email"
                 value={userEmail}
                 onChange={(e) => setUserEmail(e.target.value)}
-                placeholder="e.g. rahul@college.edu"
+                placeholder="e.g. rahul.sharma24@gmail.com"
                 className="dev-input font-medium"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="engine-prompt" className="block text-xs font-mono font-bold text-[#18181b] mb-1">
+            <label htmlFor="engine-prompt" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
               REQUEST / COMPLAINT PROMPT (NATURAL LANGUAGE)
             </label>
             <textarea
@@ -230,87 +244,98 @@ export default function TacticalEngineCanvas({
               value={rawPrompt}
               onChange={(e) => setRawPrompt(e.target.value)}
               placeholder="e.g. Sir I attended the 2-day GenAI workshop yesterday but didn't receive my certificate. Please verify my attendance..."
-              className="dev-input font-medium resize-none leading-relaxed"
+              className="dev-input font-medium resize-none leading-relaxed text-xs sm:text-sm"
             />
           </div>
 
           {submitFeedback && (
             <div
-              className={`p-3 rounded-lg border-2 text-xs font-mono font-semibold ${submitFeedback.type === "success"
+              className={`p-3 rounded-lg border-2 text-xs font-mono font-semibold ${
+                submitFeedback.type === "success"
                   ? "bg-[#ecfdf5] border-[#059669] text-[#065f46]"
                   : "bg-[#fee2e2] border-[#dc2626] text-[#991b1b]"
-                }`}
+              }`}
             >
               {submitFeedback.msg}
             </div>
           )}
 
-          {/* STRONG RED PRIMARY CTA BUTTON */}
-          <div className="flex items-center justify-between gap-4 pt-1">
+          {/* Fix 1 & 18: Primary Page CTA */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
             <button
               type="submit"
               disabled={isSubmitting || !rawPrompt.trim()}
-              className="btn-primary w-full sm:w-auto px-8 py-3 text-sm font-black flex items-center justify-center gap-2"
+              className="btn-primary w-full sm:w-auto px-8 py-3 text-sm font-bold flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <>
-                  <RefreshCw className="w-4 h-4 animate-spin text-white" />
+                  <RefreshCw className="w-4 h-4 animate-spin text-white" aria-hidden="true" />
                   <span>Processing with Gemini AI...</span>
                 </>
               ) : (
                 <>
-                  <Send className="w-4 h-4 text-white" />
+                  <Send className="w-4 h-4 text-white" aria-hidden="true" />
                   <span>Run Automation Pipeline</span>
-                  <ArrowRight className="w-4 h-4 text-white" />
+                  <ArrowRight className="w-4 h-4 text-white" aria-hidden="true" />
                 </>
               )}
             </button>
 
-            <span className="hidden sm:inline-block text-[11px] font-mono text-[#71717a]">
+            {/* Fix 6: Readable 12px supporting text */}
+            <span className="hidden sm:inline-block text-xs font-mono text-[#52525b] font-medium">
               ⚡ Ingests to Notion + Triggers Real Mailer
             </span>
           </div>
         </form>
       </div>
 
-      {/* Center Card 2: 5-STAGE PIPELINE PROGRESS */}
+      {/* Center Card 2: 5-STAGE PIPELINE PROGRESS (Fix 19: Clean, group-spaced flow) */}
       <div className="dev-card bg-white p-5 sm:p-6">
-        <div className="flex items-center justify-between mb-3.5 pb-2.5 border-b border-[#e2dfd6]">
-          <span className="text-xs font-mono font-bold text-[#18181b] uppercase tracking-wider flex items-center gap-2">
-            <Layers className="w-4 h-4 text-[#dc2626]" />
-            Pipeline Execution Flow
-          </span>
-          <span className="text-[11px] font-mono text-[#71717a]">
+        <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#e2dfd6]">
+          <h3 className="text-xs font-mono font-bold text-[#18181b] uppercase tracking-wider flex items-center gap-2">
+            <Layers className="w-4 h-4 text-[#dc2626]" aria-hidden="true" />
+            <span>Pipeline Execution Flow</span>
+          </h3>
+          <span className="text-xs font-mono text-[#71717a]">
             Active Incident: <strong className="text-[#dc2626]">{selectedEvent?.id || "REQ-108"}</strong>
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
           {stages.map((stage, idx) => {
             const isTarget = activeStage === stage.id;
             return (
               <div
                 key={stage.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => setActiveStage(stage.id)}
-                className={`p-3 rounded-xl border-2 transition-all cursor-pointer relative ${isTarget
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActiveStage(stage.id);
+                  }
+                }}
+                className={`p-3 rounded-xl border-2 transition-all cursor-pointer relative focus-visible:outline-2 focus-visible:outline-[#18181b] ${
+                  isTarget
                     ? "bg-[#ffffff] border-[#18181b] shadow-[3px_3px_0px_#dc2626]"
-                    : "bg-[#fcfbfa] border-[#e2dfd6] hover:border-[#18181b] hover:bg-white"
-                  }`}
+                    : "bg-[#fcfbfa] border-[#e2dfd6] hover:border-[#18181b] hover:bg-white hover:shadow-[1.5px_1.5px_0px_#18181b]"
+                }`}
               >
-                <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center justify-between mb-2">
                   <div className="w-7 h-7 rounded-md bg-[#18181b] text-white flex items-center justify-center">
-                    <stage.icon className="w-3.5 h-3.5 text-white" />
+                    <stage.icon className="w-3.5 h-3.5 text-white" aria-hidden="true" />
                   </div>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#f4f3ef] border border-[#e2dfd6] text-[#18181b]">
+                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[#f4f3ef] border border-[#e2dfd6] text-[#18181b]">
                     {stage.status}
                   </span>
                 </div>
                 <div className="text-xs font-bold text-[#18181b] truncate">{stage.title}</div>
-                <div className="text-[10px] text-[#71717a] font-mono truncate">{stage.sub}</div>
+                <div className="text-xs text-[#71717a] font-mono truncate">{stage.sub}</div>
 
                 {idx < stages.length - 1 && (
-                  <div className="hidden sm:block absolute -right-2.5 top-1/2 -translate-y-1/2 z-10">
-                    <ArrowRight className="w-3 h-3 text-[#18181b]" />
+                  <div className="hidden sm:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
+                    <ArrowRight className="w-3.5 h-3.5 text-[#18181b]" aria-hidden="true" />
                   </div>
                 )}
               </div>
@@ -324,9 +349,9 @@ export default function TacticalEngineCanvas({
         {/* Output Panel Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-[#18181b]">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-bold uppercase text-[#18181b]">
+            <h3 className="text-xs font-mono font-bold uppercase text-[#18181b]">
               Incident Output & Clearance:
-            </span>
+            </h3>
             <span className="px-2 py-0.5 rounded bg-[#18181b] text-white text-xs font-mono font-bold">
               {selectedEvent?.id || "REQ-108"}
             </span>
@@ -334,17 +359,19 @@ export default function TacticalEngineCanvas({
 
           <div className="flex items-center gap-1.5 p-1 rounded-lg bg-[#f4f3ef] border border-[#e2dfd6] text-xs font-mono">
             {[
-              { id: "TACTICAL", label: "ANALYSIS" },
-              { id: "PAYLOAD", label: "JSON SCHEMA" },
-              { id: "NOTION_SYNC", label: "NOTION DB" },
+              { id: "TACTICAL", label: "Analysis" },
+              { id: "PAYLOAD", label: "JSON Schema" },
+              { id: "NOTION_SYNC", label: "Notion DB" },
             ].map((tab) => (
               <button
                 key={tab.id}
+                type="button"
                 onClick={() => setViewMode(tab.id)}
-                className={`px-3 py-1 rounded-md text-[11px] font-bold transition-all ${viewMode === tab.id
+                className={`px-3 py-1 rounded-md text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-[#18181b] ${
+                  viewMode === tab.id
                     ? "bg-[#18181b] text-white shadow-[1.5px_1.5px_0px_#dc2626]"
                     : "text-[#52525b] hover:text-[#18181b]"
-                  }`}
+                }`}
               >
                 {tab.label}
               </button>
@@ -357,11 +384,13 @@ export default function TacticalEngineCanvas({
           <div className="space-y-4">
             {/* Raw Complaint Panel */}
             <div className="p-4 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b]">
-              <div className="flex items-center justify-between text-[11px] font-mono text-[#71717a] mb-1.5">
-                <span>RAW COMPLAINT INGESTED:</span>
-                <span>From: <strong className="text-[#18181b]">{selectedEvent?.userName}</strong> ({selectedEvent?.userEmail})</span>
+              <div className="flex flex-wrap items-center justify-between text-xs font-mono text-[#71717a] mb-2 gap-1">
+                <span className="font-bold">RAW COMPLAINT INGESTED:</span>
+                <span>
+                  From: <strong className="text-[#18181b]">{selectedEvent?.userName}</strong> ({selectedEvent?.userEmail})
+                </span>
               </div>
-              <p className="text-sm text-[#18181b] font-medium italic">
+              <p className="text-xs sm:text-sm text-[#18181b] font-medium italic leading-relaxed">
                 &ldquo;{selectedEvent?.rawMessage}&rdquo;
               </p>
             </div>
@@ -369,75 +398,79 @@ export default function TacticalEngineCanvas({
             {/* AI Classification Breakdown Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
               <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
-                <span className="text-[10px] text-[#71717a] block font-bold">CATEGORY</span>
-                <strong className="text-xs text-[#18181b] truncate block mt-0.5">
-                  {selectedEvent?.category || "CERTIFICATE_ISSUE"}
+                <span className="text-xs text-[#71717a] block font-bold">CATEGORY</span>
+                <strong className="text-xs text-[#18181b] truncate block mt-1">
+                  {formatDisplayCategory(selectedEvent?.category)}
                 </strong>
               </div>
               <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
-                <span className="text-[10px] text-[#71717a] block font-bold">AI CONFIDENCE</span>
-                <strong className="text-xs text-[#059669] block mt-0.5">
+                <span className="text-xs text-[#71717a] block font-bold">AI CONFIDENCE</span>
+                <strong className="text-xs text-[#059669] block mt-1">
                   {selectedEvent?.confidence || 98}% Accuracy
                 </strong>
               </div>
               <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
-                <span className="text-[10px] text-[#71717a] block font-bold">ATTENDANCE</span>
-                <strong className="text-xs text-[#18181b] block mt-0.5">
+                <span className="text-xs text-[#71717a] block font-bold">ATTENDANCE</span>
+                <strong className="text-xs text-[#18181b] block mt-1">
                   {selectedEvent?.attendanceVerified ? "Verified (100%) ✓" : "Unverified ⚠️"}
                 </strong>
               </div>
               <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
-                <span className="text-[10px] text-[#71717a] block font-bold">PRIORITY</span>
-                <strong className="text-xs text-[#dc2626] block mt-0.5">
+                <span className="text-xs text-[#71717a] block font-bold">PRIORITY</span>
+                <strong className="text-xs text-[#dc2626] block mt-1">
                   {selectedEvent?.priority || "HIGH"}
                 </strong>
               </div>
             </div>
 
-            {/* Operator Clearance Station */}
+            {/* Operator Clearance Station (Fix 16: Semantic Green Approve & Red Reject) */}
             <div className="p-4 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b] flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <span className="text-xs font-mono font-bold text-[#18181b] flex items-center gap-1.5">
-                  <UserCheck className="w-4 h-4 text-[#dc2626]" />
+                  <UserCheck className="w-4 h-4 text-[#dc2626]" aria-hidden="true" />
                   Human-in-the-Loop Clearance:
                 </span>
-                <p className="text-xs text-[#52525b] mt-0.5">
+                <p className="text-xs sm:text-sm text-[#52525b] mt-1 leading-relaxed">
                   {selectedEvent?.status === "WAITING_APPROVAL"
                     ? "Requires operator review before real certificate dispatch."
                     : selectedEvent?.status === "FAILED"
-                      ? "Rejected by operator — request dismissed."
-                      : selectedEvent?.status === "NEEDS_FIX"
-                        ? "Flagged for manual data fix."
-                        : "Completed and audited in Notion."}
+                    ? "Rejected by operator — request dismissed."
+                    : selectedEvent?.status === "NEEDS_FIX"
+                    ? "Flagged for manual data fix."
+                    : "Completed and audited in Notion."}
                 </p>
               </div>
 
               {selectedEvent?.status === "WAITING_APPROVAL" ? (
-                <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="flex items-center gap-2.5 w-full sm:w-auto">
                   <button
+                    type="button"
                     onClick={() => onApproveEvent(selectedEvent?.id)}
-                    className="btn-primary py-2 px-4 text-xs font-mono font-bold bg-[#059669] hover:bg-[#047857] shadow-[2px_2px_0px_#18181b]"
+                    className="btn-success btn-success-sm text-xs font-mono"
                   >
-                    <Check className="w-4 h-4 stroke-[3]" /> Approve & Dispatch
+                    <Check className="w-4 h-4 stroke-[3]" aria-hidden="true" />
+                    <span>Approve & Dispatch</span>
                   </button>
                   <button
+                    type="button"
                     onClick={() => onRejectEvent(selectedEvent?.id)}
-                    className="btn-secondary py-2 px-3 text-xs font-mono font-bold text-[#dc2626] hover:bg-[#fee2e2]"
+                    className="btn-danger btn-danger-sm text-xs font-mono"
                   >
-                    <X className="w-4 h-4 stroke-[3]" /> Reject
+                    <X className="w-4 h-4 stroke-[3]" aria-hidden="true" />
+                    <span>Reject</span>
                   </button>
                 </div>
               ) : selectedEvent?.status === "FAILED" ? (
                 <span className="px-3 py-1.5 rounded-lg bg-[#fee2e2] border-2 border-[#dc2626] text-[#991b1b] text-xs font-mono font-bold">
-                  ❌ REJECTED BY OPERATOR
+                  ✗ Rejected by Operator
                 </span>
               ) : selectedEvent?.status === "NEEDS_FIX" ? (
                 <span className="px-3 py-1.5 rounded-lg bg-[#fef3c7] border-2 border-[#f59e0b] text-[#92400e] text-xs font-mono font-bold">
-                  ⚠️ REQUIRES DATA FIX
+                  ⚠️ Requires Data Fix
                 </span>
               ) : (
                 <span className="px-3 py-1.5 rounded-lg bg-[#ecfdf5] border-2 border-[#059669] text-[#065f46] text-xs font-mono font-bold">
-                  ✅ EXECUTED & SEALED
+                  ✓ Executed & Sealed
                 </span>
               )}
             </div>
@@ -449,7 +482,7 @@ export default function TacticalEngineCanvas({
           <div className="space-y-3">
             <div className="flex items-center justify-between text-xs font-mono">
               <span className="text-[#18181b] font-bold flex items-center gap-1.5">
-                <Terminal className="w-4 h-4 text-[#dc2626]" />
+                <Terminal className="w-4 h-4 text-[#dc2626]" aria-hidden="true" />
                 Extracted JSON Entity (Gemini AI):
               </span>
               <button
@@ -459,18 +492,18 @@ export default function TacticalEngineCanvas({
               >
                 {copied ? (
                   <>
-                    <CheckCheck className="w-3.5 h-3.5 text-[#059669]" />
+                    <CheckCheck className="w-3.5 h-3.5 text-[#059669]" aria-hidden="true" />
                     <span className="text-[#059669]">Copied!</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-3.5 h-3.5 text-[#18181b]" />
+                    <Copy className="w-3.5 h-3.5 text-[#18181b]" aria-hidden="true" />
                     <span>Copy JSON</span>
                   </>
                 )}
               </button>
             </div>
-            <pre className="p-4 rounded-xl bg-[#18181b] text-[12px] text-[#4ade80] overflow-x-auto border-2 border-[#18181b] leading-relaxed font-mono">
+            <pre className="p-4 rounded-xl bg-[#18181b] text-xs text-[#4ade80] overflow-x-auto border-2 border-[#18181b] leading-relaxed font-mono">
               {JSON.stringify(payloadData, null, 2)}
             </pre>
           </div>
@@ -480,24 +513,24 @@ export default function TacticalEngineCanvas({
         {viewMode === "NOTION_SYNC" && (
           <div className="space-y-3 font-mono text-xs">
             <div className="text-[#18181b] font-bold flex items-center gap-1.5">
-              <Database className="w-4 h-4 text-[#d97706]" />
-              Notion Database Synchronized Page:
+              <Database className="w-4 h-4 text-[#d97706]" aria-hidden="true" />
+              <span>Notion Database Synchronized Page:</span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px]">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
               <div className="p-3 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b]">
-                <span className="text-[#71717a] block text-[10px]">PARENT DB</span>
+                <span className="text-[#71717a] block text-xs">PARENT DB</span>
                 <span className="text-[#18181b] font-bold">📥 Requests DB</span>
               </div>
               <div className="p-3 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b]">
-                <span className="text-[#71717a] block text-[10px]">SYNC STATUS</span>
+                <span className="text-[#71717a] block text-xs">SYNC STATUS</span>
                 <span className="text-[#059669] font-bold">Live Synchronized</span>
               </div>
               <div className="p-3 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b]">
-                <span className="text-[#71717a] block text-[10px]">AUTHENTICATION</span>
-                <span className="text-[#18181b] font-bold">Bot Integration Token</span>
+                <span className="text-[#71717a] block text-xs">AUTHENTICATION</span>
+                <span className="text-[#18181b] font-bold">Bot Token</span>
               </div>
               <div className="p-3 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b]">
-                <span className="text-[#71717a] block text-[10px]">AUDIT RUN ID</span>
+                <span className="text-[#71717a] block text-xs">AUDIT RUN ID</span>
                 <span className="text-[#dc2626] font-bold">
                   {selectedEvent?.id ? `RUN-${selectedEvent.id.replace('REQ-', '')}` : 'RUN-042'}
                 </span>

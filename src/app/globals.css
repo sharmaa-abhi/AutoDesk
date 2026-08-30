@@ -123,9 +123,9 @@ body {
   border-radius: var(--radius-md);
 }
 
-/* ===== BUTTON STYLES ===== */
+/* ===== STANDARDIZED 5-BUTTON SYSTEM ===== */
 
-/* 1. Primary Button (Strong Red, White Bold Text, Slightly Rounded) */
+/* 1. Primary Button (Main page action only) */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -147,15 +147,20 @@ body {
   user-select: none;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background-color: var(--accent-red-hover);
   transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px #18181b;
+  box-shadow: 3px 3px 0px var(--border-charcoal);
 }
 
-.btn-primary:active {
+.btn-primary:active:not(:disabled) {
   transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0px #18181b;
+  box-shadow: 1px 1px 0px var(--border-charcoal);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--border-charcoal);
+  outline-offset: 2px;
 }
 
 .btn-primary:disabled {
@@ -166,7 +171,7 @@ body {
 }
 
 .btn-primary-sm {
-  padding: 0.375rem 0.875rem;
+  padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -177,7 +182,7 @@ body {
   font-weight: 700;
 }
 
-/* 2. Secondary Button (Light Background with Dark Charcoal Border) */
+/* 2. Secondary Button (Supporting actions, presets, navigation, neutral utilities) */
 .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -193,32 +198,173 @@ body {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-button);
   padding: 0.625rem 1.25rem;
-  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
   cursor: pointer;
   text-decoration: none;
   user-select: none;
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover:not(:disabled) {
   background-color: var(--bg-card-hover);
   transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px #18181b;
+  box-shadow: 3px 3px 0px var(--border-charcoal);
 }
 
-.btn-secondary:active {
+.btn-secondary:active:not(:disabled) {
   transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0px #18181b;
+  box-shadow: 1px 1px 0px var(--border-charcoal);
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--border-charcoal);
+  outline-offset: 2px;
 }
 
 .btn-secondary:disabled {
   opacity: 0.55;
   cursor: not-allowed;
   transform: none;
+  box-shadow: var(--shadow-button);
 }
 
 .btn-secondary-sm {
   padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* 3. Success Button (Approve, complete, positive dispatches) */
+.btn-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #ffffff;
+  background-color: var(--accent-emerald);
+  border: 2px solid var(--border-charcoal);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-button);
+  padding: 0.625rem 1.25rem;
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: #047857;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--border-charcoal);
+}
+
+.btn-success:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--border-charcoal);
+}
+
+.btn-success:focus-visible {
+  outline: 2px solid var(--border-charcoal);
+  outline-offset: 2px;
+}
+
+.btn-success:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-success-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* 4. Danger Button (Reject, destructive or irreversible actions) */
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--accent-red);
+  background-color: #ffffff;
+  border: 2px solid var(--border-charcoal);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-button);
+  padding: 0.625rem 1.25rem;
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #fee2e2;
+  color: #991b1b;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--border-charcoal);
+}
+
+.btn-danger:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--border-charcoal);
+}
+
+.btn-danger:focus-visible {
+  outline: 2px solid var(--accent-red);
+  outline-offset: 2px;
+}
+
+.btn-danger:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-danger-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* 5. Icon Button (Consistent Sizing & Accessible States) */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  border: 2px solid var(--border-charcoal);
+  color: var(--text-primary);
+  box-shadow: 1.5px 1.5px 0px var(--border-charcoal);
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.btn-icon:hover:not(:disabled) {
+  background-color: var(--bg-card-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 2.5px 2.5px 0px var(--border-charcoal);
+}
+
+.btn-icon:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--border-charcoal);
+}
+
+.btn-icon:focus-visible {
+  outline: 2px solid var(--border-charcoal);
+  outline-offset: 2px;
 }
 
 /* ===== STATUS BADGES ===== */
@@ -226,20 +372,20 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.125rem 0.5rem;
+  padding: 0.2rem 0.6rem;
   border-radius: var(--radius-sm);
   background-color: #ecfdf5;
   color: #065f46;
   border: 1.5px solid #059669;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 
 .badge-live-dot {
-  width: 0.375rem;
-  height: 0.375rem;
+  width: 0.4rem;
+  height: 0.4rem;
   border-radius: 9999px;
   background-color: #059669;
 }
@@ -248,13 +394,13 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.2rem 0.5rem;
+  padding: 0.25rem 0.6rem;
   border-radius: var(--radius-sm);
   background-color: #f4f3ef;
   color: var(--text-primary);
   border: 1px solid var(--border-subtle);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 

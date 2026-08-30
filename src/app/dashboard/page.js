@@ -21,7 +21,7 @@ const initialEvents = [
     status: "WAITING_APPROVAL",
     attendanceVerified: true,
     priority: "HIGH",
-    actionPreview: "GENERATE_PDF + EMAIL",
+    actionPreview: "Generate PDF + Email",
   },
   {
     id: "REQ-107",
@@ -36,7 +36,7 @@ const initialEvents = [
     status: "SUCCESS",
     attendanceVerified: true,
     priority: "HIGH",
-    actionPreview: "PDF_DISPATCHED",
+    actionPreview: "PDF Dispatched",
   },
   {
     id: "REQ-106",
@@ -51,7 +51,7 @@ const initialEvents = [
     status: "WAITING_APPROVAL",
     attendanceVerified: true,
     priority: "HIGH",
-    actionPreview: "NOTION_HITL_REVIEW",
+    actionPreview: "Notion Review",
   },
   {
     id: "REQ-105",
@@ -66,7 +66,7 @@ const initialEvents = [
     status: "SUCCESS",
     attendanceVerified: true,
     priority: "MEDIUM",
-    actionPreview: "PDF_DISPATCHED",
+    actionPreview: "PDF Dispatched",
   },
   {
     id: "REQ-104",
@@ -81,7 +81,7 @@ const initialEvents = [
     status: "SUCCESS",
     attendanceVerified: true,
     priority: "HIGH",
-    actionPreview: "PDF_DISPATCHED",
+    actionPreview: "PDF Dispatched",
   },
 ];
 
@@ -282,6 +282,14 @@ export default function DashboardPage() {
         throw new Error(data.error || 'Webhook simulation failed');
       }
 
+      const formatAction = (raw) => {
+        if (!raw) return 'Generate PDF + Email';
+        if (raw === 'GENERATE_PDF + EMAIL') return 'Generate PDF + Email';
+        if (raw === 'PDF_DISPATCHED') return 'PDF Dispatched';
+        if (raw === 'NOTION_HITL_REVIEW') return 'Notion Review';
+        return raw;
+      };
+
       const newEvent = {
         id: newId,
         minute: `${Math.floor(Math.random() * 80 + 10)}`,
@@ -295,7 +303,7 @@ export default function DashboardPage() {
         status: data.status || (type === 'GARBAGE_INPUT' ? 'NEEDS_FIX' : 'WAITING_APPROVAL'),
         attendanceVerified: data.ai?.attendanceVerified ?? (type !== 'GARBAGE_INPUT'),
         priority: data.ai?.priority || (type === 'GARBAGE_INPUT' ? 'CRITICAL' : 'HIGH'),
-        actionPreview: data.ai?.actionPreview || 'GENERATE_PDF + EMAIL',
+        actionPreview: formatAction(data.ai?.actionPreview),
       };
 
       setEvents((prev) => [newEvent, ...prev]);
@@ -330,6 +338,32 @@ export default function DashboardPage() {
       <Navbar />
 
       <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        {/* Page Top Header with semantic, visible H1 (Fix 15) */}
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-[#e2dfd6]">
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-black text-[#18181b] tracking-tight">
+                Live Automation Cockpit
+              </h1>
+              <span className="badge-live">
+                <span className="badge-live-dot" aria-hidden="true" />
+                <span>LIVE ENGINE</span>
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-[#52525b] mt-1">
+              Autonomous request triage, human-in-the-loop approvals, and real-time execution telemetry.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono text-[#52525b] bg-white px-3 py-1.5 rounded-lg border border-[#e2dfd6] shadow-[1px_1px_0px_#18181b]">
+              Queue: <strong className="text-[#18181b]">{events.length} Active</strong>
+            </span>
+            <span className="text-xs font-mono text-[#059669] bg-[#ecfdf5] px-3 py-1.5 rounded-lg border border-[#059669]/40 font-bold">
+              Uptime: 99.8%
+            </span>
+          </div>
+        </div>
+
         {/* 3-Column Desktop Dashboard Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Column 1: Left Panel (Match Stream & Event Timeline) [3.5 cols] */}

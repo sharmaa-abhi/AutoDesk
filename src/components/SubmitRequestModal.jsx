@@ -62,9 +62,18 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
   };
 
   const sampleMessages = [
-    "Sir, I attended both Day 1 and Day 2 of the GenAI Workshop. My attendance was marked at the venue, but I have not received my certificate email yet.",
-    "Hello team, our team 'NeuralCoders' secured 2nd position in the National Hackathon 2026 track. Requesting official merit certificate dispatch.",
-    "Respected organizers, I attended the complete Web3 Smart Contracts track yesterday. Kindly verify my attendance via project submission and issue badge.",
+    {
+      title: "GenAI Workshop Missing",
+      msg: "Sir, I attended both Day 1 and Day 2 of the GenAI Workshop. My attendance was marked at the venue, but I have not received my certificate email yet.",
+    },
+    {
+      title: "Hackathon Finalist Merit",
+      msg: "Hello team, our team 'NeuralCoders' secured 2nd position in the National Hackathon 2026 track. Requesting official merit certificate dispatch.",
+    },
+    {
+      title: "Web3 Attendance Discrepancy",
+      msg: "Respected organizers, I attended the complete Web3 Smart Contracts track yesterday. Kindly verify my attendance via project submission and issue badge.",
+    },
   ];
 
   return (
@@ -93,10 +102,10 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                   <Sparkles className="w-4 h-4 text-white" aria-hidden="true" focusable="false" />
                 </div>
                 <div>
-                  <h3 id="ticket-modal-title" className="text-base font-black text-[#18181b]">
+                  <h3 id="ticket-modal-title" className="text-base font-bold text-[#18181b]">
                     Submit Incident Ticket
                   </h3>
-                  <p className="text-xs text-[#52525b] font-mono">
+                  <p className="text-xs text-[#52525b] font-mono mt-0.5">
                     Triggers live Gemini AI ➔ Notion DB ➔ Action Pipeline
                   </p>
                 </div>
@@ -105,7 +114,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                 type="button"
                 aria-label="Close dialog"
                 onClick={onClose}
-                className="p-1.5 rounded-lg border-2 border-[#18181b] bg-white text-[#18181b] hover:bg-[#fee2e2] transition-colors"
+                className="btn-icon w-8 h-8 rounded-lg"
               >
                 <X className="w-4 h-4" aria-hidden="true" focusable="false" />
               </button>
@@ -117,7 +126,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="student-name-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1">
+                      <label htmlFor="student-name-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
                         STUDENT / USER NAME
                       </label>
                       <input
@@ -130,7 +139,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                       />
                     </div>
                     <div>
-                      <label htmlFor="student-email-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1">
+                      <label htmlFor="student-email-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
                         EMAIL ADDRESS
                       </label>
                       <input
@@ -145,7 +154,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                   </div>
 
                   <div>
-                    <label htmlFor="student-message-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1">
+                    <label htmlFor="student-message-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
                       COMPLAINT / REQUEST MESSAGE (NATURAL LANGUAGE)
                     </label>
                     <textarea
@@ -155,24 +164,26 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Sir I attended AI workshop yesterday but didn't get certificate..."
                       required
-                      className="dev-input resize-none"
+                      className="dev-input resize-none text-xs sm:text-sm"
                     />
                   </div>
 
                   {/* Preset Buttons */}
                   <div>
-                    <span className="text-[11px] font-mono text-[#71717a] font-bold block mb-1.5">
+                    <span className="text-xs font-mono text-[#71717a] font-bold block mb-1.5">
                       QUICK TEST PRESETS:
                     </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {sampleMessages.map((msg, i) => (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      {sampleMessages.map((sample, i) => (
                         <button
                           key={i}
                           type="button"
-                          onClick={() => setMessage(msg)}
-                          className="text-xs px-2.5 py-1 rounded-md bg-white border border-[#18181b] text-[#18181b] hover:bg-[#f4f3ef] transition-colors truncate max-w-full font-mono"
+                          onClick={() => setMessage(sample.msg)}
+                          className="btn-secondary btn-secondary-sm text-xs font-mono text-left justify-start py-2 px-2.5 truncate"
+                          title={sample.msg}
                         >
-                          Preset {i + 1}: {msg.substring(0, 30)}...
+                          <span className="font-bold text-[#dc2626] mr-1">P{i + 1}:</span>
+                          <span className="truncate">{sample.title}</span>
                         </button>
                       ))}
                     </div>
@@ -188,7 +199,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                   <button
                     type="submit"
                     disabled={loading || !message.trim()}
-                    className="btn-primary w-full py-3 text-sm font-bold"
+                    className="btn-primary w-full py-3 text-sm font-bold flex items-center justify-center gap-2"
                   >
                     {loading ? (
                       <>
@@ -210,7 +221,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                     <CheckCircle2 className="w-6 h-6 text-[#059669] flex-shrink-0" aria-hidden="true" focusable="false" />
                     <div>
                       <h4 className="text-sm font-bold text-[#065f46]">Pipeline Ingested Successfully!</h4>
-                      <p className="text-xs text-[#065f46]/80 font-mono">
+                      <p className="text-xs text-[#065f46]/80 font-mono mt-0.5">
                         Ticket <strong className="text-[#18181b]">{result.requestId}</strong> processed in{" "}
                         <strong>{result.durationMs}ms</strong>.
                       </p>
