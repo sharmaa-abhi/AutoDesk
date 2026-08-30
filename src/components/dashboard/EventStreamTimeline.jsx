@@ -75,7 +75,12 @@ export default function EventStreamTimeline({
 
         {/* Stacked Navigation Cards for Incidents */}
         <div className="overflow-y-auto p-3 space-y-2.5 max-h-[520px]">
-          {filteredEvents.map((item) => {
+          {filteredEvents.length === 0 ? (
+            <div className="p-6 text-center text-xs font-mono text-[#71717a] bg-[#fcfbfa] rounded-xl border border-dashed border-[#d3cfc2]">
+              No tickets matching &quot;{filterTab}&quot; filter.
+            </div>
+          ) : (
+            filteredEvents.map((item) => {
             const isSelected = item.id === selectedEventId;
 
             const StatusIcon =
@@ -150,7 +155,7 @@ export default function EventStreamTimeline({
                 </div>
               </div>
             );
-          })}
+          }))}
         </div>
       </div>
   );

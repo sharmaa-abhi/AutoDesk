@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Sparkles, Send, CheckCircle2, AlertCircle, Loader2, Database, Mail, Brain } from "lucide-react";
 
@@ -11,6 +11,16 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,12 +73,14 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#18181b]/50 backdrop-blur-sm"
           role="presentation"
+          onClick={onClose}
         >
           <motion.div
             id="ticket-dialog"
             role="dialog"
             aria-modal="true"
             aria-labelledby="ticket-modal-title"
+            onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -126,7 +138,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="e.g. rahul@college.edu"
+                        placeholder="e.g. rahul.sharma24@gmail.com"
                         className="dev-input"
                       />
                     </div>
