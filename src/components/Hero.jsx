@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Sparkles, Activity, Plus, ShieldCheck, Zap } from "lucide-react";
+import { ArrowRight, Activity, Plus } from "lucide-react";
 import SubmitRequestModal from "@/components/SubmitRequestModal";
 
 export default function Hero() {

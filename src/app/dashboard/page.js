@@ -245,7 +245,15 @@ export default function DashboardPage() {
     const newId = `REQ-${nextNum}`;
 
     let payload;
-    if (type === 'GARBAGE_INPUT') {
+    if (typeof type === 'object' && type.custom) {
+      payload = {
+        action: 'ingest',
+        requestId: newId,
+        userName: type.userName || 'Student Participant',
+        userEmail: type.userEmail || 'rahul.sharma24@gmail.com',
+        rawMessage: type.rawMessage,
+      };
+    } else if (type === 'GARBAGE_INPUT') {
       payload = {
         action: 'ingest',
         requestId: newId,

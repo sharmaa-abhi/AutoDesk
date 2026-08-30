@@ -31,7 +31,7 @@ const teamMembers = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#f7f6f2] text-[#18181b] font-sans flex flex-col dot-grid">
+    <div className="min-h-screen bg-[#f7f6f2] text-[#18181b] font-sans flex flex-col">
       <Navbar />
 
       <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 py-12 space-y-16">
