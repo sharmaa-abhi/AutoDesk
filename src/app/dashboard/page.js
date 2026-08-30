@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import MatchScoreboard from "@/components/dashboard/MatchScoreboard";
 import EventStreamTimeline from "@/components/dashboard/EventStreamTimeline";
 import TacticalEngineCanvas from "@/components/dashboard/TacticalEngineCanvas";
 import BentoMetrics from "@/components/dashboard/BentoMetrics";
@@ -311,13 +310,10 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f6f2] text-[#18181b] font-sans flex flex-col dot-grid">
+    <div className="min-h-screen bg-[#f7f6f2] text-[#18181b] font-sans flex flex-col">
       <Navbar />
 
-      <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 pt-6 pb-12">
-        {/* Top Scoreboard / Live Telemetry Header */}
-        <MatchScoreboard activeEvent={selectedEvent} stats={stats} />
-
+      <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* 3-Column Desktop Dashboard Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Column 1: Left Panel (Match Stream & Event Timeline) [3.5 cols] */}

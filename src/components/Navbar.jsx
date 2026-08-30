@@ -88,14 +88,6 @@ export default function Navbar() {
             <ExternalLink className="w-3 h-3 text-[#71717a]" aria-hidden="true" focusable="false" />
           </a>
 
-          <Link
-            href="/dashboard"
-            className="btn-secondary btn-secondary-sm text-xs font-mono"
-          >
-            <Activity className="w-3.5 h-3.5 text-[#dc2626]" aria-hidden="true" focusable="false" />
-            <span>Cockpit</span>
-          </Link>
-
           <button
             type="button"
             aria-haspopup="dialog"

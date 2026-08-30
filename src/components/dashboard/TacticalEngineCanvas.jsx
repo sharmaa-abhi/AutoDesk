@@ -8,15 +8,12 @@ import {
   UserCheck,
   Mail,
   FileCheck,
-  ShieldAlert,
   Check,
   X,
-  Play,
   Layers,
   ArrowRight,
   Terminal,
   Send,
-  Sparkles,
   ExternalLink,
   Copy,
   CheckCheck,
@@ -161,22 +158,16 @@ export default function TacticalEngineCanvas({
     <div className="space-y-6">
       {/* Center Card 1: PROMINENT INPUT & ACTION SECTION */}
       <div className="dev-card bg-white p-6 sm:p-7">
-        <div className="mb-5 pb-3 border-b-2 border-[#18181b] flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <h2 className="text-base font-black text-[#18181b] uppercase tracking-tight flex items-center gap-2">
-              <span>Autonomous Request Automation Engine</span>
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#18181b] text-white">
-                LIVE
-              </span>
-            </h2>
-            <p className="text-xs text-[#52525b] mt-0.5">
-              Enter natural language student requests. The engine categorizes with Gemini AI, synchronizes Notion, and executes actions.
-            </p>
-          </div>
-          <div className="flex items-center gap-1.5 text-xs font-mono text-[#71717a]">
-            <Clock className="w-3.5 h-3.5 text-[#dc2626]" />
-            <span>Avg SLA: <strong className="text-[#18181b]">1.42s</strong></span>
-          </div>
+        <div className="mb-5 pb-3 border-b-2 border-[#18181b]">
+          <h2 className="text-base font-black text-[#18181b] uppercase tracking-tight flex items-center gap-2">
+            <span>Autonomous Request Automation Engine</span>
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#18181b] text-white">
+              LIVE
+            </span>
+          </h2>
+          <p className="text-xs text-[#52525b] mt-0.5">
+            Enter natural language student requests. The engine categorizes with Gemini AI, synchronizes Notion, and executes actions.
+          </p>
         </div>
 
         {/* Quick Fill Presets */}
@@ -245,11 +236,10 @@ export default function TacticalEngineCanvas({
 
           {submitFeedback && (
             <div
-              className={`p-3 rounded-lg border-2 text-xs font-mono font-semibold ${
-                submitFeedback.type === "success"
+              className={`p-3 rounded-lg border-2 text-xs font-mono font-semibold ${submitFeedback.type === "success"
                   ? "bg-[#ecfdf5] border-[#059669] text-[#065f46]"
                   : "bg-[#fee2e2] border-[#dc2626] text-[#991b1b]"
-              }`}
+                }`}
             >
               {submitFeedback.msg}
             </div>
@@ -302,11 +292,10 @@ export default function TacticalEngineCanvas({
               <div
                 key={stage.id}
                 onClick={() => setActiveStage(stage.id)}
-                className={`p-3 rounded-xl border-2 transition-all cursor-pointer relative ${
-                  isTarget
+                className={`p-3 rounded-xl border-2 transition-all cursor-pointer relative ${isTarget
                     ? "bg-[#ffffff] border-[#18181b] shadow-[3px_3px_0px_#dc2626]"
                     : "bg-[#fcfbfa] border-[#e2dfd6] hover:border-[#18181b] hover:bg-white"
-                }`}
+                  }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="w-7 h-7 rounded-md bg-[#18181b] text-white flex items-center justify-center">
@@ -352,11 +341,10 @@ export default function TacticalEngineCanvas({
               <button
                 key={tab.id}
                 onClick={() => setViewMode(tab.id)}
-                className={`px-3 py-1 rounded-md text-[11px] font-bold transition-all ${
-                  viewMode === tab.id
+                className={`px-3 py-1 rounded-md text-[11px] font-bold transition-all ${viewMode === tab.id
                     ? "bg-[#18181b] text-white shadow-[1.5px_1.5px_0px_#dc2626]"
                     : "text-[#52525b] hover:text-[#18181b]"
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>
@@ -417,10 +405,10 @@ export default function TacticalEngineCanvas({
                   {selectedEvent?.status === "WAITING_APPROVAL"
                     ? "Requires operator review before real certificate dispatch."
                     : selectedEvent?.status === "FAILED"
-                    ? "Rejected by operator — request dismissed."
-                    : selectedEvent?.status === "NEEDS_FIX"
-                    ? "Flagged for manual data fix."
-                    : "Completed and audited in Notion."}
+                      ? "Rejected by operator — request dismissed."
+                      : selectedEvent?.status === "NEEDS_FIX"
+                        ? "Flagged for manual data fix."
+                        : "Completed and audited in Notion."}
                 </p>
               </div>
 

@@ -1,20 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   Clock,
   UserCheck,
   CheckCircle2,
   AlertTriangle,
   XCircle,
-  MessageSquare,
-  Sparkles,
   Inbox,
-  ArrowRight,
-  Layers,
-  ShieldCheck,
-  Info,
 } from "lucide-react";
 
 export default function EventStreamTimeline({
@@ -40,76 +33,7 @@ export default function EventStreamTimeline({
   });
 
   return (
-    <div className="space-y-4">
-      {/* Workspace Navigation Cards */}
-      <div className="space-y-2.5">
-        <span className="text-[11px] font-mono text-[#71717a] uppercase font-bold tracking-wider block px-1">
-          Navigation & Modules:
-        </span>
-
-        {/* Nav Card 1: Active Ingestion Stream */}
-        <div className="dev-card bg-white p-3.5 flex items-start gap-3 cursor-pointer border-2 border-[#18181b] shadow-[2.5px_2.5px_0px_#dc2626]">
-          <div className="w-8 h-8 rounded-lg bg-[#18181b] text-white flex items-center justify-center flex-shrink-0">
-            <Inbox className="w-4 h-4 text-white" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-[#18181b]">Incident Queue</h3>
-              <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#dc2626] text-white">
-                LIVE
-              </span>
-            </div>
-            <p className="text-[10px] text-[#71717a] mt-0.5 leading-relaxed">
-              Real-time incoming student tickets & natural language requests.
-            </p>
-          </div>
-        </div>
-
-        {/* Nav Card 2: System Architecture */}
-        <Link
-          href="/#how-it-works"
-          className="dev-card bg-[#fcfbfa] hover:bg-white p-3.5 flex items-start gap-3 cursor-pointer border-2 border-[#18181b] hover:shadow-[2.5px_2.5px_0px_#18181b] transition-all group block"
-        >
-          <div className="w-8 h-8 rounded-lg bg-white border-2 border-[#18181b] text-[#18181b] flex items-center justify-center flex-shrink-0 group-hover:bg-[#18181b] group-hover:text-white transition-colors">
-            <Layers className="w-4 h-4" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-[#18181b] group-hover:text-[#dc2626] transition-colors">
-                System Blueprint
-              </h3>
-              <span className="text-[9px] font-mono text-[#71717a]">5-Stage</span>
-            </div>
-            <p className="text-[10px] text-[#71717a] mt-0.5 leading-relaxed">
-              Ingest → Gemini AI → Notion → Action Dispatcher.
-            </p>
-          </div>
-        </Link>
-
-        {/* Nav Card 3: About Team */}
-        <Link
-          href="/about"
-          className="dev-card bg-[#fcfbfa] hover:bg-white p-3.5 flex items-start gap-3 cursor-pointer border-2 border-[#18181b] hover:shadow-[2.5px_2.5px_0px_#18181b] transition-all group block"
-        >
-          <div className="w-8 h-8 rounded-lg bg-white border-2 border-[#18181b] text-[#18181b] flex items-center justify-center flex-shrink-0 group-hover:bg-[#18181b] group-hover:text-white transition-colors">
-            <Info className="w-4 h-4" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-[#18181b] group-hover:text-[#dc2626] transition-colors">
-                About The Team
-              </h3>
-              <span className="text-[9px] font-mono text-[#71717a]">Info</span>
-            </div>
-            <p className="text-[10px] text-[#71717a] mt-0.5 leading-relaxed">
-              Builders, system credentials, and technology stack.
-            </p>
-          </div>
-        </Link>
-      </div>
-
-      {/* Incident Stream Card Container */}
-      <div className="dev-card bg-white flex flex-col overflow-hidden">
+    <div className="dev-card bg-white flex flex-col overflow-hidden">
         {/* Header */}
         <div className="p-3.5 border-b-2 border-[#18181b] bg-[#fcfbfa] flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -229,6 +153,5 @@ export default function EventStreamTimeline({
           })}
         </div>
       </div>
-    </div>
   );
 }
