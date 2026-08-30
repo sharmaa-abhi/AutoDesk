@@ -14,7 +14,7 @@ const teamMembers = [
     role: "Full-Stack Developer & System Architect",
     bio: "Passionate about building real automation systems that solve actual problems. Specializes in backend engineering, AI integration, and creating clean, resilient architectures.",
     links: {
-      github: "https://github.com",
+      github: "https://github.com/sharmaa-abhi",
       linkedin: "https://www.linkedin.com/in/abhishek-sharma-88876b389/",
     },
   },
@@ -23,7 +23,7 @@ const teamMembers = [
     role: "Full-Stack Developer & AI Systems Engineer",
     bio: "Dedicated to building high-performance autonomous pipelines, intelligent human-in-the-loop workflows, and seamless user experiences.",
     links: {
-      github: "https://github.com",
+      github: "https://github.com/akashgautam09",
       linkedin: "https://www.linkedin.com/in/akash-gautam-07664230a/",
     },
   },
