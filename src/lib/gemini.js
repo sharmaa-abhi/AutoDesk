@@ -38,14 +38,12 @@ async function callGeminiGenerate(prompt) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) throw new Error('GEMINI_API_KEY is not configured in .env.local');
 
-  // Candidate models in order of priority (GA production models first for universal key compatibility)
+  // Candidate models in order of priority (gemini-flash-lite-latest is fastest & highly available)
   const candidateModels = [
-    'gemini-2.5-flash',
-    'gemini-2.0-flash',
-    'gemini-1.5-flash',
-    'gemini-3.5-flash',
     'gemini-flash-lite-latest',
     'gemini-flash-latest',
+    'gemini-2.5-flash',
+    'gemini-3.5-flash',
   ];
 
   let lastError = null;
@@ -63,7 +61,7 @@ async function callGeminiGenerate(prompt) {
             responseMimeType: 'application/json',
           },
         }),
-        signal: AbortSignal.timeout(12000),
+        signal: AbortSignal.timeout(5000),
       });
 
       if (!res.ok) {
