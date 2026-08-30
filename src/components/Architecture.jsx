@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 const nodes = [
   { id: "user", label: "👤 Student / User", sub: "Submits natural complaint", category: "INPUT", type: "input" },
   { id: "webhook", label: "🌐 Webhook Gateway", sub: "POST /api/pipeline", category: "INPUT", type: "input" },
@@ -18,13 +16,7 @@ export default function Architecture() {
     <section className="py-20 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto space-y-12">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
-          viewport={{ once: true, margin: "-60px" }}
-          className="text-center space-y-3"
-        >
+        <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
             <span>SYSTEM BLUEPRINT</span>
           </div>
@@ -50,46 +42,40 @@ export default function Architecture() {
               <span>OUTPUT (Action & Audit)</span>
             </span>
           </div>
-        </motion.div>
+        </div>
 
         {/* Architecture Diagram Container */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
-          viewport={{ once: true, margin: "-40px" }}
-          className="dev-card bg-white p-6 sm:p-10 relative overflow-hidden"
-        >
+        <div className="dev-card bg-white p-6 sm:p-10 relative overflow-hidden">
           <div className="relative z-10 flex flex-col items-center gap-3">
             {/* Row 1: User */}
-            <FlowNode node={nodes[0]} delay={0} />
+            <FlowNode node={nodes[0]} />
             <FlowArrow />
 
             {/* Row 2: Webhook */}
-            <FlowNode node={nodes[1]} delay={0.08} />
+            <FlowNode node={nodes[1]} />
             <FlowArrow />
 
             {/* Row 3: Validate */}
-            <FlowNode node={nodes[2]} delay={0.16} />
+            <FlowNode node={nodes[2]} />
             <FlowArrow />
 
             {/* Row 4: AI */}
-            <FlowNode node={nodes[3]} delay={0.24} />
+            <FlowNode node={nodes[3]} />
 
             {/* Branch */}
             <div className="flex items-start gap-4 sm:gap-8 w-full mt-2">
               {/* Left Branch: Notion + Approval */}
               <div className="flex-1 flex flex-col items-center gap-3">
                 <div className="text-[#dc2626] text-xs font-mono font-bold">↓ Needs Approval (High Risk)</div>
-                <FlowNode node={nodes[4]} delay={0.32} />
+                <FlowNode node={nodes[4]} />
                 <FlowArrow />
-                <FlowNode node={nodes[5]} delay={0.4} />
+                <FlowNode node={nodes[5]} />
               </div>
 
               {/* Right Branch: Direct Action */}
               <div className="flex-1 flex flex-col items-center gap-3">
                 <div className="text-[#059669] text-xs font-mono font-bold">↓ Verified (Auto Execute)</div>
-                <FlowNode node={nodes[6]} delay={0.32} />
+                <FlowNode node={nodes[6]} />
                 <div className="h-[44px]" />
                 <div className="text-[#71717a] text-xs font-mono">↓ auto-dispatch</div>
               </div>
@@ -101,26 +87,20 @@ export default function Architecture() {
             </div>
 
             {/* Run Log */}
-            <FlowNode node={nodes[7]} delay={0.48} />
+            <FlowNode node={nodes[7]} />
 
             {/* Final Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.56 }}
-              viewport={{ once: true }}
-              className="mt-4 px-4 py-2 rounded-full bg-[#ecfdf5] border-2 border-[#059669] text-[#065f46] text-xs font-mono font-bold shadow-[2px_2px_0px_#18181b]"
-            >
+            <div className="mt-4 px-4 py-2 rounded-full bg-[#ecfdf5] border-2 border-[#059669] text-[#065f46] text-xs font-mono font-bold shadow-[2px_2px_0px_#18181b]">
               🏁 TAMPER-PROOF RUN LOG PROOF SEALED
-            </motion.div>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 }
 
-function FlowNode({ node, delay = 0 }) {
+function FlowNode({ node }) {
   const badgeClass =
     node.type === "input"
       ? "bg-[#f4f3ef] text-[#18181b] border-[#18181b]"
@@ -129,13 +109,7 @@ function FlowNode({ node, delay = 0 }) {
       : "bg-[#ecfdf5] text-[#065f46] border-[#059669]";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
-      viewport={{ once: true }}
-      className="w-full max-w-sm px-5 py-3 rounded-xl border-2 border-[#18181b] bg-[#fcfbfa] shadow-[2px_2px_0px_#18181b] text-center"
-    >
+    <div className="w-full max-w-sm px-5 py-3 rounded-xl border-2 border-[#18181b] bg-[#fcfbfa] shadow-[2px_2px_0px_#18181b] text-center">
       <div className="flex items-center justify-center mb-1">
         <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded border ${badgeClass}`}>
           {node.category}
@@ -143,7 +117,7 @@ function FlowNode({ node, delay = 0 }) {
       </div>
       <div className="font-bold text-sm text-[#18181b]">{node.label}</div>
       <div className="text-[#52525b] text-xs mt-0.5 font-mono">{node.sub}</div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -152,4 +126,3 @@ function FlowArrow() {
     <div className="w-[2px] h-6 bg-[#18181b] my-0.5" aria-hidden="true" />
   );
 }
-

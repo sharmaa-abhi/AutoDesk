@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   Globe,
   Cpu,
@@ -49,13 +48,7 @@ export default function HowItWorks() {
     <section id="how-it-works" className="py-20 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
-          viewport={{ once: true, margin: "-60px" }}
-          className="text-center space-y-3"
-        >
+        <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
             <span>SYSTEM PIPELINE</span>
           </div>
@@ -65,17 +58,13 @@ export default function HowItWorks() {
           <p className="text-sm sm:text-base text-[#52525b] max-w-xl mx-auto">
             From inbound trigger to tamper-proof proof — every step is automated, audited, and human-supervised.
           </p>
-        </motion.div>
+        </div>
 
         {/* Steps Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {steps.map((step, i) => (
-            <motion.div
+            <div
               key={step.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: i * 0.08, ease: [0.21, 0.47, 0.32, 0.98] }}
-              viewport={{ once: true, margin: "-40px" }}
               className="dev-card bg-white p-6 relative flex flex-col justify-between"
             >
               <div>
@@ -95,18 +84,12 @@ export default function HowItWorks() {
                   {step.desc}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Tamper-Proof Audit Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
-          viewport={{ once: true, margin: "-40px" }}
-          className="dev-card bg-white p-5 flex flex-col sm:flex-row items-center gap-4 max-w-3xl mx-auto"
-        >
+        <div className="dev-card bg-white p-5 flex flex-col sm:flex-row items-center gap-4 max-w-3xl mx-auto">
           <div className="w-11 h-11 rounded-lg bg-[#059669] text-white flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0px_#18181b]">
             <ScrollText className="w-5 h-5 text-white" aria-hidden="true" focusable="false" />
           </div>
@@ -119,9 +102,8 @@ export default function HowItWorks() {
               Every action automatically writes a timestamped execution row to Notion — written via the Notion Integration Bot token, never manually entered.
             </p>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 }
-

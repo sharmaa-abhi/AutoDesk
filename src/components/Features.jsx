@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Brain, UserCheck, Mail, ShieldCheck } from "lucide-react";
 
 const features = [
@@ -35,13 +34,7 @@ export default function Features() {
     <section className="py-20 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
-          viewport={{ once: true, margin: "-60px" }}
-          className="text-center space-y-3"
-        >
+        <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
             <span>CORE ARCHITECTURE</span>
           </div>
@@ -51,17 +44,13 @@ export default function Features() {
           <p className="text-sm sm:text-base text-[#52525b] max-w-xl mx-auto">
             Not a mockup or chatbot. A robust, audited production automation system with live backend dispatching.
           </p>
-        </motion.div>
+        </div>
 
         {/* 2x2 Feature Bento Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {features.map((f, i) => (
-            <motion.div
+          {features.map((f) => (
+            <div
               key={f.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: i * 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
-              viewport={{ once: true, margin: "-40px" }}
               className="dev-card bg-white p-7 relative flex flex-col justify-between"
             >
               <div>
@@ -81,11 +70,10 @@ export default function Features() {
                   {f.desc}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
     </section>
   );
 }
-
