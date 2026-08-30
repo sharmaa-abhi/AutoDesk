@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Code2, Link, Globe } from "lucide-react";
 
 export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {

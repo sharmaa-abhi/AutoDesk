@@ -3,16 +3,10 @@
 import {
   ShieldCheck,
   Zap,
-  CheckCircle2,
-  Cpu,
   Lock,
   ExternalLink,
   Code2,
   Database,
-  Play,
-  ShieldAlert,
-  Radio,
-  BookOpen,
 } from "lucide-react";
 
 export default function BentoMetrics({ stats, runLogs, onSimulateWebhook }) {

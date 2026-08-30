@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 const nodes = [
   { id: "user", label: "👤 Student / User", sub: "Submits natural complaint", category: "INPUT", type: "input" },
   { id: "webhook", label: "🌐 Webhook Gateway", sub: "POST /api/pipeline", category: "INPUT", type: "input" },

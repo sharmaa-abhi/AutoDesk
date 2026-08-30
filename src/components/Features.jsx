@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Brain, UserCheck, Mail, ShieldCheck } from "lucide-react";
 
 const features = [

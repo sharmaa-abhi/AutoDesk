@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 const techStack = [
   { name: "Next.js 16", category: "App Router" },
   { name: "Tailwind CSS v4", category: "Styling" },
