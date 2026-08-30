@@ -2,7 +2,7 @@
 
 > **Project Name:** AutoDesk Engine  
 > **Tagline:** Kill One Boring Job. Completely. (Autonomous Request & Certificate Automation System)  
-> **Event:** Automate India 2026 Hackathon  
+> **Event:** Automate India 2026 Hackathon (Notion Track)  
 > **Target Video Duration:** 2:30 to 3:00 Minutes  
 > **Local Server URL:** `http://localhost:3000`
 

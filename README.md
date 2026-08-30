@@ -3,10 +3,12 @@
 > **"Kill One Boring Job. Completely."**  
 > An autonomous, Human-in-the-Loop backend service built for the **Notion Track Hackathon**.
 
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.3.2-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.2.8-blue?style=for-the-badge&logo=react)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![Notion API](https://img.shields.io/badge/Notion_API-Integrated-000000?style=for-the-badge&logo=notion)](https://developers.notion.com/)
-[![Gemini AI](https://img.shields.io/badge/Google_Gemini-AI_Engine-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/)
+[![Notion API](https://img.shields.io/badge/Notion_API-v5.26-000000?style=for-the-badge&logo=notion)](https://developers.notion.com/)
+[![Google Gemini](https://img.shields.io/badge/Google_Gemini-2.18-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/)
+[![Resend](https://img.shields.io/badge/Resend-v6.22-black?style=for-the-badge&logo=resend)](https://resend.com/)
 
 ---
 
@@ -33,7 +35,7 @@ AutoDesk Engine replaces that entire chaotic manual cycle with an **autonomous 5
 
 ### 🔁 Step-by-Step Flow:
 
-1. **⚡ Trigger & Ingestion**: Form submission or webhook arrives at your deployed backend.
+1. **⚡ Trigger & Ingestion**: Form submission or webhook arrives at [`POST /api/pipeline`](file:///c:/Users/ABHI%20SHARMA/OneDrive/Desktop/New%20folder/src/app/api/pipeline/route.js).
 2. **🛡️ Data Sanitization & Deduplication**: Inputs are cleaned; MD5 hash prevents double-submissions within 24h.
 3. **🧠 AI Intelligence (Gemini)**: Extracts student intent, urgency, and matches against verified attendance.
 4. **🔀 Smart Routing**:
@@ -42,16 +44,16 @@ AutoDesk Engine replaces that entire chaotic manual cycle with an **autonomous 5
 5. **🚀 Real-World Action**: HTML template engine generates a styled, signed certificate and sends it via Email (Resend / Gmail SMTP).
 6. **📜 Tamper-Proof Audit**: Every single run is written automatically to the **Notion Run Log** with real timestamps and execution metrics.
 
-### Current Feature Set
+### 🌟 Current Feature Set
 
-- Live request intake from the landing-page modal or direct `POST /api/pipeline` webhooks.
-- Gemini classification with a local fallback for intent, category, confidence, priority, attendance status, and action preview.
-- MD5 duplicate filtering for repeated email/message combinations during the 24-hour cache window.
-- Smart routing that auto-dispatches verified high-confidence requests and queues other requests for operator review.
-- Dashboard controls for approving or rejecting requests, plus event filters, counters, webhook simulation, and run-log telemetry.
-- Standalone HTML certificate generation with a unique certificate ID and issue date.
-- Transactional delivery through Resend with Gmail SMTP fallback, plus Resend operations for send, batch, lookup, update, and attachment actions.
-- Notion request records and run telemetry with mock-mode responses when integration credentials are unavailable.
+- **Live Request Intake**: Submit ticket modal on the landing page and direct webhook endpoint `POST /api/pipeline`.
+- **Gemini AI Classification**: Multi-model fallback cascade (`gemini-flash-lite-latest`, `gemini-flash-latest`, `gemini-2.5-flash`, `gemini-3.5-flash`) with deterministic JSON parsing fallback.
+- **24-Hour MD5 Deduplication**: Filters identical email/complaint spam within a rolling 24-hour TTL window.
+- **Smart HITL Routing**: Auto-dispatches verified high-confidence requests while queueing edge cases for human review.
+- **Live Tactical Cockpit**: 3-column operator dashboard for inspecting incidents, payload schemas, approval actions, event filters, and SLA telemetry.
+- **Dynamic HTML/SVG Certificate Engine**: Renders high-fidelity verifiable certificates with unique cryptographic IDs and timestamped signatures.
+- **Universal Email Dispatcher**: Dual-layer transactional mailer utilizing Resend API with seamless failover to authenticated Gmail SMTP.
+- **Notion SDK Operations**: Automated database synchronization with mock mode fallback when keys are absent.
 
 ---
 
@@ -61,7 +63,7 @@ AutoDesk Engine replaces that entire chaotic manual cycle with an **autonomous 5
 > - **If Yes:** It was just a no-code Zapier/Make wrapper (0 marks).  
 > - **If No:** **Your custom backend code is the true brain.** Notion serves as the operator's cockpit & audit trail (Full marks).
 
-- ✅ **Real Backend Logic**: Custom validation, fingerprint hashing, and PDF generation.
+- ✅ **Real Backend Logic**: Custom validation, fingerprint hashing, Gemini NLP extraction, and certificate generation.
 - ✅ **Operator Cockpit**: Organizers never touch code or raw databases — they manage everything via Notion.
 - ✅ **Complete Loop**: From messy student input to a verified certificate in their inbox + proof in the Run Log.
 
@@ -69,13 +71,13 @@ AutoDesk Engine replaces that entire chaotic manual cycle with an **autonomous 5
 
 ## 🖥️ Live Simulator & Frontend Pages
 
-This repo includes a Next.js web experience designed with the **Deep OLED Void / Pitch Black** design system:
+This repo includes a Next.js web experience designed with the **Clean Modern Developer-Tool** design system:
 
 | Route | Page | Purpose |
 |:------|:-----|:--------|
-| [`/`](src/app/page.js) | **🏠 Landing Page** | Product overview, pipeline flow, live stats, and a **Submit Live Ticket** modal that triggers the Gemini AI → Notion → Email pipeline. |
-| [`/dashboard`](src/app/dashboard/page.js) | **🎛️ Live Tactical Cockpit** | Interactive simulator for clean or garbage webhook payloads, request inspection, and approve/reject actions. |
-| [`/about`](src/app/about/page.js) | **👥 About & Team** | Team background, system architecture philosophy, and technology stack. |
+| [`/`](file:///c:/Users/ABHI%20SHARMA/OneDrive/Desktop/New%20folder/src/app/page.js) | **🏠 Landing Page** | Product overview, interactive pipeline flow, live stats, and a **Submit Live Ticket** modal. |
+| [`/dashboard`](file:///c:/Users/ABHI%20SHARMA/OneDrive/Desktop/New%20folder/src/app/dashboard/page.js) | **🎛️ Live Tactical Cockpit** | Interactive operator simulator for webhook payloads, ticket inspection, and approve/reject actions. |
+| [`/about`](file:///c:/Users/ABHI%20SHARMA/OneDrive/Desktop/New%20folder/src/app/about/page.js) | **👥 About & Team** | Team background, system architecture philosophy, and technology stack. |
 
 > 💡 **Submit Ticket Modal**: Available from both the **Navbar** and the **Hero section CTA** on any page. Students can type a raw complaint, and the system runs the full pipeline live — Gemini AI classification → Notion DB write → certificate generation → email dispatch.
 
@@ -107,20 +109,21 @@ npm run dev
 
 ---
 
-## 🎨 Design System Tokens (Deep OLED Void)
+## 🎨 Design System Tokens
 
-Built with a high-contrast mathematical dark theme:
+Built with a high-contrast modern developer-tool aesthetic:
 
 | Token | Hex / Value | Usage |
 |:------|:------------|:------|
-| `--bg-canvas` | `#050508` | True Pitch Black Void background |
-| `--bg-panel` | `#0A0C10` | Obsidian Matte container panels |
-| `--bg-panel-elevated` | `#10141D` | Floating bento cards & modals |
-| `--accent-cyan` | `#00E5FF` | Primary actions & baseline flow |
-| `--accent-amber` | `#FFB300` | Warnings & Human Review flags |
-| `--accent-crimson` | `#FF2A55` | Critical alerts & action buttons |
-| `--accent-emerald` | `#00E676` | Verified attendance & success |
-| `--text-gold` | `#FFD700` | Primary glow headings & accents |
+| `--bg-canvas` | `#f7f6f2` | Warm off-white / light beige canvas |
+| `--bg-panel` | `#ffffff` | Pure white container panels |
+| `--bg-panel-elevated` | `#fcfbfa` | Floating bento cards & modals |
+| `--border-charcoal` | `#18181b` | 2px–3px dark charcoal structured borders |
+| `--accent-red` | `#dc2626` | Primary action buttons & critical flags |
+| `--accent-emerald` | `#059669` | Verified attendance & success status |
+| `--accent-amber` | `#d97706` | Warnings & Human Review queue indicators |
+| `--text-primary` | `#18181b` | Primary dark charcoal typography |
+| `--text-secondary` | `#52525b` | Muted slate secondary text |
 
 ---
 
@@ -137,6 +140,9 @@ All deep architectural diagrams, specs, and hackathon rules are documented in th
 - [docs/COLOR_SYSTEM.md](docs/COLOR_SYSTEM.md) — Complete UI color ramps, contrast tokens, and CSS variables.
 - [docs/DESIGN_LAYOUT.md](docs/DESIGN_LAYOUT.md) — Multi-pane wireframes and design specifications.
 - [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) — Frontend build roadmap and component structure.
+- [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) — 🎬 Official hackathon demo presentation script and recording guide.
+- [docs/BUG_REPORT.md](docs/BUG_REPORT.md) — 🐞 Comprehensive bug audit, test resolutions, and verification evidence.
+- [docs/ROADMAP.md](docs/ROADMAP.md) — 🗺️ Product milestones, architecture phases, and planned features.
 - [docs/Notion_Track_Complete_Conversation.md](docs/Notion_Track_Complete_Conversation.md) — Full problem breakdown transcript & ideation notes.
 
 ---

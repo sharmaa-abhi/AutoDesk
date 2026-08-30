@@ -31,8 +31,8 @@
   - Operator approval states (`WAITING_APPROVAL`, `SUCCESS`, `FAILED`, `NEEDS_FIX`).
 
 - [x] **Universal Action Dispatcher**
-  - Primary dispatch via Resend transactional email API.
-  - Automatic, seamless fallback to authenticated Gmail SMTP (`nodemailer`) when Resend keys are unconfigured.
+  - Primary dispatch via Resend transactional email API (`resend` v6.22.0).
+  - Automatic, seamless fallback to authenticated Gmail SMTP (`nodemailer` v9.0.5) when Resend keys are unconfigured.
   - Dynamic, tamper-proof HTML/SVG certificate rendering engine with XSS/HTML entity sanitization.
 
 - [x] **Sanitization & 24-Hour Deduplication Gate**
@@ -165,7 +165,7 @@ Future (Phase 3-5):
 
 ## 👥 Governance & Contribution
 
-- **Repository:** [AutoDesk Engine on GitHub](https://github.com)
+- **Repository:** [AutoDesk Engine on GitHub](https://github.com/sharmaa-abhi/Notion.AI)
 - **Control Center:** Connected Notion Workspace
 - **Maintainers:** Abhishek Sharma & Akash Gautam
 - **License:** MIT License

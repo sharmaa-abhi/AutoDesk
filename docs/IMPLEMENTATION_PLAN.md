@@ -1,31 +1,45 @@
-# AutoDesk Engine — Full-Stack Implementation Plan
+# AutoDesk Engine — Full-Stack Implementation Plan & Architecture Spec
 
-Build a stunning, production-grade full-stack application for **AutoDesk Engine** — a college event certificate request automation system. Three pages: **Home (Landing)** + **Dashboard (Live Simulator)** + **About/Team**. Fully functional backend with Gemini AI, Notion SDK, and Email dispatch.
+Build a production-grade full-stack application for **AutoDesk Engine** — a college event certificate and student request automation system. Three pages: **Home (Landing)** + **Dashboard (Live Simulator)** + **About/Team**. Fully functional backend with Gemini AI, Notion SDK, and Email dispatch.
 
 ## Implemented Feature Update
 
-The planned surface is now implemented as a live request-to-action workflow: landing-page submissions call the pipeline, Gemini or its deterministic fallback classifies requests, duplicate payloads are filtered, Notion stores request and run records, high-confidence verified requests auto-dispatch, and uncertain requests remain available for dashboard approval or rejection. Certificates are generated as standalone HTML and delivered through Resend or Gmail SMTP fallback.
-
-## Tech Stack
-- **Next.js 16** (App Router)
-- **Tailwind CSS v4**
-- **Framer Motion** (animations)
-- **Lucide React** (icons)
-- **Google Gemini AI** (`@google/genai` — `gemini-3.6-flash`)
-- **Notion SDK** (`@notionhq/client` v5.26)
-- **Resend** (`resend` v6.22) + **Nodemailer** (Gmail SMTP fallback)
-
-## Design System (from DESIGN_LAYOUT.md & globals.css)
-- Dark theme (Deep OLED Void): `#050508` canvas, `#0A0C10` panels, `#10141D` elevated
-- Accents: Cyan `#00E5FF`, Amber `#FFB300`, Crimson `#FF2A55`, Emerald `#00E676`, Violet `#7C4DFF`, Orange `#FF6E40`
-- Text: Gold `#FFD700` (primary), White `#F3F4F6`, Secondary `#8B949E`, Muted `#545D68`
-- Fonts: Inter (sans) + JetBrains Mono (mono)
-- Glassmorphism overlays, dot-matrix grid background
-- Motion: smooth scroll reveals, hover lifts, floating orbs, shimmer effects
+The full request-to-action workflow is live:
+- Landing-page ticket submission calls the pipeline directly.
+- Gemini Flash AI or deterministic fallback classifies requests.
+- Duplicate payloads are filtered using in-memory 24h MD5 hashing with automated TTL garbage collection.
+- Notion stores request and run records with mock mode fallback.
+- High-confidence verified requests auto-dispatch.
+- Uncertain requests remain available for dashboard operator approval or rejection.
+- Certificates are generated as standalone cryptographic HTML/SVG and delivered through Resend with Gmail SMTP fallback.
 
 ---
 
-## Project Structure (Actual)
+## 🏗️ Tech Stack
+
+- **Framework**: **Next.js 16.3.2** (App Router) + **React 19.2.8**
+- **Styling**: **Tailwind CSS v4** (`@tailwindcss/postcss`) + Vanilla CSS design tokens in `src/app/globals.css`
+- **Animations**: **Framer Motion** (`framer-motion` v13.1.1)
+- **Icons**: **Lucide React** (`lucide-react` v1.33.0)
+- **AI Engine**: **Google Gemini AI** (`@google/genai` v2.18.0 — multi-model cascade)
+- **Database & Operator Cockpit**: **Notion SDK** (`@notionhq/client` v5.26.0)
+- **Transactional Mailer**: **Resend** (`resend` v6.22.0) + **Nodemailer** (`nodemailer` v9.0.5 — Gmail SMTP fallback)
+
+---
+
+## 🎨 Design System
+
+Built on a Clean Modern Developer-Tool Design System:
+- **Canvas / Background**: Warm off-white `#f7f6f2`, pure white panels `#ffffff`, elevated cards `#fcfbfa`
+- **Borders**: Structured 2px–3px dark charcoal `#18181b`
+- **Accents**: Red `#dc2626` (primary action), Emerald `#059669` (success/verified), Amber `#d97706` (review/warning), Blue `#2563eb`, Violet `#7c3aed`
+- **Typography**: Inter (sans) + JetBrains Mono (mono)
+- **Shadows**: Tactical offset developer shadows (`2px 2px 0px #18181b`)
+- **Motion**: Fluid scroll progress bar, hover card elevations, tab indicators, and timeline transitions
+
+---
+
+## 📁 Project Structure
 
 ```
 New folder/
@@ -47,6 +61,7 @@ New folder/
 │   │   ├── about/
 │   │   │   └── page.js         ← About/Team page
 │   │   ├── dashboard/
+│   │   │   ├── error.js        ← Dashboard error boundary
 │   │   │   └── page.js         ← Live Tactical Cockpit simulator
 │   │   └── api/
 │   │       ├── pipeline/
@@ -58,88 +73,86 @@ New folder/
 │   │       └── notion-test/
 │   │           └── route.js    ← Notion database connection verification
 │   ├── components/
-│   │   ├── Navbar.jsx
-│   │   ├── Hero.jsx
-│   │   ├── HowItWorks.jsx
-│   │   ├── Features.jsx
-│   │   ├── Architecture.jsx
-│   │   ├── StatsStrip.jsx
-│   │   ├── Footer.jsx
-│   │   ├── TeamCard.jsx
-│   │   ├── TechStack.jsx
+│   │   ├── Navbar.jsx          ← Navigation header with scroll progress & modal trigger
+│   │   ├── Hero.jsx            ← Hero section with live statistics and CTA
+│   │   ├── HowItWorks.jsx      ← 6-stage interactive pipeline flow
+│   │   ├── Features.jsx        ← Bento feature highlights
+│   │   ├── Architecture.jsx    ← Interactive system architecture diagram
+│   │   ├── StatsStrip.jsx      ← Live counter metric badges
+│   │   ├── Footer.jsx          ← Footer with navigation and hackathon credits
+│   │   ├── TeamCard.jsx        ← Team profile card component
+│   │   ├── TechStack.jsx       ← Tech stack showcase grid
 │   │   ├── SubmitRequestModal.jsx   ← Interactive form modal (triggers pipeline)
-│   │   └── dashboard/               ← Dashboard sub-components
+│   │   └── dashboard/
+│   │       ├── BentoMetrics.jsx          ← Right telemetry sidebar & audit log feed
+│   │       ├── EventStreamTimeline.jsx   ← Left live incident queue & filters
+│   │       └── TacticalEngineCanvas.jsx  ← Center 5-stage live execution engine
 │   └── lib/
-│       ├── gemini.js            ← Gemini AI classification engine
+│       ├── gemini.js            ← Gemini AI classification engine with model fallback
 │       ├── notion.js            ← Notion SDK: createNotionRequest + logRunToNotion
-│       ├── certificate.js       ← HTML certificate template generator
-│       ├── mailer.js            ← Universal email dispatcher (Resend → SMTP fallback)
+│       ├── certificate.js       ← HTML/SVG certificate template generator with XSS sanitization
+│       ├── mailer.js            ← Universal email dispatcher (Resend → Gmail SMTP fallback)
 │       └── resend.js            ← Full Resend SDK wrapper (send/batch/get/update/list)
 ```
 
 ---
 
-## Frontend Pages
+## 🖥️ Frontend Pages & Workflows
 
 ### Page 1: Home / Landing Page (`/`)
-Sections in order:
-1. **Navbar** — Logo + nav links (Home, Dashboard, About) + "Submit Request" CTA button
-2. **Hero Section** — Big bold headline "Kill One Boring Job. Completely." + animated gradient orbs
-3. **Stats Strip** — Live counters: Requests Processed, Uptime, Certificates Sent, Response Time
-4. **How It Works** — 5-stage pipeline flow with icons (Ingest → Classify → Approve → Execute → Audit)
-5. **Features Grid** — Bento-style cards for AI Classification, HITL, Real-World Actions, Tamper-Proof Logs
-6. **Architecture Diagram** — Visual system flow showing the full pipeline
-7. **Footer** — Project name, hackathon credit, team links
+1. **Navbar** — Logo + nav links (Home, Live Cockpit, About) + "+ Submit Ticket" primary CTA.
+2. **Hero Section** — Headline "Kill One Boring Job. Completely." + live metric pills + test modal launch.
+3. **Stats Strip** — Real-time metrics: Incidents Auto-Resolved, Uptime SLA, Certificates Dispatched.
+4. **How It Works** — 6-step animated pipeline flow (Ingest → Sanitize → Classify → Route → Execute → Audit).
+5. **Features Grid** — Bento-style cards for Zero Hallucination AI, Human-in-the-Loop, Dynamic HTML Certificates, and Tamper-Proof Notion Run Logs.
+6. **Architecture Blueprint** — Interactive blueprint showcasing end-to-end data pipelines.
+7. **Footer** — Hackathon credentials, GitHub links, and author credits.
 
 ### Page 2: Live Tactical Cockpit (`/dashboard`)
-1. **Interactive Simulator** — Test webhooks, trigger garbage payloads, approve/reject requests in real time
-2. **Live Pipeline Execution** — Calls `/api/pipeline` with real Gemini AI + Notion + Email dispatch
-3. **Stage-by-Stage Visualization** — Shows each pipeline stage result in sequence
+1. **Left Column (Live Incident Queue)** — Filter tabs (`ALL`, `WAITING`, `DISPATCHED`, `REJECTED`), real-time ticket stream, and quick selector.
+2. **Center Column (Tactical Engine Canvas)** — 5-Stage execution pipeline visualizer with interactive mode and raw JSON payload inspector.
+3. **Right Column (Telemetry & Audit Log)** — Notion DB status, SLA latency monitors, and live append-only run log feed.
 
 ### Page 3: About / Team (`/about`)
-1. **Team Cards** — Glassmorphism cards for Abhishek Sharma & Akash Gautam
-2. **Tech Stack Section** — Visual grid of technologies used
-3. **Footer** — Same as Home
+1. **Team Cards** — Abhishek Sharma & Akash Gautam with GitHub and LinkedIn links.
+2. **System Philosophy** — Architectural principles behind the "Repo Deletion Test".
+3. **Tech Stack Section** — Visual grid of core frameworks and SDKs.
 
 ---
 
-## Backend API Endpoints
+## 🔌 Backend API Endpoints
 
-| Endpoint | Method | Actions | Description |
-|:---------|:-------|:--------|:------------|
-| `/api/pipeline` | `POST` | `ingest`, `approve`, `reject` | Core 5-stage pipeline: sanitize → classify → route → execute → log |
-| `/api/classify` | `POST` | — | Standalone Gemini AI text classification |
-| `/api/send-email` | `GET` | — | List sent emails via Resend |
-| `/api/send-email` | `POST` | `send`, `batch`, `get`, `update`, `list`, `listAttachments`, `getAttachment` | Full Resend email operations |
-| `/api/notion-test` | `GET` | — | Notion database connection verification test |
-
----
-
-## Environment Variables Required
-
-| Variable | Required | Provider |
-|:---------|:---------|:---------|
-| `NOTION_API_KEY` | ✅ | Notion Integrations |
-| `NOTION_REQUESTS_DATABASE_ID` | ✅ | Notion Database |
-| `NOTION_RUN_LOG_DATABASE_ID` | ✅ | Notion Database |
-| `GEMINI_API_KEY` | ✅ | Google AI Studio |
-| `RESEND_API_KEY` | ⚡ Either this | Resend.com |
-| `SMTP_USER` + `SMTP_PASS` | ⚡ Or these | Gmail App Password |
+| Endpoint | Method | Supported Actions / Operations | Description |
+|:---------|:-------|:-------------------------------|:------------|
+| [`/api/pipeline`](file:///c:/Users/ABHI%20SHARMA/OneDrive/Desktop/New%20folder/src/app/api/pipeline/route.js) | `POST` | `ingest`, `approve`, `reject` | Core 5-stage pipeline: sanitize → classify → route → execute → audit log |
+| [`/api/classify`](file:///c:/Users/ABHI%20SHARMA/OneDrive/Desktop/New%20folder/src/app/api/classify/route.js) | `POST` | — | Standalone Gemini AI text classification with schema validation |
+| [`/api/send-email`](file:///c:/Users/ABHI%20SHARMA/OneDrive/Desktop/New%20folder/src/app/api/send-email/route.js) | `GET` | — | List sent emails via Resend API |
+| [`/api/send-email`](file:///c:/Users/ABHI%20SHARMA/OneDrive/Desktop/New%20folder/src/app/api/send-email/route.js) | `POST` | `send`, `batch`, `get`, `update`, `list`, `listAttachments`, `getAttachment` | Full Resend transactional email suite |
+| [`/api/notion-test`](file:///c:/Users/ABHI%20SHARMA/OneDrive/Desktop/New%20folder/src/app/api/notion-test/route.js) | `GET` | — | Notion database connectivity and schema audit test |
 
 ---
 
-## Verification Plan
+## 🔑 Environment Variables
+
+| Variable | Required | Default / Provider | Purpose |
+|:---------|:---------|:-------------------|:--------|
+| `NOTION_API_KEY` | ✅ Required | Notion Integrations | Authenticates Notion SDK client |
+| `NOTION_REQUESTS_DATABASE_ID` | ✅ Required | Notion Database | Stores inbound requests & human approval queue |
+| `NOTION_RUN_LOG_DATABASE_ID` | ✅ Required | Notion Database | Stores immutable telemetry run logs |
+| `GEMINI_API_KEY` | ✅ Required | Google AI Studio | Powers Gemini Flash classification cascade |
+| `RESEND_API_KEY` | ⚡ Primary | Resend.com | Primary transactional email dispatch provider |
+| `SMTP_USER` + `SMTP_PASS` | ⚡ Fallback | Gmail App Password | Seamless failover SMTP transporter |
+
+---
+
+## 🧪 Verification & QA Plan
 
 ### Automated Verification
-- `npm run build` — Verify Next.js production build passes
-- `npm run lint` — Verify ESLint passes
+- `npm run build` — Verify Next.js 16 production build compiles with exit code 0.
+- `npm run lint` — Verify zero ESLint syntax or style errors.
 
 ### Manual Verification
-- Run `npm run dev` and verify all 3 pages render correctly
-- Test `/api/pipeline` with `action: "ingest"` → verify Gemini AI classification + Notion write + Email send
-- Test `/api/pipeline` with `action: "approve"` → verify certificate generation + email dispatch
-- Test `/api/pipeline` with `action: "reject"` → verify rejection run log entry
-- Test `/api/notion-test` → verify Notion database connection
-- Test duplicate submission within 24h → verify MD5 deduplication blocks it
-- Confirm dark theme colors match the design system
-- Verify all Framer Motion animations work on landing page
+- Launch local development server (`npm run dev`) and test all 3 pages (`/`, `/dashboard`, `/about`).
+- Submit live ticket in modal → verify AI classification, Notion record creation, certificate generation, and mailer dispatch.
+- Test deduplication gate with identical prompt → verify `DUPLICATE_FILTERED` status.
+- Test operator clearance on `/dashboard` → verify approve/reject state transitions and run log append.
