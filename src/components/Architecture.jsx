@@ -3,174 +3,128 @@
 import { motion } from "framer-motion";
 
 const nodes = [
-  { id: "user", label: "👤 User", sub: "Submits complaint", category: "INPUT", type: "input" },
-  { id: "webhook", label: "🌐 Webhook", sub: "POST /api/pipeline", category: "INPUT", type: "input" },
-  { id: "validate", label: "🛡️ Validate", sub: "Sanitize & deduplicate", category: "PROCESSING", type: "process" },
-  { id: "ai", label: "🧠 Gemini AI", sub: "Extract intent & classify", category: "PROCESSING", type: "process" },
-  { id: "notion", label: "🗄️ Notion DB", sub: "Create request card", category: "PROCESSING", type: "process" },
-  { id: "human", label: "🙋 Approval", sub: "Approve / Reject / Override", category: "PROCESSING", type: "process" },
-  { id: "action", label: "🚀 Actions", sub: "Email + PDF + API", category: "OUTPUT", type: "output" },
-  { id: "runlog", label: "📜 Run Log", sub: "Tamper-proof audit trail", category: "OUTPUT", type: "output" },
+  { id: "user", label: "👤 Student / User", sub: "Submits natural complaint", category: "INPUT", type: "input" },
+  { id: "webhook", label: "🌐 Webhook Gateway", sub: "POST /api/pipeline", category: "INPUT", type: "input" },
+  { id: "validate", label: "🛡️ Sanitize & Deduplicate", sub: "MD5 24h Duplicate Guard", category: "PROCESSING", type: "process" },
+  { id: "ai", label: "🧠 Gemini Flash AI", sub: "Extract intent & schema JSON", category: "PROCESSING", type: "process" },
+  { id: "notion", label: "🗄️ Notion Database", sub: "Create live incident page", category: "PROCESSING", type: "process" },
+  { id: "human", label: "🙋 Human-in-the-Loop", sub: "Approve / Reject Cockpit", category: "PROCESSING", type: "process" },
+  { id: "action", label: "🚀 Action Dispatcher", sub: "HTML Certificate + Resend SMTP", category: "OUTPUT", type: "output" },
+  { id: "runlog", label: "📜 Notion Run Log", sub: "Tamper-proof audit proof", category: "OUTPUT", type: "output" },
 ];
 
 export default function Architecture() {
   return (
-    <section className="relative py-28 px-6 overflow-hidden">
-      <div className="max-w-5xl mx-auto">
+    <section className="py-20 px-4 sm:px-6">
+      <div className="max-w-5xl mx-auto space-y-12">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <span className="text-xs font-mono text-emerald-accent bg-emerald-accent/10 px-3 py-1 rounded-full border border-emerald-accent/20">
-            ARCHITECTURE
-          </span>
-          <h2 className="text-4xl sm:text-5xl font-black text-gold mt-4 mb-4 text-glow-gold">
-            System Blueprint
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
+            <span>SYSTEM BLUEPRINT</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#18181b] tracking-tight">
+            End-to-End Pipeline Architecture
           </h2>
-          <p className="text-text-secondary max-w-xl mx-auto">
-            The complete end-to-end pipeline — from user complaint to automated proof.
+          <p className="text-sm sm:text-base text-[#52525b] max-w-xl mx-auto">
+            The complete blueprint — from student complaint ingestion to audited real-world execution.
           </p>
 
           {/* Semantic Category Legend */}
-          <div className="flex items-center justify-center gap-4 sm:gap-6 flex-wrap mt-6 text-xs font-mono">
-            <span className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-cyan-accent" aria-hidden="true" />
-              <span className="text-text-secondary">INPUT (Ingestion)</span>
+          <div className="flex items-center justify-center gap-4 sm:gap-6 flex-wrap mt-4 text-xs font-mono">
+            <span className="flex items-center gap-1.5 font-bold text-[#18181b]">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#18181b]" aria-hidden="true" />
+              <span>INPUT (Ingestion)</span>
             </span>
-            <span className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-violet-accent" aria-hidden="true" />
-              <span className="text-text-secondary">PROCESSING (Engine & AI)</span>
+            <span className="flex items-center gap-1.5 font-bold text-[#18181b]">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#dc2626]" aria-hidden="true" />
+              <span>PROCESSING (AI & Notion)</span>
             </span>
-            <span className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-accent" aria-hidden="true" />
-              <span className="text-text-secondary">OUTPUT (Action & Audit)</span>
+            <span className="flex items-center gap-1.5 font-bold text-[#18181b]">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#059669]" aria-hidden="true" />
+              <span>OUTPUT (Action & Audit)</span>
             </span>
           </div>
-        </motion.div>
+        </div>
 
-        {/* Architecture Diagram */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="relative bg-panel rounded-2xl border border-border-subtle p-8 sm:p-12 overflow-hidden"
-        >
-          {/* Dot grid inside */}
-          <div className="absolute inset-0 dot-grid opacity-50 rounded-2xl" aria-hidden="true" />
-
-          {/* Vertical Flow */}
-          <div className="relative z-10 flex flex-col items-center gap-4">
+        {/* Architecture Diagram Container */}
+        <div className="dev-card bg-white p-6 sm:p-10 relative overflow-hidden">
+          <div className="relative z-10 flex flex-col items-center gap-3">
             {/* Row 1: User */}
-            <FlowNode node={nodes[0]} delay={0} />
-            <FlowArrow delay={0.1} />
+            <FlowNode node={nodes[0]} />
+            <FlowArrow />
 
             {/* Row 2: Webhook */}
-            <FlowNode node={nodes[1]} delay={0.15} />
-            <FlowArrow delay={0.25} />
+            <FlowNode node={nodes[1]} />
+            <FlowArrow />
 
             {/* Row 3: Validate */}
-            <FlowNode node={nodes[2]} delay={0.3} />
-            <FlowArrow delay={0.4} />
+            <FlowNode node={nodes[2]} />
+            <FlowArrow />
 
             {/* Row 4: AI */}
-            <FlowNode node={nodes[3]} delay={0.45} />
+            <FlowNode node={nodes[3]} />
 
             {/* Branch */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.55, duration: 0.4 }}
-              className="flex items-start gap-4 sm:gap-8 w-full mt-2"
-            >
+            <div className="flex items-start gap-4 sm:gap-8 w-full mt-2">
               {/* Left Branch: Notion + Approval */}
-              <div className="flex-1 flex flex-col items-center gap-4">
-                <div className="text-violet-accent text-xs font-mono mb-1 font-semibold">↓ High Risk (Review)</div>
-                <FlowNode node={nodes[4]} delay={0.6} />
-                <FlowArrow delay={0.7} />
-                <FlowNode node={nodes[5]} delay={0.75} />
+              <div className="flex-1 flex flex-col items-center gap-3">
+                <div className="text-[#dc2626] text-xs font-mono font-bold">↓ Needs Approval (High Risk)</div>
+                <FlowNode node={nodes[4]} />
+                <FlowArrow />
+                <FlowNode node={nodes[5]} />
               </div>
 
               {/* Right Branch: Direct Action */}
-              <div className="flex-1 flex flex-col items-center gap-4">
-                <div className="text-emerald-accent text-xs font-mono mb-1 font-semibold">↓ Low Risk (Verified)</div>
-                <FlowNode node={nodes[6]} delay={0.6} />
-                <div className="h-[40px]" />
-                <div className="text-text-muted text-xs font-mono">↓ auto-execute</div>
+              <div className="flex-1 flex flex-col items-center gap-3">
+                <div className="text-[#059669] text-xs font-mono font-bold">↓ Verified (Auto Execute)</div>
+                <FlowNode node={nodes[6]} />
+                <div className="h-[44px]" />
+                <div className="text-[#71717a] text-xs font-mono">↓ auto-dispatch</div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Merge Arrow */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.85, duration: 0.3 }}
-              className="flex items-center gap-2 text-text-muted text-xs font-mono my-2"
-            >
-              <span aria-hidden="true">←</span> both paths merge <span aria-hidden="true">→</span>
-            </motion.div>
+            <div className="text-[#71717a] text-xs font-mono my-2 font-bold">
+              ← Both Paths Merge →
+            </div>
 
             {/* Run Log */}
-            <FlowNode node={nodes[7]} delay={0.9} />
+            <FlowNode node={nodes[7]} />
 
             {/* Final Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 1, duration: 0.4 }}
-              className="mt-4 px-4 py-2 rounded-full bg-emerald-accent/10 border border-emerald-accent/20 text-emerald-accent text-xs font-mono font-bold"
-            >
-              🏁 EXECUTION CYCLE COMPLETE
-            </motion.div>
+            <div className="mt-4 px-4 py-2 rounded-full bg-[#ecfdf5] border-2 border-[#059669] text-[#065f46] text-xs font-mono font-bold shadow-[2px_2px_0px_#18181b]">
+              🏁 TAMPER-PROOF RUN LOG PROOF SEALED
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 }
 
-function FlowNode({ node, delay }) {
-  const typeClass =
+function FlowNode({ node }) {
+  const badgeClass =
     node.type === "input"
-      ? "blueprint-input"
+      ? "bg-[#f4f3ef] text-[#18181b] border-[#18181b]"
       : node.type === "process"
-      ? "blueprint-process"
-      : "blueprint-output";
+      ? "bg-[#fee2e2] text-[#991b1b] border-[#dc2626]"
+      : "bg-[#ecfdf5] text-[#065f46] border-[#059669]";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay, duration: 0.4 }}
-      className={`w-full max-w-xs px-5 py-3 rounded-xl border text-center transition-colors ${typeClass}`}
-    >
+    <div className="w-full max-w-sm px-5 py-3 rounded-xl border-2 border-[#18181b] bg-[#fcfbfa] shadow-[2px_2px_0px_#18181b] text-center">
       <div className="flex items-center justify-center mb-1">
-        <span className="blueprint-category-badge">{node.category}</span>
+        <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded border ${badgeClass}`}>
+          {node.category}
+        </span>
       </div>
-      <div className="font-bold text-sm text-text-white">{node.label}</div>
-      <div className="text-text-secondary text-xs mt-0.5">{node.sub}</div>
-    </motion.div>
+      <div className="font-bold text-sm text-[#18181b]">{node.label}</div>
+      <div className="text-[#52525b] text-xs mt-0.5 font-mono">{node.sub}</div>
+    </div>
   );
 }
 
-function FlowArrow({ delay }) {
+function FlowArrow() {
   return (
-    <motion.div
-      initial={{ opacity: 0, scaleY: 0 }}
-      whileInView={{ opacity: 1, scaleY: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay, duration: 0.3 }}
-      className="w-[2px] h-8 bg-gradient-to-b from-cyan-accent/60 to-transparent origin-top"
-      aria-hidden="true"
-    />
+    <div className="w-[2px] h-6 bg-[#18181b] my-0.5" aria-hidden="true" />
   );
 }
-

@@ -3,14 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Zap, Activity, Sparkles } from "lucide-react";
+import { Menu, X, Zap, Activity, Plus, Database, ExternalLink } from "lucide-react";
 import SubmitRequestModal from "@/components/SubmitRequestModal";
 
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "Dashboard", href: "/dashboard", badge: "LIVE" },
-  { name: "About", href: "/about" },
+  { name: "Overview", href: "/" },
+  { name: "Live Cockpit", href: "/dashboard", badge: "ACTIVE" },
+  { name: "About Team", href: "/about" },
 ];
 
 export default function Navbar() {
@@ -19,63 +18,83 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <motion.nav
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 glass border-b border-border-subtle"
-    >
-      <div className="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group focus-visible:outline-2 focus-visible:outline-cyan-accent focus-visible:rounded-lg">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-accent to-[#006994] flex items-center justify-center shadow-[0_0_20px_rgba(0,229,255,0.25)] group-hover:shadow-[0_0_30px_rgba(0,229,255,0.4)] transition-shadow duration-300">
-            <Zap className="w-5 h-5 text-canvas" strokeWidth={2.5} aria-hidden="true" focusable="false" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-bold text-gold tracking-tight leading-none">
-              Auto<span className="text-cyan-accent">Desk</span>{" "}
-              <span className="text-text-secondary font-normal text-xs uppercase tracking-wider">
-                Engine
+    <header className="sticky top-0 left-0 right-0 z-50 bg-[#ffffff] border-b-2 border-[#18181b]">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+        {/* Brand / Logo */}
+        <div className="flex items-center gap-6">
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 group focus-visible:outline-2 focus-visible:outline-[#dc2626] focus-visible:rounded"
+          >
+            <div className="w-8 h-8 rounded-lg bg-[#18181b] border-2 border-[#18181b] flex items-center justify-center text-white shadow-[2px_2px_0px_#dc2626]">
+              <Zap className="w-4 h-4 text-[#ffffff]" strokeWidth={2.5} aria-hidden="true" focusable="false" />
+            </div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-base font-black tracking-tight text-[#18181b]">
+                AutoDesk<span className="text-[#dc2626]">.Engine</span>
               </span>
-            </span>
-            <span className="text-xs leading-4 font-mono text-emerald-accent flex items-center gap-1.5 mt-0.5">
-              <span
-                className="w-1.5 h-1.5 rounded-full bg-emerald-accent animate-pulse"
-                aria-hidden="true"
-              />
-              MATCH CENTER & COCKPIT
-            </span>
-          </div>
-        </Link>
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-[#f4f3ef] text-[#52525b] border border-[#e2dfd6]">
+                v0.1
+              </span>
+            </div>
+          </Link>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-6">
+          {/* Operational Status Pill */}
+          <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-md bg-[#f4f3ef] border border-[#e2dfd6] text-[11px] font-mono text-[#52525b]">
+            <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse" aria-hidden="true" />
+            <span>Notion Bot Engine: <strong className="text-[#059669] font-bold">READY (24/7)</strong></span>
+          </div>
+        </div>
+
+        {/* Desktop Navigation Links */}
+        <nav aria-label="Main Navigation" className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`relative text-sm font-medium transition-colors duration-200 flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-cyan-accent focus-visible:rounded-md ${
-                  isActive ? "text-gold font-semibold" : "text-text-secondary hover:text-gold"
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                  isActive
+                    ? "bg-[#18181b] text-[#ffffff]"
+                    : "text-[#52525b] hover:text-[#18181b] hover:bg-[#f4f3ef]"
                 }`}
               >
                 <span>{link.name}</span>
                 {link.badge && (
-                  <span className="badge-live">
-                    <span className="badge-live-dot animate-pulse" aria-hidden="true" />
-                    <span>{link.badge}</span>
+                  <span
+                    className={`text-[9px] font-mono px-1 py-0.2 rounded font-bold ${
+                      isActive ? "bg-[#dc2626] text-white" : "bg-[#ecfdf5] text-[#065f46] border border-[#059669]/40"
+                    }`}
+                  >
+                    {link.badge}
                   </span>
-                )}
-                {isActive && (
-                  <motion.div
-                    layoutId="navIndicator"
-                    className="absolute -bottom-4 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-accent to-gold"
-                  />
                 )}
               </Link>
             );
           })}
+        </nav>
+
+        {/* Header Right Actions */}
+        <div className="hidden md:flex items-center gap-3">
+          <a
+            href="https://notion.so"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-1.5 rounded-lg border-2 border-[#18181b] bg-white text-[12px] font-mono font-bold text-[#18181b] hover:bg-[#f4f3ef] transition-colors flex items-center gap-1.5 shadow-[1.5px_1.5px_0px_#18181b]"
+          >
+            <Database className="w-3.5 h-3.5" aria-hidden="true" focusable="false" />
+            <span>Notion HQ</span>
+            <ExternalLink className="w-3 h-3 text-[#71717a]" aria-hidden="true" focusable="false" />
+          </a>
+
+          <Link
+            href="/dashboard"
+            className="btn-secondary btn-secondary-sm text-xs font-mono"
+          >
+            <Activity className="w-3.5 h-3.5 text-[#dc2626]" aria-hidden="true" focusable="false" />
+            <span>Cockpit</span>
+          </Link>
 
           <button
             type="button"
@@ -83,89 +102,63 @@ export default function Navbar() {
             aria-controls="ticket-dialog"
             aria-expanded={modalOpen}
             onClick={() => setModalOpen(true)}
-            className="btn-primary btn-primary-sm"
+            className="btn-primary btn-primary-sm text-xs font-mono"
           >
-            <Sparkles className="w-3.5 h-3.5 text-canvas" aria-hidden="true" focusable="false" />
+            <Plus className="w-3.5 h-3.5 stroke-[3]" aria-hidden="true" focusable="false" />
             <span>Submit Ticket</span>
           </button>
-
-          <Link
-            href="/dashboard"
-            className="px-3.5 py-1.5 rounded-lg bg-cyan-accent/10 text-cyan-accent border border-cyan-accent/30 hover:bg-cyan-accent/20 hover:border-cyan-accent/50 hover:shadow-[0_0_20px_rgba(0,229,255,0.2)] transition-all duration-300 text-xs font-mono font-semibold flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-cyan-accent"
-          >
-            <Activity className="w-3.5 h-3.5" aria-hidden="true" focusable="false" />
-            <span>Launch Cockpit</span>
-          </Link>
         </div>
 
-        {/* Mobile Toggle */}
+        {/* Mobile Hamburger Toggle */}
         <button
           type="button"
           aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-1.5 rounded-lg text-text-secondary hover:text-gold transition-colors focus-visible:outline-2 focus-visible:outline-cyan-accent"
+          className="md:hidden p-1.5 rounded-lg border-2 border-[#18181b] bg-white text-[#18181b] hover:bg-[#f4f3ef] transition-colors"
         >
-          {mobileOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
+          {mobileOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
         </button>
       </div>
 
       <SubmitRequestModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden overflow-hidden border-t border-border-subtle bg-panel/95 backdrop-blur-xl"
-          >
-            <div className="px-6 py-4 flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-text-secondary hover:text-gold transition-colors text-sm font-medium flex items-center justify-between py-1 focus-visible:outline-2 focus-visible:outline-cyan-accent focus-visible:rounded"
-                >
-                  <span>{link.name}</span>
-                  {link.badge && (
-                    <span className="badge-live">
-                      <span className="badge-live-dot animate-pulse" aria-hidden="true" />
-                      <span>{link.badge}</span>
-                    </span>
-                  )}
-                </Link>
-              ))}
-              <button
-                type="button"
-                aria-haspopup="dialog"
-                aria-controls="ticket-dialog"
-                aria-expanded={modalOpen}
-                onClick={() => {
-                  setMobileOpen(false);
-                  setModalOpen(true);
-                }}
-                className="btn-primary w-full py-2.5 text-xs font-mono"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-canvas" aria-hidden="true" focusable="false" />
-                <span>Submit Student Ticket ✨</span>
-              </button>
-              <Link
-                href="/dashboard"
-                onClick={() => setMobileOpen(false)}
-                className="px-4 py-2.5 rounded-lg bg-cyan-accent/10 text-cyan-accent border border-cyan-accent/20 text-xs font-mono font-semibold text-center flex items-center justify-center gap-1.5 focus-visible:outline-2 focus-visible:outline-cyan-accent"
-              >
-                <Activity className="w-3.5 h-3.5" aria-hidden="true" focusable="false" />
-                <span>Launch Cockpit ⚡</span>
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+      {/* Mobile Drawer Menu */}
+      {mobileOpen && (
+        <div className="md:hidden border-t-2 border-[#18181b] bg-white px-4 py-3 space-y-2">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className="block px-3 py-2 rounded-md text-sm font-semibold text-[#18181b] hover:bg-[#f4f3ef]"
+            >
+              {link.name}
+            </Link>
+          ))}
+          <div className="pt-2 border-t border-[#e2dfd6] flex flex-col gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                setModalOpen(true);
+              }}
+              className="btn-primary w-full py-2.5 text-xs font-mono justify-center"
+            >
+              <Plus className="w-3.5 h-3.5" aria-hidden="true" focusable="false" />
+              <span>Submit Student Ticket</span>
+            </button>
+            <Link
+              href="/dashboard"
+              onClick={() => setMobileOpen(false)}
+              className="btn-secondary w-full py-2 text-xs font-mono justify-center"
+            >
+              <Activity className="w-3.5 h-3.5 text-[#dc2626]" aria-hidden="true" focusable="false" />
+              <span>Launch Live Cockpit</span>
+            </Link>
+          </div>
+        </div>
+      )}
+    </header>
   );
 }
-

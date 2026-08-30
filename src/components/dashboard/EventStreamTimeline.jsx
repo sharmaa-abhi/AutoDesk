@@ -1,19 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
-  FileText,
-  AlertTriangle,
-  CheckCircle2,
-  XCircle,
   Clock,
-  Filter,
-  Flame,
   UserCheck,
-  Send,
+  CheckCircle2,
+  AlertTriangle,
+  XCircle,
   MessageSquare,
   Sparkles,
+  Inbox,
+  ArrowRight,
 } from "lucide-react";
 
 export default function EventStreamTimeline({
@@ -23,11 +20,9 @@ export default function EventStreamTimeline({
   filterTab,
   setFilterTab,
 }) {
-  const [commentaryOpen, setCommentaryOpen] = useState(false);
-
   const filterTabs = [
     { id: "ALL", label: "All", count: events.length },
-    { id: "APPROVAL", label: "Approval", count: events.filter((e) => e.status === "WAITING_APPROVAL").length },
+    { id: "APPROVAL", label: "Review", count: events.filter((e) => e.status === "WAITING_APPROVAL").length },
     { id: "COMPLETED", label: "Done", count: events.filter((e) => e.status === "SUCCESS").length },
     { id: "FAILED", label: "Alerts", count: events.filter((e) => e.status === "FAILED" || e.status === "NEEDS_FIX").length },
   ];
@@ -41,42 +36,45 @@ export default function EventStreamTimeline({
   });
 
   return (
-    <div className="flex flex-col h-full bg-panel border border-border-subtle rounded-2xl overflow-hidden shadow-xl">
+    <div className="dev-card bg-white flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-border-subtle bg-panel-elevated/80 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-cyan-accent animate-ping" />
-          <h2 className="text-sm font-bold text-text-white uppercase tracking-wider flex items-center gap-2">
-            <span>Match Stream</span>
-            <span className="badge-live">
-              <span className="badge-live-dot animate-pulse" aria-hidden="true" />
-              <span>LIVE</span>
-            </span>
-          </h2>
+      <div className="p-4 border-b-2 border-[#18181b] bg-[#fcfbfa] flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-md bg-[#18181b] text-white flex items-center justify-center font-bold text-xs shadow-[1.5px_1.5px_0px_#dc2626]">
+            <Inbox className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <h2 className="text-xs font-black text-[#18181b] uppercase tracking-wider">
+              Incident Queue
+            </h2>
+            <p className="text-[10px] text-[#71717a] font-mono">
+              Real-time Ingest Stream
+            </p>
+          </div>
         </div>
-        <span className="text-xs font-mono text-text-muted">
-          {events.length} INCIDENTS
+        <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-[#f4f3ef] border border-[#e2dfd6] text-[#18181b]">
+          {events.length} Tickets
         </span>
       </div>
 
-      {/* Incident Filter Tabs */}
-      <div className="flex p-2 gap-1 border-b border-border-subtle bg-canvas/60 text-xs font-mono">
+      {/* Filter Tabs */}
+      <div className="p-2.5 border-b border-[#e2dfd6] bg-[#f9f8f5] flex gap-1.5 text-xs font-mono">
         {filterTabs.map((tab) => {
           const isActive = filterTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => setFilterTab(tab.id)}
-              className={`flex-1 py-1.5 px-2 rounded-lg text-center font-medium transition-all duration-200 flex items-center justify-center gap-1 ${
+              className={`flex-1 py-1.5 px-2 rounded-lg text-center font-semibold transition-all flex items-center justify-center gap-1.5 ${
                 isActive
-                  ? "bg-cyan-accent/20 text-cyan-accent border border-cyan-accent/30 font-bold shadow-sm"
-                  : "text-text-secondary hover:text-text-white hover:bg-panel-elevated"
+                  ? "bg-[#18181b] text-white border-2 border-[#18181b] shadow-[1.5px_1.5px_0px_#dc2626]"
+                  : "bg-white text-[#52525b] border border-[#e2dfd6] hover:border-[#18181b] hover:text-[#18181b]"
               }`}
             >
               <span>{tab.label}</span>
               <span
-                className={`text-[10px] px-1 rounded-full ${
-                  isActive ? "bg-cyan-accent/30 text-cyan-accent" : "bg-panel text-text-muted"
+                className={`text-[10px] px-1 rounded font-bold ${
+                  isActive ? "bg-[#dc2626] text-white" : "bg-[#f4f3ef] text-[#71717a]"
                 }`}
               >
                 {tab.count}
@@ -86,103 +84,109 @@ export default function EventStreamTimeline({
         })}
       </div>
 
-      {/* Events Chronological Stream */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2.5 max-h-[520px] scrollbar-thin">
-        <AnimatePresence initial={false}>
-          {filteredEvents.map((item, idx) => {
-            const isSelected = item.id === selectedEventId;
-            return (
-              <motion.div
-                key={item.id}
-                layout
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.2, delay: idx * 0.04 }}
-                onClick={() => onSelectEvent(item.id)}
-                className={`group relative p-3 rounded-xl border transition-all duration-200 cursor-pointer ${
-                  isSelected
-                    ? "bg-panel-elevated border-cyan-accent shadow-[0_0_20px_rgba(0,229,255,0.15)] ring-1 ring-cyan-accent/30"
-                    : "bg-panel-elevated/40 border-border-subtle hover:border-white/20 hover:bg-panel-elevated/70"
-                }`}
-              >
-                {/* Event Time Stamp + Incident Type Badge */}
-                <div className="flex items-center justify-between mb-1.5 font-mono text-[11px]">
-                  <div className="flex items-center gap-1.5 text-text-muted">
-                    <Clock className="w-3 h-3 text-cyan-accent" />
-                    <span>{item.time}</span>
-                    <span className="text-text-muted/60">•</span>
-                    <span className="text-gold font-semibold">{item.minute}&apos;</span>
-                  </div>
+      {/* Individual Rectangular Navigation Cards */}
+      <div className="flex-1 overflow-y-auto p-3 space-y-3 max-h-[640px]">
+        {filteredEvents.map((item) => {
+          const isSelected = item.id === selectedEventId;
 
-                  {item.status === "WAITING_APPROVAL" && (
-                    <span className="px-2 py-0.5 rounded-full bg-amber-accent/20 text-amber-accent border border-amber-accent/30 font-bold text-[10px] flex items-center gap-1 animate-pulse">
-                      <UserCheck className="w-3 h-3" /> APPROVAL
-                    </span>
-                  )}
-                  {item.status === "SUCCESS" && (
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-accent/20 text-emerald-accent border border-emerald-accent/30 font-bold text-[10px] flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" /> EXECUTED
-                    </span>
-                  )}
-                  {item.status === "NEEDS_FIX" && (
-                    <span className="px-2 py-0.5 rounded-full bg-crimson-accent/20 text-crimson-accent border border-crimson-accent/30 font-bold text-[10px] flex items-center gap-1">
-                      <AlertTriangle className="w-3 h-3" /> DATA FIX
-                    </span>
-                  )}
-                  {item.status === "FAILED" && (
-                    <span className="px-2 py-0.5 rounded-full bg-crimson-accent/20 text-crimson-accent border border-crimson-accent/30 font-bold text-[10px] flex items-center gap-1">
-                      <XCircle className="w-3 h-3" /> REJECTED
-                    </span>
-                  )}
+          // Status Icon
+          const StatusIcon =
+            item.status === "WAITING_APPROVAL"
+              ? UserCheck
+              : item.status === "SUCCESS"
+              ? CheckCircle2
+              : item.status === "NEEDS_FIX"
+              ? AlertTriangle
+              : XCircle;
+
+          return (
+            <div
+              key={item.id}
+              onClick={() => onSelectEvent(item.id)}
+              className={`relative p-3.5 rounded-[14px] border-2 transition-all duration-150 cursor-pointer ${
+                isSelected
+                  ? "bg-[#ffffff] border-[#18181b] shadow-[3px_3px_0px_#18181b] translate-x-1"
+                  : "bg-[#fcfbfa] border-[#e2dfd6] hover:border-[#18181b] hover:bg-white hover:shadow-[2px_2px_0px_#18181b]"
+              }`}
+            >
+              {/* Card Header: Timestamp & Badge */}
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#71717a]">
+                  <Clock className="w-3 h-3 text-[#dc2626]" />
+                  <span>{item.time}</span>
+                  <span>•</span>
+                  <span className="font-bold text-[#18181b]">{item.id}</span>
                 </div>
 
-                {/* Event Title & User Payload Summary */}
-                <div className="text-xs font-bold text-text-white group-hover:text-gold transition-colors flex items-center gap-1.5">
-                  <span className="text-cyan-accent font-mono">{item.id}:</span>
-                  <span className="truncate">{item.title}</span>
-                </div>
+                {item.status === "WAITING_APPROVAL" && (
+                  <span className="px-2 py-0.5 rounded-full bg-[#fef3c7] text-[#92400e] border border-[#f59e0b] font-mono font-bold text-[9px]">
+                    APPROVAL
+                  </span>
+                )}
+                {item.status === "SUCCESS" && (
+                  <span className="px-2 py-0.5 rounded-full bg-[#ecfdf5] text-[#065f46] border border-[#059669] font-mono font-bold text-[9px]">
+                    DISPATCHED
+                  </span>
+                )}
+                {item.status === "NEEDS_FIX" && (
+                  <span className="px-2 py-0.5 rounded-full bg-[#fee2e2] text-[#991b1b] border border-[#dc2626] font-mono font-bold text-[9px]">
+                    DATA FIX
+                  </span>
+                )}
+                {item.status === "FAILED" && (
+                  <span className="px-2 py-0.5 rounded-full bg-[#fee2e2] text-[#991b1b] border border-[#dc2626] font-mono font-bold text-[9px]">
+                    REJECTED
+                  </span>
+                )}
+              </div>
 
-                <p className="text-[11px] text-text-secondary line-clamp-1 mt-1">
-                  &ldquo;{item.rawMessage}&rdquo;
-                </p>
-
-                {/* Tactical Mini Badges */}
-                <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border-subtle/50 text-[10px] font-mono">
-                  <span className="text-text-muted">User: <b className="text-text-secondary">{item.userName}</b></span>
-                  <span className="text-text-muted">|</span>
-                  <span className="text-text-muted">AI: <b className="text-violet-accent">{item.confidence}%</b></span>
-                  <span className="ml-auto text-cyan-accent font-semibold">{item.actionPreview}</span>
+              {/* Title with Icon on Left */}
+              <div className="flex items-start gap-2 mb-1.5">
+                <div
+                  className={`w-6 h-6 rounded flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                    item.status === "WAITING_APPROVAL"
+                      ? "bg-[#fef3c7] text-[#92400e]"
+                      : item.status === "SUCCESS"
+                      ? "bg-[#ecfdf5] text-[#059669]"
+                      : "bg-[#fee2e2] text-[#dc2626]"
+                  }`}
+                >
+                  <StatusIcon className="w-3.5 h-3.5" />
                 </div>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
+                <h3 className="text-xs font-bold text-[#18181b] leading-tight line-clamp-1">
+                  {item.title}
+                </h3>
+              </div>
+
+              {/* Muted Description Below */}
+              <p className="text-[11px] text-[#52525b] line-clamp-2 leading-relaxed pl-8">
+                &ldquo;{item.rawMessage}&rdquo;
+              </p>
+
+              {/* Card Footer Metadata */}
+              <div className="flex items-center justify-between text-[10px] font-mono text-[#71717a] mt-2.5 pt-2 border-t border-[#f0eee6] pl-8">
+                <span>By: <strong className="text-[#18181b]">{item.userName}</strong></span>
+                <span className="text-[#dc2626] font-bold">{item.actionPreview}</span>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Live Commentary Collapsible Strip */}
-      <div className="p-3 border-t border-border-subtle bg-canvas/90">
-        <div className="flex items-center justify-between text-xs font-mono mb-2">
-          <span className="text-gold flex items-center gap-1.5 font-bold">
-            <MessageSquare className="w-3.5 h-3.5 text-gold" />
-            TELEMETRY COMMENTARY
+      {/* Telemetry Stream Footer */}
+      <div className="p-3 border-t-2 border-[#18181b] bg-[#f9f8f5]">
+        <div className="flex items-center justify-between text-[11px] font-mono mb-1 text-[#18181b] font-bold">
+          <span className="flex items-center gap-1.5">
+            <MessageSquare className="w-3.5 h-3.5 text-[#dc2626]" />
+            LIVE TELEMETRY STREAM
           </span>
-          <span className="text-[10px] text-emerald-accent font-semibold flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-accent animate-ping" />
-            STREAMING
+          <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#ecfdf5] text-[#065f46] border border-[#059669] font-bold">
+            POLLING
           </span>
         </div>
-        <div className="p-2.5 rounded-lg bg-panel border border-border-subtle font-mono text-[11px] text-text-secondary max-h-20 overflow-y-auto leading-relaxed">
-          <p className="text-cyan-accent">
-            [67:18] ⚡ Ingestion Webhook received POST payload from &lsquo;abhi@test.com&rsquo;
-          </p>
-          <p className="text-text-muted mt-1">
-            [67:20] 🧠 Gemini JSON schema returned high confidence entity: Certificate_Missing
-          </p>
-          <p className="text-amber-accent mt-1">
-            [67:23] 🙋 Status locked into &lsquo;WAITING_APPROVAL&rsquo; in Notion Cockpit
-          </p>
-        </div>
+        <p className="text-[10px] font-mono text-[#52525b] leading-relaxed">
+          Daemon connected to Notion Database. Incoming webhooks are parsed with Gemini AI in &lt;1.5s.
+        </p>
       </div>
     </div>
   );

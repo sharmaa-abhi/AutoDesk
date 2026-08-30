@@ -9,33 +9,29 @@ const stats = [
     icon: Activity,
     value: 1247,
     suffix: "",
-    label: "Requests Processed",
-    color: "text-cyan-accent",
-    bg: "bg-cyan-accent/10",
+    label: "Incidents Processed",
+    highlight: "text-[#18181b]",
   },
   {
     icon: Clock,
-    value: 99.2,
+    value: 99.8,
     suffix: "%",
-    label: "System Uptime",
-    color: "text-emerald-accent",
-    bg: "bg-emerald-accent/10",
+    label: "Autonomous Uptime",
+    highlight: "text-[#059669]",
   },
   {
     icon: Award,
     value: 342,
     suffix: "",
-    label: "Certificates Sent",
-    color: "text-amber-accent",
-    bg: "bg-amber-accent/10",
+    label: "Certificates Dispatched",
+    highlight: "text-[#dc2626]",
   },
   {
     icon: Zap,
-    value: 1.8,
+    value: 1.4,
     suffix: "s",
-    label: "Avg Response Time",
-    color: "text-violet-accent",
-    bg: "bg-violet-accent/10",
+    label: "Average Latency",
+    highlight: "text-[#18181b]",
   },
 ];
 
@@ -74,32 +70,30 @@ function AnimatedCounter({ value, suffix, duration = 2 }) {
 
 export default function StatsStrip() {
   return (
-    <section className="relative py-20 px-6 overflow-hidden">
+    <section className="py-12 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-6"
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
         >
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="group p-6 rounded-xl bg-panel border border-border-subtle hover:border-[rgba(255,255,255,0.14)] transition-all duration-300 text-center"
+              className="dev-card bg-white p-5 text-center"
             >
-              <div
-                className={`w-10 h-10 rounded-lg ${stat.bg} flex items-center justify-center mx-auto mb-4`}
-              >
-                <stat.icon className={`w-5 h-5 ${stat.color}`} aria-hidden="true" focusable="false" />
+              <div className="w-10 h-10 rounded-lg bg-[#18181b] text-white flex items-center justify-center mx-auto mb-3 shadow-[1.5px_1.5px_0px_#dc2626]">
+                <stat.icon className="w-5 h-5 text-white" aria-hidden="true" focusable="false" />
               </div>
-              <div className={stat.color}>
+              <div className={stat.highlight}>
                 <AnimatedCounter
                   value={stat.value}
                   suffix={stat.suffix}
                 />
               </div>
-              <div className="text-text-secondary text-xs mt-2 font-medium">
+              <div className="text-[#52525b] text-xs font-mono font-bold mt-2 uppercase tracking-wider">
                 {stat.label}
               </div>
             </div>

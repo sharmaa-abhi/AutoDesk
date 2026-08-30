@@ -61,7 +61,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
     <AnimatePresence>
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-canvas/80 backdrop-blur-md"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#18181b]/50 backdrop-blur-sm"
           role="presentation"
         >
           <motion.div
@@ -69,40 +69,44 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
             role="dialog"
             aria-modal="true"
             aria-labelledby="ticket-modal-title"
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-xl bg-panel border border-border-subtle rounded-2xl shadow-2xl overflow-hidden"
+            exit={{ opacity: 0, scale: 0.95, y: 15 }}
+            className="relative w-full max-w-xl bg-white border-2 border-[#18181b] rounded-2xl shadow-[4px_4px_0px_#18181b] overflow-hidden"
           >
             {/* Modal Header */}
-            <div className="p-6 border-b border-border-subtle flex items-center justify-between bg-panel-elevated/60">
+            <div className="p-5 border-b-2 border-[#18181b] flex items-center justify-between bg-[#fcfbfa]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-cyan-accent/15 border border-cyan-accent/30 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-cyan-accent" aria-hidden="true" focusable="false" />
+                <div className="w-9 h-9 rounded-lg bg-[#18181b] text-white flex items-center justify-center shadow-[1.5px_1.5px_0px_#dc2626]">
+                  <Sparkles className="w-4 h-4 text-white" aria-hidden="true" focusable="false" />
                 </div>
                 <div>
-                  <h3 id="ticket-modal-title" className="text-lg font-bold text-gold">Submit Student Ticket</h3>
-                  <p className="text-xs text-text-secondary">Triggers real Gemini AI ➔ Notion DB ➔ Email Pipeline</p>
+                  <h3 id="ticket-modal-title" className="text-base font-black text-[#18181b]">
+                    Submit Incident Ticket
+                  </h3>
+                  <p className="text-xs text-[#52525b] font-mono">
+                    Triggers live Gemini AI ➔ Notion DB ➔ Action Pipeline
+                  </p>
                 </div>
               </div>
               <button
                 type="button"
                 aria-label="Close dialog"
                 onClick={onClose}
-                className="p-2 rounded-lg text-text-secondary hover:text-text-white hover:bg-canvas transition-colors focus-visible:outline-2 focus-visible:outline-cyan-accent"
+                className="p-1.5 rounded-lg border-2 border-[#18181b] bg-white text-[#18181b] hover:bg-[#fee2e2] transition-colors"
               >
-                <X className="w-5 h-5" aria-hidden="true" focusable="false" />
+                <X className="w-4 h-4" aria-hidden="true" focusable="false" />
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
+            <div className="p-6 space-y-4 max-h-[80vh] overflow-y-auto bg-[#faf9f6]">
               {!result ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="student-name-input" className="block text-xs font-mono text-text-secondary mb-1.5">
-                        STUDENT NAME
+                      <label htmlFor="student-name-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1">
+                        STUDENT / USER NAME
                       </label>
                       <input
                         id="student-name-input"
@@ -110,11 +114,11 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="e.g. Rahul Sharma"
-                        className="w-full px-3.5 py-2.5 rounded-lg bg-canvas border border-border-subtle text-sm text-text-white placeholder:text-text-muted focus:outline-none focus:border-cyan-accent/50 focus-visible:ring-1 focus-visible:ring-cyan-accent transition-colors"
+                        className="dev-input"
                       />
                     </div>
                     <div>
-                      <label htmlFor="student-email-input" className="block text-xs font-mono text-text-secondary mb-1.5">
+                      <label htmlFor="student-email-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1">
                         EMAIL ADDRESS
                       </label>
                       <input
@@ -123,14 +127,14 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="e.g. rahul@college.edu"
-                        className="w-full px-3.5 py-2.5 rounded-lg bg-canvas border border-border-subtle text-sm text-text-white placeholder:text-text-muted focus:outline-none focus:border-cyan-accent/50 focus-visible:ring-1 focus-visible:ring-cyan-accent transition-colors"
+                        className="dev-input"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="student-message-input" className="block text-xs font-mono text-text-secondary mb-1.5">
-                      RAW MESSAGE / COMPLAINT (HINDI / ENGLISH)
+                    <label htmlFor="student-message-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1">
+                      COMPLAINT / REQUEST MESSAGE (NATURAL LANGUAGE)
                     </label>
                     <textarea
                       id="student-message-input"
@@ -139,32 +143,32 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Sir I attended AI workshop yesterday but didn't get certificate..."
                       required
-                      className="w-full px-3.5 py-2.5 rounded-lg bg-canvas border border-border-subtle text-sm text-text-white placeholder:text-text-muted focus:outline-none focus:border-cyan-accent/50 focus-visible:ring-1 focus-visible:ring-cyan-accent transition-colors resize-none"
+                      className="dev-input resize-none"
                     />
                   </div>
 
-                  {/* Sample Quick Fill */}
+                  {/* Preset Buttons */}
                   <div>
-                    <span className="text-xs font-mono text-text-muted block mb-1.5">
+                    <span className="text-[11px] font-mono text-[#71717a] font-bold block mb-1.5">
                       QUICK TEST PRESETS:
                     </span>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5">
                       {sampleMessages.map((msg, i) => (
                         <button
                           key={i}
                           type="button"
                           onClick={() => setMessage(msg)}
-                          className="text-xs px-2.5 py-1 rounded-md bg-panel-elevated border border-border-subtle text-text-secondary hover:text-cyan-accent hover:border-cyan-accent/30 text-left transition-colors truncate max-w-full focus-visible:outline-2 focus-visible:outline-cyan-accent"
+                          className="text-xs px-2.5 py-1 rounded-md bg-white border border-[#18181b] text-[#18181b] hover:bg-[#f4f3ef] transition-colors truncate max-w-full font-mono"
                         >
-                          Preset {i + 1}: {msg.substring(0, 32)}...
+                          Preset {i + 1}: {msg.substring(0, 30)}...
                         </button>
                       ))}
                     </div>
                   </div>
 
                   {error && (
-                    <div className="p-3 rounded-lg bg-crimson-accent/10 border border-crimson-accent/30 text-crimson-accent text-xs flex items-center gap-2" role="alert">
-                      <AlertCircle className="w-4 h-4 flex-shrink-0" aria-hidden="true" focusable="false" />
+                    <div className="p-3 rounded-lg bg-[#fee2e2] border-2 border-[#dc2626] text-[#991b1b] text-xs font-mono flex items-center gap-2" role="alert">
+                      <AlertCircle className="w-4 h-4 flex-shrink-0 text-[#dc2626]" aria-hidden="true" focusable="false" />
                       <span>{error}</span>
                     </div>
                   )}
@@ -172,16 +176,16 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                   <button
                     type="submit"
                     disabled={loading || !message.trim()}
-                    className="btn-primary w-full py-3"
+                    className="btn-primary w-full py-3 text-sm font-bold"
                   >
                     {loading ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" focusable="false" />
-                        <span>Processing Live Pipeline (Gemini AI + Notion)...</span>
+                        <Loader2 className="w-4 h-4 animate-spin text-white" aria-hidden="true" focusable="false" />
+                        <span>Processing with Gemini AI & Notion...</span>
                       </>
                     ) : (
                       <>
-                        <Send className="w-4 h-4" aria-hidden="true" focusable="false" />
+                        <Send className="w-4 h-4 text-white" aria-hidden="true" focusable="false" />
                         <span>Launch Automated Pipeline</span>
                       </>
                     )}
@@ -189,46 +193,46 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                 </form>
               ) : (
                 /* Success View */
-                <div className="space-y-4 py-2">
-                  <div className="p-4 rounded-lg bg-emerald-accent/10 border border-emerald-accent/30 flex items-center gap-3">
-                    <CheckCircle2 className="w-6 h-6 text-emerald-accent flex-shrink-0" aria-hidden="true" focusable="false" />
+                <div className="space-y-4 py-1">
+                  <div className="p-4 rounded-xl bg-[#ecfdf5] border-2 border-[#059669] flex items-center gap-3">
+                    <CheckCircle2 className="w-6 h-6 text-[#059669] flex-shrink-0" aria-hidden="true" focusable="false" />
                     <div>
-                      <h4 className="text-sm font-bold text-emerald-accent">Pipeline Executed Successfully!</h4>
-                      <p className="text-xs text-text-secondary">
-                        Ticket <span className="font-mono text-gold font-bold">{result.requestId}</span> processed in{" "}
-                        <span className="font-mono text-cyan-accent">{result.durationMs}ms</span>.
+                      <h4 className="text-sm font-bold text-[#065f46]">Pipeline Ingested Successfully!</h4>
+                      <p className="text-xs text-[#065f46]/80 font-mono">
+                        Ticket <strong className="text-[#18181b]">{result.requestId}</strong> processed in{" "}
+                        <strong>{result.durationMs}ms</strong>.
                       </p>
                     </div>
                   </div>
 
                   {/* AI Extraction Breakdown */}
                   {result.ai && (
-                    <div className="p-4 rounded-lg bg-canvas border border-border-subtle space-y-2.5 font-mono text-xs">
-                      <div className="flex items-center gap-2 text-violet-accent font-bold pb-1 border-b border-border-subtle">
-                        <Brain className="w-4 h-4" aria-hidden="true" focusable="false" />
-                        <span>GEMINI AI CLASSIFICATION</span>
+                    <div className="p-4 rounded-xl bg-white border-2 border-[#18181b] space-y-2.5 font-mono text-xs shadow-[2px_2px_0px_#18181b]">
+                      <div className="flex items-center gap-2 text-[#18181b] font-bold pb-2 border-b border-[#e2dfd6]">
+                        <Brain className="w-4 h-4 text-[#dc2626]" aria-hidden="true" focusable="false" />
+                        <span>GEMINI AI INTENT EXTRACTION</span>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 text-text-secondary">
-                        <div>CATEGORY: <span className="text-gold font-bold">{result.ai.category}</span></div>
-                        <div>CONFIDENCE: <span className="text-cyan-accent font-bold">{result.ai.confidence}%</span></div>
-                        <div>PRIORITY: <span className="text-crimson-accent font-bold">{result.ai.priority}</span></div>
-                        <div>STATUS: <span className="text-emerald-accent font-bold">{result.status}</span></div>
+                      <div className="grid grid-cols-2 gap-2 text-[#52525b]">
+                        <div>CATEGORY: <strong className="text-[#18181b]">{result.ai.category}</strong></div>
+                        <div>CONFIDENCE: <strong className="text-[#059669]">{result.ai.confidence}%</strong></div>
+                        <div>PRIORITY: <strong className="text-[#dc2626]">{result.ai.priority}</strong></div>
+                        <div>STATUS: <strong className="text-[#18181b]">{result.status}</strong></div>
                       </div>
-                      <div className="text-xs text-text-muted pt-1">
+                      <div className="text-xs text-[#71717a] pt-1 border-t border-[#f0eee6]">
                         Reasoning: {result.ai.reasoning}
                       </div>
                     </div>
                   )}
 
-                  {/* Action Steps Completed */}
+                  {/* Action Steps */}
                   <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-                    <div className="p-3 rounded-lg bg-panel-elevated border border-border-subtle flex items-center gap-2 text-text-secondary">
-                      <Database className="w-4 h-4 text-amber-accent" aria-hidden="true" focusable="false" />
-                      <span>Notion DB Synced</span>
+                    <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] flex items-center gap-2 text-[#18181b]">
+                      <Database className="w-4 h-4 text-[#d97706]" aria-hidden="true" focusable="false" />
+                      <span>Notion DB Synced ✓</span>
                     </div>
-                    <div className="p-3 rounded-lg bg-panel-elevated border border-border-subtle flex items-center gap-2 text-text-secondary">
-                      <Mail className="w-4 h-4 text-cyan-accent" aria-hidden="true" focusable="false" />
-                      <span>{result.email ? "Email Dispatched" : "Queued in Cockpit"}</span>
+                    <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] flex items-center gap-2 text-[#18181b]">
+                      <Mail className="w-4 h-4 text-[#059669]" aria-hidden="true" focusable="false" />
+                      <span>{result.email ? "Email Dispatched ✓" : "Queued in Cockpit"}</span>
                     </div>
                   </div>
 
@@ -239,14 +243,14 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                         setResult(null);
                         setMessage("");
                       }}
-                      className="flex-1 py-2.5 rounded-lg border border-border-subtle text-text-secondary hover:text-text-white text-xs font-semibold focus-visible:outline-2 focus-visible:outline-cyan-accent"
+                      className="btn-secondary flex-1 py-2.5 text-xs font-mono"
                     >
                       Submit Another Ticket
                     </button>
                     <button
                       type="button"
                       onClick={onClose}
-                      className="flex-1 py-2.5 rounded-lg bg-cyan-accent/10 border border-cyan-accent/30 text-cyan-accent text-xs font-semibold hover:bg-cyan-accent/20 focus-visible:outline-2 focus-visible:outline-cyan-accent"
+                      className="btn-primary flex-1 py-2.5 text-xs font-mono"
                     >
                       Close & View Cockpit
                     </button>
@@ -260,4 +264,3 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
     </AnimatePresence>
   );
 }
-

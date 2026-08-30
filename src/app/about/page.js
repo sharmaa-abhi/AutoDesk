@@ -12,7 +12,7 @@ const teamMembers = [
   {
     name: "Abhishek Sharma",
     role: "Full-Stack Developer & System Architect",
-    bio: "Passionate about building real automation systems that solve actual problems. Specializes in backend engineering, AI integration, and creating pixel-perfect interfaces.",
+    bio: "Passionate about building real automation systems that solve actual problems. Specializes in backend engineering, AI integration, and creating clean, resilient architectures.",
     links: {
       github: "https://github.com",
       linkedin: "https://www.linkedin.com/in/abhishek-sharma-88876b389/",
@@ -31,33 +31,26 @@ const teamMembers = [
 
 export default function AboutPage() {
   return (
-    <main className="flex-1 dot-grid">
+    <div className="min-h-screen bg-[#f7f6f2] text-[#18181b] font-sans flex flex-col dot-grid">
       <Navbar />
 
-      {/* Hero */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
-        {/* Orbs */}
-        <div className="orb orb-amber w-[300px] h-[300px] -top-10 -right-20 animate-float-slow" />
-        <div className="orb orb-violet w-[250px] h-[250px] bottom-0 -left-20 animate-pulse-glow" />
-
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <span className="text-xs font-mono text-amber-accent bg-amber-accent/10 px-3 py-1 rounded-full border border-amber-accent/20">
-            THE TEAM
-          </span>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gold mt-4 mb-4 text-glow-gold">
-            Built by Builders
+      <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 py-12 space-y-16">
+        {/* Hero Section */}
+        <section className="text-center space-y-3 max-w-3xl mx-auto pt-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
+            <span>THE CREW</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#18181b] tracking-tight">
+            Built by Pragmatic Engineers
           </h1>
-          <p className="text-text-secondary text-lg max-w-xl mx-auto">
-            We're not building a dashboard. We're building an engine that{" "}
-            <span className="text-cyan-accent font-semibold">kills one boring job</span>{" "}
-            — completely.
+          <p className="text-base sm:text-lg text-[#52525b] leading-relaxed">
+            We are not building another toy chatbot. We built an autonomous backend engine that{" "}
+            <strong className="text-[#dc2626]">kills one boring manual job</strong> — completely.
           </p>
-        </div>
-      </section>
+        </section>
 
-      {/* Team Cards */}
-      <section className="relative px-6 pb-20">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {/* Team Cards Grid */}
+        <section className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
           {teamMembers.map((member, i) => (
             <TeamCard
               key={member.name}
@@ -68,53 +61,42 @@ export default function AboutPage() {
               delay={i * 0.15}
             />
           ))}
-        </div>
-      </section>
+        </section>
 
-      {/* Our Story */}
-      <section className="relative px-6 pb-20">
-        <div className="max-w-3xl mx-auto">
-          <div className="p-8 rounded-xl bg-panel border border-border-subtle">
-            <h2 className="text-2xl font-bold text-gold mb-4">📖 The Problem We're Solving</h2>
-            <div className="space-y-4 text-text-secondary text-sm leading-relaxed">
+        {/* Story Section */}
+        <section className="max-w-3xl mx-auto">
+          <div className="dev-card bg-white p-6 sm:p-8 space-y-4">
+            <h2 className="text-xl font-black text-[#18181b]">
+              📖 The Real-World Problem We Solve
+            </h2>
+            <div className="space-y-3 text-sm text-[#52525b] leading-relaxed">
               <p>
-                Every college, club, and small organization in India has people doing the same boring tasks every week —
-                manually sorting WhatsApp requests, copying form submissions into spreadsheets, drafting follow-up messages,
-                fixing lost attendance records.
+                Every college, tech club, and student organization in India has organizers wasting hours every week manually sorting WhatsApp complaints, matching attendance rosters, drafting apology emails, and re-issuing lost certificates.
               </p>
               <p>
-                <span className="text-amber-accent font-semibold">AutoDesk Engine</span> automates one of these jobs
-                completely. A student submits a complaint like{" "}
-                <span className="text-cyan-accent italic">
-                  "Sir I attended AI workshop but didn't receive certificate"
-                </span>{" "}
-                — and the system takes over: AI classifies the request, creates a Notion entry, waits for human approval,
-                then generates a PDF certificate and sends it via email.
+                <strong className="text-[#18181b]">AutoDesk Engine</strong> automates this workflow autonomously:
+                a student submits a natural language request, Gemini AI parses the student&apos;s intent and validates attendance, Notion acts as the human-in-the-loop audit cockpit, and our mailer dispatches a verified certificate in seconds.
               </p>
               <p>
-                No manual copying. No lost requests. No typing{" "}
-                <code className="text-gold bg-gold/10 px-1.5 py-0.5 rounded-md text-xs font-mono">python app.py</code>{" "}
-                — the system runs 24/7 on its own.
+                Zero manual copying. Zero lost tickets. Full tamper-proof Notion audit trail.
               </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Tech Stack */}
-      <section className="relative px-6 pb-28">
-        <div className="max-w-4xl mx-auto text-center">
-          <span className="text-xs font-mono text-cyan-accent bg-cyan-accent/10 px-3 py-1 rounded-full border border-cyan-accent/20">
-            TECH STACK
-          </span>
-          <h2 className="text-3xl font-black text-gold mt-4 mb-8">
-            Powered By
+        {/* Tech Stack Section */}
+        <section className="max-w-4xl mx-auto text-center space-y-6 pb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
+            <span>TECHNOLOGY STACK</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-black text-[#18181b]">
+            Production Architecture
           </h2>
           <TechStack />
-        </div>
-      </section>
+        </section>
+      </main>
 
       <Footer />
-    </main>
+    </div>
   );
 }

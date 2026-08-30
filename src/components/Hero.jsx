@@ -2,113 +2,81 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Activity } from "lucide-react";
+import { ArrowRight, Sparkles, Activity, Plus, ShieldCheck, Zap } from "lucide-react";
 import SubmitRequestModal from "@/components/SubmitRequestModal";
 
 export default function Hero() {
   const [modalOpen, setModalOpen] = useState(false);
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden dot-grid pt-20">
-      {/* Floating Orbs */}
-      <div className="orb orb-cyan w-[400px] h-[400px] -top-20 -left-32 animate-float-slow" />
-      <div className="orb orb-amber w-[300px] h-[300px] top-1/3 -right-20 animate-float" style={{ animationDelay: "-3s" }} />
-      <div className="orb orb-violet w-[350px] h-[350px] bottom-10 left-1/4 animate-float-slow" style={{ animationDelay: "-5s" }} />
-      <div className="orb orb-crimson w-[200px] h-[200px] top-20 right-1/3 animate-pulse-glow" />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-panel border border-border-subtle text-text-secondary text-xs font-mono mb-8"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-cyan-accent" aria-hidden="true" focusable="false" />
-          <span>Automate India 2026 — Notion Track</span>
-          <span className="badge-live">
-            <span className="badge-live-dot animate-pulse" aria-hidden="true" />
-            <span>LIVE</span>
-          </span>
-        </motion.div>
+  return (
+    <section className="relative py-16 sm:py-24 px-4 sm:px-6 dot-grid flex items-center justify-center">
+      <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
+        {/* Top Developer Badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[2px_2px_0px_#18181b]">
+          <span className="w-2 h-2 rounded-full bg-[#dc2626] animate-pulse" aria-hidden="true" />
+          <span className="font-bold">Automate India 2026</span>
+          <span className="text-[#71717a]">•</span>
+          <span>Notion + Gemini Autonomous Engine</span>
+        </div>
 
         {/* Main Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight mb-6"
-        >
-          <span className="text-gold text-glow-gold">Kill One Boring Job.</span>
-          <br />
-          <span className="gradient-text-cyan">Completely.</span>
-        </motion.h1>
+        <div className="space-y-4 max-w-4xl mx-auto">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-[#18181b] leading-[1.08]">
+            Kill One Boring Job.{" "}
+            <span className="text-[#dc2626] underline decoration-4 decoration-[#18181b]">
+              Completely.
+            </span>
+          </h1>
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-lg sm:text-xl text-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed"
-        >
-          An <span className="text-amber-accent font-semibold">autonomous automation engine</span> that
-          eliminates repetitive college tasks — from certificate requests to
-          attendance tracking.{" "}
-          <span className="text-text-white">Notion is your cockpit.</span>{" "}
-          <span className="text-cyan-accent">AI is your brain.</span>
-        </motion.p>
+          <p className="text-base sm:text-xl text-[#52525b] max-w-2xl mx-auto leading-relaxed">
+            An <strong className="text-[#18181b]">autonomous backend automation service</strong> that eliminates repetitive student requests. Notion serves as the control center, Gemini AI classifies incoming tickets, and verified real-world actions execute in seconds.
+          </p>
+        </div>
 
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
+        {/* Primary Call to Action Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
           <button
             type="button"
             aria-haspopup="dialog"
             aria-controls="ticket-dialog"
             aria-expanded={modalOpen}
             onClick={() => setModalOpen(true)}
-            className="group btn-primary btn-primary-lg"
+            className="btn-primary btn-primary-lg text-sm w-full sm:w-auto"
           >
-            <Sparkles className="w-4 h-4 text-canvas" aria-hidden="true" focusable="false" />
+            <Plus className="w-4 h-4 stroke-[3]" aria-hidden="true" focusable="false" />
             <span>Submit Live Ticket</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" focusable="false" />
+            <ArrowRight className="w-4 h-4" aria-hidden="true" focusable="false" />
           </button>
+
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-cyan-accent/30 text-cyan-accent font-semibold text-sm hover:bg-cyan-accent/10 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-cyan-accent"
+            className="btn-secondary btn-primary-lg text-sm w-full sm:w-auto"
           >
-            <Activity className="w-4 h-4" aria-hidden="true" focusable="false" />
+            <Activity className="w-4 h-4 text-[#dc2626]" aria-hidden="true" focusable="false" />
             <span>Open Live Cockpit</span>
           </Link>
-        </motion.div>
+        </div>
 
         <SubmitRequestModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
 
-        {/* Bottom Formula */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="mt-16 inline-flex items-center gap-2 sm:gap-3 flex-wrap justify-center px-6 py-3 rounded-xl bg-panel/60 border border-border-subtle font-mono text-xs sm:text-sm"
-        >
-          <span className="text-cyan-accent">⚡ Trigger</span>
-          <span className="text-text-muted" aria-hidden="true">→</span>
-          <span className="text-gold">💻 Your Code</span>
-          <span className="text-text-muted" aria-hidden="true">→</span>
-          <span className="text-violet-accent">🧠 AI</span>
-          <span className="text-text-muted" aria-hidden="true">→</span>
-          <span className="text-amber-accent">🙋 Approval</span>
-          <span className="text-text-muted" aria-hidden="true">→</span>
-          <span className="text-emerald-accent">🌍 Action</span>
-          <span className="text-text-muted" aria-hidden="true">→</span>
-          <span className="text-crimson-accent">📜 Run Log</span>
-        </motion.div>
+        {/* Bottom Formula Container Card */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-white border-2 border-[#18181b] shadow-[3px_3px_0px_#18181b] max-w-3xl mx-auto">
+          <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#71717a] block mb-2.5">
+            5-Stage Real-Time Pipeline Architecture
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs font-mono text-[#18181b] font-bold">
+            <span className="px-2.5 py-1 rounded bg-[#f4f3ef] border border-[#18181b]">⚡ Ingest</span>
+            <span className="text-[#71717a]">→</span>
+            <span className="px-2.5 py-1 rounded bg-[#f4f3ef] border border-[#18181b]">🧠 Gemini AI</span>
+            <span className="text-[#71717a]">→</span>
+            <span className="px-2.5 py-1 rounded bg-[#f4f3ef] border border-[#18181b]">📥 Notion Queue</span>
+            <span className="text-[#71717a]">→</span>
+            <span className="px-2.5 py-1 rounded bg-[#f4f3ef] border border-[#18181b]">🙋 HITL Approval</span>
+            <span className="text-[#71717a]">→</span>
+            <span className="px-2.5 py-1 rounded bg-[#dc2626] text-white border border-[#18181b]">📜 Notion Run Log</span>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
-
