@@ -1,10 +1,17 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Code2, Link, Globe } from "lucide-react";
 
 export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {
   return (
-    <div className="dev-card bg-white p-7 relative flex flex-col justify-between">
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
+      viewport={{ once: true, margin: "-40px" }}
+      className="dev-card bg-white p-7 relative flex flex-col justify-between"
+    >
       <div>
         {/* Avatar Box */}
         <div className="w-16 h-16 rounded-xl bg-[#18181b] text-white flex items-center justify-center mb-5 shadow-[2px_2px_0px_#dc2626]">
@@ -59,6 +66,7 @@ export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {
           </a>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
+

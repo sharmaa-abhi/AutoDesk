@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { Menu, X, Zap, Activity, Plus, Database, ExternalLink } from "lucide-react";
 import SubmitRequestModal from "@/components/SubmitRequestModal";
 
@@ -17,8 +18,20 @@ export default function Navbar() {
   const [modalOpen, setModalOpen] = useState(false);
   const pathname = usePathname();
 
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 25,
+    restDelta: 0.001,
+  });
+
   return (
     <header className="sticky top-0 left-0 right-0 z-50 bg-[#ffffff] border-b-2 border-[#18181b]">
+      {/* Interactive Top Scroll Progress Indicator */}
+      <motion.div
+        className="absolute bottom-[-2px] left-0 right-0 h-[3px] bg-[#dc2626] origin-left z-50"
+        style={{ scaleX }}
+      />
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
         {/* Brand / Logo */}
         <div className="flex items-center gap-6">
