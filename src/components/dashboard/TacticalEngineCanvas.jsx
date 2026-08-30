@@ -76,22 +76,22 @@ export default function TacticalEngineCanvas({
 
   const presets = [
     {
-      label: "Certificate Missing",
+      label: "GenAI Certificate Missing",
       name: "Rahul Sharma",
-      email: "rahul@college.edu",
-      msg: "Sir I attended the 2-day GenAI workshop but did not receive certificate yet. Please verify attendance.",
+      email: "rahul.sharma24@gmail.com",
+      msg: "Sir, I attended both Day 1 and Day 2 of the GenAI & Agentic AI Workshop. My attendance was marked at the venue, but I have not received my completion certificate email yet. Please verify and issue.",
     },
     {
-      label: "Attendance Discrepancy",
+      label: "Hackathon Finalist Delivery",
+      name: "Priya Verma",
+      email: "priya.verma.cse@iitd.ac.in",
+      msg: "Hello team, our team 'NeuralCoders' secured 2nd position in the National Hackathon 2026 track. Requesting official merit certificate dispatch to registered team email.",
+    },
+    {
+      label: "Web3 Attendance Fix",
       name: "Sneha Patel",
-      email: "sneha@college.edu",
-      msg: "My attendance is showing absent for Day 2 Web3 session, but I submitted the check-in form.",
-    },
-    {
-      label: "Duplicate Submission",
-      name: "Aman Verma",
-      email: "aman@college.edu",
-      msg: "I accidentally submitted the registration form twice with different emails, please merge records.",
+      email: "sneha.patel@dtu.ac.in",
+      msg: "Respected organizers, I attended the complete Web3 Smart Contracts track yesterday. During the closing session, the QR attendance scanner timed out. Kindly verify my attendance via the submitted project link and issue the verified badge.",
     },
   ];
 
@@ -134,7 +134,7 @@ export default function TacticalEngineCanvas({
   const payloadData = {
     request_id: selectedEvent?.id || "REQ-108",
     user_name: selectedEvent?.userName || "Rahul Sharma",
-    user_email: selectedEvent?.userEmail || "rahul@college.edu",
+    user_email: selectedEvent?.userEmail || "rahul.sharma24@gmail.com",
     intent: selectedEvent?.category || "CERTIFICATE_ISSUE",
     confidence_score: selectedEvent?.confidence
       ? Number((selectedEvent.confidence / 100).toFixed(2))
@@ -144,7 +144,7 @@ export default function TacticalEngineCanvas({
     action_spec: {
       type: selectedEvent?.actionPreview || "GENERATE_PDF + EMAIL",
       template: "event_certificate_v2.html",
-      recipient: selectedEvent?.userEmail || "rahul@college.edu",
+      recipient: selectedEvent?.userEmail || "rahul.sharma24@gmail.com",
     },
   };
 

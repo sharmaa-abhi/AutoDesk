@@ -52,9 +52,9 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
   };
 
   const sampleMessages = [
-    "Sir I attended the 2-day GenAI workshop but didn't receive my certificate yet. Please verify attendance.",
-    "Hey, I accidentally submitted the form twice with different emails, please merge.",
-    "Completed all modules for Web3 track, requesting verified completion certificate.",
+    "Sir, I attended both Day 1 and Day 2 of the GenAI Workshop. My attendance was marked at the venue, but I have not received my certificate email yet.",
+    "Hello team, our team 'NeuralCoders' secured 2nd position in the National Hackathon 2026 track. Requesting official merit certificate dispatch.",
+    "Respected organizers, I attended the complete Web3 Smart Contracts track yesterday. Kindly verify my attendance via project submission and issue badge.",
   ];
 
   return (
