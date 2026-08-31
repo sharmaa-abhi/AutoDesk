@@ -11,6 +11,8 @@ import {
   listApiKeys,
   updateApiKey,
   removeApiKey,
+  getLog,
+  listLogs,
 } from '@/lib/resend';
 import { sendUniversalEmail } from '@/lib/mailer';
 
@@ -88,6 +90,14 @@ export async function POST(request) {
 
       case 'removeApiKey':
         result = await removeApiKey(body.id);
+        break;
+
+      case 'getLog':
+        result = await getLog(body.id);
+        break;
+
+      case 'listLogs':
+        result = await listLogs(body.options || {});
         break;
 
       case 'send':

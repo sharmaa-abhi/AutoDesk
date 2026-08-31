@@ -182,3 +182,22 @@ export async function removeApiKey(id) {
   return await client.apiKeys.remove(id);
 }
 
+/**
+ * 15. Retrieve a Specific Log
+ * @param {string} id - The Log ID
+ */
+export async function getLog(id) {
+  const client = ensureClient();
+  return await client.logs.get(id);
+}
+
+/**
+ * 16. List Logs
+ * @param {Object} [options]
+ */
+export async function listLogs(options = {}) {
+  const client = ensureClient();
+  return await client.logs.list(options);
+}
+
+
