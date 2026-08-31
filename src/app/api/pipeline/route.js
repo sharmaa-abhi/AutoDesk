@@ -6,8 +6,13 @@ import { sendUniversalEmail } from '@/lib/mailer';
 import { generateCertificateHTML } from '@/lib/certificate';
 
 // In-memory deduplication cache with TTL cleanup (24h window)
+// BUG-V2-005 NOTE: This is ephemeral — in serverless (Vercel, Lambda) each cold start
+// gets a fresh Map. For production, consider migrating to Redis or an external store.
 const DEDUP_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 const deduplicationCache = new Map();
+if (typeof process !== 'undefined' && process.env.NODE_ENV === 'production') {
+  console.warn('[AutoDesk Pipeline] In-memory dedup cache is ephemeral in serverless environments. Consider using Redis for production deduplication.');
+}
 
 function cleanExpiredEntries() {
   const now = Date.now();

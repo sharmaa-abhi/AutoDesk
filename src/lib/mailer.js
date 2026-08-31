@@ -14,11 +14,13 @@ function toNodemailerAttachments(attachments) {
   }));
 }
 
+// BUG-V2-003 FIX: Pass through `path` property for file-path-based attachments
 function toResendAttachments(attachments) {
   if (!attachments || !attachments.length) return [];
   return attachments.map((att) => ({
     filename: att.filename || att.name || 'attachment',
     content: att.content,
+    ...(att.path ? { path: att.path } : {}),
   }));
 }
 

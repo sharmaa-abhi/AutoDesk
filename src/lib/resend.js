@@ -1,15 +1,26 @@
 import { Resend } from 'resend';
 
-const rawResendKey = process.env.RESEND_API_KEY;
-const resendApiKey = rawResendKey && !rawResendKey.includes('xxxxxxxxx') ? rawResendKey : null;
+// BUG-V2-004 FIX: Lazy singleton — re-evaluates env var on first call after cold start
+let _resendClient = null;
 
-export const resend = resendApiKey ? new Resend(resendApiKey) : null;
+function getResendClient() {
+  if (_resendClient) return _resendClient;
+  const key = process.env.RESEND_API_KEY;
+  if (key && !key.includes('xxxxxxxxx')) {
+    _resendClient = new Resend(key);
+  }
+  return _resendClient;
+}
+
+// Kept for backward-compat — existing imports of `resend` still work
+export const resend = getResendClient();
 
 function ensureClient() {
-  if (!resend) {
+  const client = getResendClient();
+  if (!client) {
     throw new Error('RESEND_API_KEY is not configured in .env.local. Please add your Resend API Key (starts with re_).');
   }
-  return resend;
+  return client;
 }
 
 /**
@@ -199,5 +210,3 @@ export async function listLogs(options = {}) {
   const client = ensureClient();
   return await client.logs.list(options);
 }
-
-
