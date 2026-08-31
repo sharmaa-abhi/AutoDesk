@@ -137,3 +137,48 @@ export async function getEmailMetrics(options = {}) {
   const client = ensureClient();
   return await client.emails.metrics(options);
 }
+
+/**
+ * 11. Create API Key
+ * @param {Object} options
+ * @param {string} options.name - The name of the API key
+ * @param {'full_access' | 'sending_access'} [options.permission]
+ * @param {string} [options.domainId]
+ */
+export async function createApiKey({ name = 'Production', permission, domainId } = {}) {
+  const client = ensureClient();
+  const payload = { name };
+  if (permission) payload.permission = permission;
+  if (domainId) payload.domain_id = domainId;
+  return await client.apiKeys.create(payload);
+}
+
+/**
+ * 12. List API Keys
+ * @param {Object} [options]
+ */
+export async function listApiKeys(options = {}) {
+  const client = ensureClient();
+  return await client.apiKeys.list(options);
+}
+
+/**
+ * 13. Update API Key
+ * @param {string} id - The API key ID
+ * @param {Object} payload
+ * @param {string} payload.name - The new name of the API key
+ */
+export async function updateApiKey(id, { name } = {}) {
+  const client = ensureClient();
+  return await client.apiKeys.update(id, { name });
+}
+
+/**
+ * 14. Remove API Key
+ * @param {string} id - The API key ID
+ */
+export async function removeApiKey(id) {
+  const client = ensureClient();
+  return await client.apiKeys.remove(id);
+}
+

@@ -7,6 +7,10 @@ import {
   listEmails,
   listAttachments,
   getAttachment,
+  createApiKey,
+  listApiKeys,
+  updateApiKey,
+  removeApiKey,
 } from '@/lib/resend';
 import { sendUniversalEmail } from '@/lib/mailer';
 
@@ -64,6 +68,26 @@ export async function POST(request) {
 
       case 'getAttachment':
         result = await getAttachment({ id: body.id, emailId: body.emailId });
+        break;
+
+      case 'createApiKey':
+        result = await createApiKey({
+          name: body.name || 'Production',
+          permission: body.permission,
+          domainId: body.domainId,
+        });
+        break;
+
+      case 'listApiKeys':
+        result = await listApiKeys();
+        break;
+
+      case 'updateApiKey':
+        result = await updateApiKey(body.id, { name: body.name });
+        break;
+
+      case 'removeApiKey':
+        result = await removeApiKey(body.id);
         break;
 
       case 'send':
