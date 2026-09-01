@@ -104,6 +104,9 @@ export async function logRunToNotion({
   duration = 0,
   status = 'SUCCESS',
 }) {
+  // NOTE: If NOTION_RUN_LOG_DATABASE_ID equals NOTION_REQUESTS_DATABASE_ID,
+  // run logs and requests will be co-mingled in the same database.
+  // For production, consider using separate databases for cleaner audit trails.
   const dbId = getResolvedDatabaseId(process.env.NOTION_RUN_LOG_DATABASE_ID);
 
   if (!notion || !dbId) {

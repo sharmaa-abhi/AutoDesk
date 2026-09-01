@@ -46,7 +46,7 @@ export default function BentoMetrics({ stats, runLogs }) {
       </a>
 
       {/* Card 2: Engine SLA & Performance Telemetry (Fix 8 & 9) */}
-      <div className="dev-card bg-white p-4.5 border-2 border-[#18181b]">
+      <div className="dev-card bg-white p-5 border-2 border-[#18181b]">
         <div className="flex items-center justify-between mb-3.5 pb-2.5 border-b border-[#e2dfd6]">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-md bg-[#18181b] text-white flex items-center justify-center">
@@ -110,7 +110,7 @@ export default function BentoMetrics({ stats, runLogs }) {
       </div>
 
       {/* Card 3: Tamper-Proof Notion Run Log Feed (Fix 10–14 & Fix 17) */}
-      <div className="dev-card bg-white p-4.5 flex flex-col border-2 border-[#18181b]">
+      <div className="dev-card bg-white p-5 flex flex-col border-2 border-[#18181b]">
         {/* Clean Structured Header (Fix 17: No floating overlapping icons) */}
         <div className="flex items-center justify-between mb-3 pb-2.5 border-b border-[#e2dfd6]">
           <div className="flex items-center gap-2">

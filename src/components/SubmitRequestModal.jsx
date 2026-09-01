@@ -22,6 +22,13 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
+  // Clear stale error when modal reopens
+  useEffect(() => {
+    if (isOpen) {
+      setError(null);
+    }
+  }, [isOpen]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
@@ -264,7 +271,10 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                       type="button"
                       onClick={() => {
                         setResult(null);
+                        setName("");
+                        setEmail("");
                         setMessage("");
+                        setError(null);
                       }}
                       className="btn-secondary flex-1 py-2.5 text-xs font-mono"
                     >

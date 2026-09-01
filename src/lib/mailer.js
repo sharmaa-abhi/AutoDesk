@@ -24,6 +24,23 @@ function toResendAttachments(attachments) {
   }));
 }
 
+// Cache the SMTP transporter as a lazy singleton to avoid re-creating on every call
+let _smtpTransporter = null;
+
+function getSmtpTransporter() {
+  if (_smtpTransporter) return _smtpTransporter;
+  if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+    _smtpTransporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+  }
+  return _smtpTransporter;
+}
+
 /**
  * Universal email dispatcher: Attempts Resend first; falls back to Gmail SMTP if configured.
  */
@@ -57,13 +74,7 @@ export async function sendUniversalEmail({ to, subject, html, attachments = [] }
 
   // 2. Try Gmail SMTP if credentials exist (Delivers to ANY email address without domain restriction)
   if (hasSmtp) {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
+    const transporter = getSmtpTransporter();
 
     const info = await transporter.sendMail({
       from: `"AutoDesk Engine" <${process.env.SMTP_USER}>`,
@@ -78,3 +89,4 @@ export async function sendUniversalEmail({ to, subject, html, attachments = [] }
 
   throw new Error('No email provider configured. Please provide either a valid RESEND_API_KEY or SMTP_USER & SMTP_PASS in .env.local');
 }
+

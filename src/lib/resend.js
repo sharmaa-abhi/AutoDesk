@@ -12,8 +12,11 @@ function getResendClient() {
   return _resendClient;
 }
 
-// Kept for backward-compat — existing imports of `resend` still work
-export const resend = getResendClient();
+// Lazy getter — callers should use getResendClient() or this accessor
+// to avoid evaluating env vars at module parse time.
+export function getResend() {
+  return getResendClient();
+}
 
 function ensureClient() {
   const client = getResendClient();

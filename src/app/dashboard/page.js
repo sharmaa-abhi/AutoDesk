@@ -177,7 +177,7 @@ export default function DashboardPage() {
       }));
 
       const newLog = {
-        runId: data.runId || `RUN-20260822-00${runLogs.length + 43}`,
+        runId: data.runId || `RUN-${Date.now()}`,
         timestamp: new Date().toLocaleTimeString(),
         action: `Live Approved: Certificate Dispatched to ${target?.userEmail || target?.userName}`,
         trigger: 'Notion HITL Cockpit',
@@ -223,7 +223,7 @@ export default function DashboardPage() {
       }));
 
       const newLog = {
-        runId: data.runId || `RUN-20260822-00${runLogs.length + 43}`,
+        runId: data.runId || `RUN-${Date.now()}`,
         timestamp: new Date().toLocaleTimeString(),
         action: `Operator Rejected Request ${eventId} (Attendance unverified)`,
         trigger: 'Notion HITL Cockpit',
@@ -317,7 +317,7 @@ export default function DashboardPage() {
       }));
 
       const newLog = {
-        runId: data.runId || `RUN-20260822-00${runLogs.length + 43}`,
+        runId: data.runId || `RUN-${Date.now()}`,
         timestamp: new Date().toLocaleTimeString(),
         action: `Live Ingestion: Gemini Analyzed & Synced to Notion (${newId})`,
         trigger: 'Webhook Ingest Gateway',
@@ -389,7 +389,7 @@ export default function DashboardPage() {
 
           {/* Column 3: Right Panel (Deep Metrics & Bento Breakdown) [3 cols] */}
           <div className="lg:col-span-3 h-full">
-            <BentoMetrics stats={stats} runLogs={runLogs} onSimulateWebhook={handleSimulateWebhook} />
+            <BentoMetrics stats={stats} runLogs={runLogs} />
           </div>
         </div>
       </main>
