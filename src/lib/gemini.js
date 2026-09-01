@@ -38,12 +38,12 @@ async function callGeminiGenerate(prompt) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) throw new Error('GEMINI_API_KEY is not configured in .env.local');
 
-  // Candidate models in order of priority (gemini-flash-lite-latest is fastest & highly available)
+  // Candidate models in order of priority
   const candidateModels = [
-    'gemini-flash-lite-latest',
-    'gemini-flash-latest',
     'gemini-2.5-flash',
-    'gemini-3.5-flash',
+    'gemini-2.0-flash',
+    'gemini-1.5-flash',
+    'gemini-flash-latest',
   ];
 
   let lastError = null;
@@ -83,7 +83,7 @@ async function callGeminiGenerate(prompt) {
   // Also attempt SDK fallback if direct fetch fails
   const client = getClient();
   if (client) {
-    for (const sdkModel of ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-3.5-flash']) {
+    for (const sdkModel of ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']) {
       try {
         const sdkRes = await client.models.generateContent({
           model: sdkModel,

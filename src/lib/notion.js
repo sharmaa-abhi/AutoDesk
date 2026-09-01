@@ -1,8 +1,22 @@
 import { Client } from '@notionhq/client';
 
-const notionApiKey = process.env.NOTION_API_KEY;
+let _notionClient = null;
 
-export const notion = notionApiKey ? new Client({ auth: notionApiKey }) : null;
+export function getNotionClient() {
+  const key = process.env.NOTION_API_KEY;
+  if (!key) return null;
+  if (!_notionClient) {
+    _notionClient = new Client({ auth: key });
+  }
+  return _notionClient;
+}
+
+export const notion = {
+  get pages() {
+    const client = getNotionClient();
+    return client ? client.pages : null;
+  },
+};
 
 export function getResolvedDatabaseId(customId) {
   const raw = customId || process.env.NOTION_REQUESTS_DATABASE_ID || '3c4460806457802e8a8cfd9593734bb3';

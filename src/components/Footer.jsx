@@ -69,7 +69,7 @@ export default function Footer() {
             </div>
             <div className="flex items-center gap-2">
               <a
-                href="https://github.com"
+                href="https://github.com/sharmaa-abhi/Notion.AI"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub Repository"
