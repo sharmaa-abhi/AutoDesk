@@ -1,4 +1,4 @@
-import { getEventProfile } from '@/lib/events';
+import { getEventProfile } from './events.js';
 
 function escapeHtml(str) {
   if (!str) return '';
