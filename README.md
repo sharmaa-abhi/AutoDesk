@@ -143,6 +143,7 @@ All deep architectural diagrams, specs, and hackathon rules are documented in th
 - [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) — 🎬 Official hackathon demo presentation script and recording guide.
 - [docs/BUG_REPORT.md](docs/BUG_REPORT.md) — 🐞 Comprehensive bug audit, test resolutions, and verification evidence.
 - [docs/ROADMAP.md](docs/ROADMAP.md) — 🗺️ Product milestones, architecture phases, and planned features.
+- [docs/CLAUDE.md](docs/CLAUDE.md) — 🤖 Claude developer guide, tech stack, environment reference & entry points.
 - [docs/Notion_Track_Complete_Conversation.md](docs/Notion_Track_Complete_Conversation.md) — Full problem breakdown transcript & ideation notes.
 
 ---
