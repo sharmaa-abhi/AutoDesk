@@ -4,24 +4,8 @@ import { classifyRequest } from '@/lib/gemini';
 import { createNotionRequest, logRunToNotion } from '@/lib/notion';
 import { sendUniversalEmail } from '@/lib/mailer';
 import { generateCertificateHTML } from '@/lib/certificate';
-
-// In-memory deduplication cache with TTL cleanup (24h window)
-// BUG-V2-005 NOTE: This is ephemeral — in serverless (Vercel, Lambda) each cold start
-// gets a fresh Map. For production, consider migrating to Redis or an external store.
-const DEDUP_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
-const deduplicationCache = new Map();
-if (typeof process !== 'undefined' && process.env.NODE_ENV === 'production') {
-  console.warn('[AutoDesk Pipeline] In-memory dedup cache is ephemeral in serverless environments. Consider using Redis for production deduplication.');
-}
-
-function cleanExpiredEntries() {
-  const now = Date.now();
-  for (const [hash, timestamp] of deduplicationCache) {
-    if (now - timestamp > DEDUP_TTL_MS) {
-      deduplicationCache.delete(hash);
-    }
-  }
-}
+import { checkAndSetDedup, getDedupStats } from '@/lib/store';
+import { getEventProfile } from '@/lib/events';
 
 function getPayloadHash(email, message) {
   const normalized = `${(email || '').toLowerCase().trim()}_${(message || '').toLowerCase().trim()}`;
@@ -36,6 +20,16 @@ function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+export async function GET() {
+  const stats = getDedupStats();
+  return NextResponse.json({
+    status: 'ONLINE',
+    service: 'AutoDesk Engine Pipeline',
+    dedup: stats,
+    timestamp: new Date().toISOString(),
+  });
+}
+
 export async function POST(request) {
   const startTime = Date.now();
 
@@ -46,9 +40,13 @@ export async function POST(request) {
       userName,
       userEmail,
       rawMessage,
-      eventName = 'Automate India',
+      eventId = 'automate-india-2026',
+      eventName = null,
       requestId,
     } = body;
+
+    const eventProfile = getEventProfile(eventId || eventName);
+    const resolvedEventName = eventName || eventProfile.name;
 
     // =====================
     // GLOBAL INPUT VALIDATION
@@ -64,7 +62,6 @@ export async function POST(request) {
     // ACTION 1: INGEST NEW TICKET / WEBHOOK
     // ==========================================
     if (action === 'ingest') {
-      // Validate required fields for ingest
       if (!rawMessage || typeof rawMessage !== 'string' || !rawMessage.trim()) {
         return NextResponse.json(
           { success: false, error: 'rawMessage is required and must be a non-empty string.' },
@@ -85,19 +82,22 @@ export async function POST(request) {
       const safeMessage = rawMessage.slice(0, 10000);
       const safeRequestId = requestId || `REQ-${Math.floor(100 + Math.random() * 900)}`;
 
-      // Cleanup expired dedup entries
-      cleanExpiredEntries();
-
+      // Check & persist deduplication in persistent storage
       const hash = getPayloadHash(safeEmail, safeMessage);
-      const isDuplicate = deduplicationCache.has(hash);
+      const dedupCheck = checkAndSetDedup(hash, {
+        email: safeEmail,
+        name: safeName,
+        eventId: eventProfile.id,
+        requestId: safeRequestId,
+      });
 
-      if (isDuplicate) {
+      if (dedupCheck.isDuplicate) {
         const runId = `RUN-${Date.now()}`;
         const duration = Date.now() - startTime;
         await logRunToNotion({
           runId,
-          action: `MD5 Duplicate Blocked for ${safeEmail}`,
-          trigger: 'Sanitization & Dedup Gate',
+          action: `MD5 Duplicate Blocked for ${safeEmail} (Event: ${eventProfile.shortName})`,
+          trigger: 'Persistent Dedup Gate',
           duration,
           status: 'BLOCKED',
         });
@@ -105,16 +105,13 @@ export async function POST(request) {
         return NextResponse.json({
           success: true,
           status: 'DUPLICATE_FILTERED',
-          message: 'Duplicate submission blocked within 24h window.',
+          message: 'Duplicate submission blocked within persistent 24h window.',
           hash,
           requestId: safeRequestId,
           runId,
           durationMs: duration,
         });
       }
-
-      // Record in cache
-      deduplicationCache.set(hash, Date.now());
 
       // 1. Gemini AI Analysis
       const aiResult = await classifyRequest({
@@ -133,6 +130,7 @@ export async function POST(request) {
         priority: aiResult.priority,
         status: aiResult.status || 'WAITING_APPROVAL',
         rawMessage: safeMessage,
+        eventId: eventProfile.id,
       });
 
       let emailResult = null;
@@ -144,14 +142,15 @@ export async function POST(request) {
 
         const certHtml = generateCertificateHTML({
           studentName: safeName || aiResult.extractedName || 'Student Participant',
-          eventName,
+          eventId: eventProfile.id,
+          eventName: resolvedEventName,
           certificateId: `CERT-${Date.now().toString(36).toUpperCase()}`,
         });
 
         try {
           emailResult = await sendUniversalEmail({
             to: safeEmail,
-            subject: `🎓 Verified Certificate of Completion — ${eventName}`,
+            subject: `🎓 Verified Certificate of Completion — ${resolvedEventName}`,
             html: certHtml,
           });
         } catch (mailErr) {
@@ -166,8 +165,8 @@ export async function POST(request) {
       await logRunToNotion({
         runId,
         action: finalStatus === 'SUCCESS'
-          ? `Auto-Dispatched Certificate to ${safeName}`
-          : `Queued for Human Approval: ${aiResult.category}`,
+          ? `Auto-Dispatched Certificate to ${safeName} (${eventProfile.shortName})`
+          : `Queued for Human Approval: ${aiResult.category} (${eventProfile.shortName})`,
         trigger: 'Webhook Ingestion Pipeline',
         duration,
         status: 'SUCCESS',
@@ -195,7 +194,8 @@ export async function POST(request) {
 
       const certHtml = generateCertificateHTML({
         studentName: safeName,
-        eventName,
+        eventId: eventProfile.id,
+        eventName: resolvedEventName,
         certificateId: `CERT-${Date.now().toString(36).toUpperCase()}`,
       });
 
@@ -204,7 +204,7 @@ export async function POST(request) {
         try {
           emailResult = await sendUniversalEmail({
             to: safeEmail,
-            subject: `🎓 Approved: Verified Certificate — ${eventName}`,
+            subject: `🎓 Approved: Verified Certificate — ${resolvedEventName}`,
             html: certHtml,
           });
         } catch (mailErr) {
@@ -217,7 +217,7 @@ export async function POST(request) {
 
       await logRunToNotion({
         runId,
-        action: `Operator Approved Certificate for ${safeName} (${safeRequestId})`,
+        action: `Operator Approved Certificate for ${safeName} (${safeRequestId}) [${eventProfile.shortName}]`,
         trigger: 'Notion Operator Cockpit',
         duration,
         status: 'SUCCESS',
@@ -243,7 +243,7 @@ export async function POST(request) {
 
       await logRunToNotion({
         runId,
-        action: `Operator Rejected Request ${safeRequestId} (Attendance not verified)`,
+        action: `Operator Rejected Request ${safeRequestId} (Attendance not verified) [${eventProfile.shortName}]`,
         trigger: 'Notion Operator Cockpit',
         duration,
         status: 'REJECTED',
