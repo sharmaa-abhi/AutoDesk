@@ -17,7 +17,11 @@ import {
   Copy,
   CheckCheck,
   RefreshCw,
+  Play,
+  Calendar,
+  Activity,
 } from "lucide-react";
+import { EVENT_CATALOG, DEFAULT_EVENT_ID } from "@/lib/events";
 
 export default function TacticalEngineCanvas({
   selectedEvent,
@@ -30,11 +34,13 @@ export default function TacticalEngineCanvas({
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [rawPrompt, setRawPrompt] = useState("");
+  const [selectedEventId, setSelectedEventId] = useState(DEFAULT_EVENT_ID);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
   const [submitFeedback, setSubmitFeedback] = useState(null);
+  const [daemonLoading, setDaemonLoading] = useState(false);
+  const [daemonFeedback, setDaemonFeedback] = useState(null);
 
-  // Fix 19: Simplified execution flow with clean readable status labels
   const stages = [
     {
       id: 1,
@@ -83,18 +89,21 @@ export default function TacticalEngineCanvas({
       label: "GenAI Certificate Missing",
       name: "Rahul Sharma",
       email: "rahul.sharma24@gmail.com",
+      eventId: "ai-masterclass",
       msg: "Sir, I attended both Day 1 and Day 2 of the GenAI & Agentic AI Workshop. My attendance was marked at the venue, but I have not received my completion certificate email yet. Please verify and issue.",
     },
     {
       label: "Hackathon Finalist Delivery",
       name: "Priya Verma",
       email: "priya.verma.cse@iitd.ac.in",
+      eventId: "automate-india-2026",
       msg: "Hello team, our team 'NeuralCoders' secured 2nd position in the National Hackathon 2026 track. Requesting official merit certificate dispatch to registered team email.",
     },
     {
       label: "Web3 Attendance Fix",
       name: "Sneha Patel",
       email: "sneha.patel@dtu.ac.in",
+      eventId: "web3-builders",
       msg: "Respected organizers, I attended the complete Web3 Smart Contracts track yesterday. During the closing session, the QR attendance scanner timed out. Kindly verify my attendance via the submitted project link and issue the verified badge.",
     },
   ];
@@ -103,6 +112,7 @@ export default function TacticalEngineCanvas({
     setUserName(p.name);
     setUserEmail(p.email);
     setRawPrompt(p.msg);
+    if (p.eventId) setSelectedEventId(p.eventId);
     setSubmitFeedback(null);
   };
 
@@ -113,16 +123,20 @@ export default function TacticalEngineCanvas({
     setIsSubmitting(true);
     setSubmitFeedback(null);
 
+    const eventProfile = EVENT_CATALOG[selectedEventId] || EVENT_CATALOG[DEFAULT_EVENT_ID];
+
     try {
       await onSimulateWebhook({
         custom: true,
         userName: userName.trim() || "Student Participant",
         userEmail: userEmail.trim() || "student@college.edu",
         rawMessage: rawPrompt.trim(),
+        eventId: eventProfile.id,
+        eventName: eventProfile.name,
       });
       setSubmitFeedback({
         type: "success",
-        msg: "Pipeline executed! Ingested into Notion & analyzed with Gemini AI.",
+        msg: `Pipeline executed for [${eventProfile.shortName}]! Ingested into Notion & analyzed with Gemini AI.`,
       });
       setRawPrompt("");
     } catch (err) {
@@ -135,6 +149,40 @@ export default function TacticalEngineCanvas({
     }
   };
 
+  const handleTriggerDaemonPoll = async () => {
+    setDaemonLoading(true);
+    setDaemonFeedback(null);
+
+    try {
+      const res = await fetch("/api/cron/poll-notion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Daemon poll failed");
+
+      if (data.itemsProcessed > 0) {
+        setDaemonFeedback({
+          type: "success",
+          msg: `Daemon processed ${data.itemsProcessed} approved request(s) in ${data.durationMs}ms!`,
+        });
+      } else {
+        setDaemonFeedback({
+          type: "info",
+          msg: `Daemon poll finished in ${data.durationMs || 0}ms. No pending 'Approved' tickets in Notion.`,
+        });
+      }
+    } catch (err) {
+      setDaemonFeedback({
+        type: "error",
+        msg: `Daemon trigger failed: ${err.message}`,
+      });
+    } finally {
+      setDaemonLoading(false);
+    }
+  };
+
   const formatDisplayCategory = (cat) => {
     if (!cat) return "Certificate Issue";
     if (cat === "CERTIFICATE_ISSUE") return "Certificate Issue";
@@ -143,8 +191,12 @@ export default function TacticalEngineCanvas({
     return cat.replace(/_/g, " ");
   };
 
+  const activeEventProfile = EVENT_CATALOG[selectedEventId] || EVENT_CATALOG[DEFAULT_EVENT_ID];
+
   const payloadData = {
     request_id: selectedEvent?.id || "REQ-108",
+    event_id: activeEventProfile.id,
+    event_name: activeEventProfile.name,
     user_name: selectedEvent?.userName || "Rahul Sharma",
     user_email: selectedEvent?.userEmail || "rahul.sharma24@gmail.com",
     intent: selectedEvent?.category || "CERTIFICATE_ISSUE",
@@ -155,7 +207,7 @@ export default function TacticalEngineCanvas({
     attendance_verified: !!selectedEvent?.attendanceVerified,
     action_spec: {
       type: selectedEvent?.actionPreview || "Generate PDF + Email",
-      template: "event_certificate_v2.html",
+      template: `${activeEventProfile.id}_certificate.html`,
       recipient: selectedEvent?.userEmail || "rahul.sharma24@gmail.com",
     },
   };
@@ -170,19 +222,58 @@ export default function TacticalEngineCanvas({
     <div className="space-y-6">
       {/* Center Card 1: PROMINENT INPUT & ACTION SECTION */}
       <div className="dev-card bg-white p-6 sm:p-7">
-        <div className="mb-5 pb-3 border-b-2 border-[#18181b]">
-          <h2 className="text-base font-bold text-[#18181b] tracking-tight flex items-center gap-2">
-            <span>Autonomous Request Automation Engine</span>
-            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[#18181b] text-white">
-              LIVE
-            </span>
-          </h2>
-          <p className="text-xs sm:text-sm text-[#52525b] mt-1 leading-relaxed">
-            Enter natural language student requests. The engine categorizes with Gemini AI, synchronizes Notion, and executes actions.
-          </p>
+        <div className="mb-5 pb-3 border-b-2 border-[#18181b] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 className="text-base font-bold text-[#18181b] tracking-tight flex items-center gap-2">
+              <span>Autonomous Request Automation Engine</span>
+              <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[#18181b] text-white">
+                LIVE
+              </span>
+            </h2>
+            <p className="text-xs sm:text-sm text-[#52525b] mt-1 leading-relaxed">
+              Enter natural language student requests. The engine categorizes with Gemini AI, synchronizes Notion, and executes actions.
+            </p>
+          </div>
+
+          {/* Daemon Quick Trigger Button */}
+          <button
+            type="button"
+            onClick={handleTriggerDaemonPoll}
+            disabled={daemonLoading}
+            className="btn-secondary btn-secondary-sm text-xs font-mono flex items-center gap-1.5 self-start sm:self-auto"
+            title="Poll Notion Database for Operator Approvals"
+          >
+            {daemonLoading ? (
+              <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#dc2626]" />
+            ) : (
+              <Activity className="w-3.5 h-3.5 text-[#059669]" />
+            )}
+            <span>Poll Notion Approvals</span>
+          </button>
         </div>
 
-        {/* Quick Fill Presets (Fix 20: Responsive CSS Grid, Equal Width/Height) */}
+        {daemonFeedback && (
+          <div
+            className={`p-3 mb-4 rounded-lg border-2 text-xs font-mono font-semibold flex items-center justify-between ${
+              daemonFeedback.type === "success"
+                ? "bg-[#ecfdf5] border-[#059669] text-[#065f46]"
+                : daemonFeedback.type === "error"
+                ? "bg-[#fee2e2] border-[#dc2626] text-[#991b1b]"
+                : "bg-[#f4f3ef] border-[#18181b] text-[#18181b]"
+            }`}
+          >
+            <span>🤖 {daemonFeedback.msg}</span>
+            <button
+              type="button"
+              onClick={() => setDaemonFeedback(null)}
+              className="text-xs underline ml-2 cursor-pointer"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+
+        {/* Quick Fill Presets */}
         <div className="mb-5">
           <span className="text-xs font-mono uppercase font-bold text-[#71717a] block mb-2">
             Quick Test Presets:
@@ -205,6 +296,26 @@ export default function TacticalEngineCanvas({
 
         {/* Form Inputs */}
         <form onSubmit={handleRunPipeline} className="space-y-4">
+          {/* Event Track Selector */}
+          <div>
+            <label htmlFor="engine-event" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5 flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-[#dc2626]" aria-hidden="true" />
+              <span>EVENT / WORKSHOP TRACK</span>
+            </label>
+            <select
+              id="engine-event"
+              value={selectedEventId}
+              onChange={(e) => setSelectedEventId(e.target.value)}
+              className="dev-input font-medium cursor-pointer"
+            >
+              {Object.values(EVENT_CATALOG).map((ev) => (
+                <option key={ev.id} value={ev.id}>
+                  {ev.name} ({ev.track})
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="engine-username" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
@@ -260,7 +371,6 @@ export default function TacticalEngineCanvas({
             </div>
           )}
 
-          {/* Fix 1 & 18: Primary Page CTA */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
             <button
               type="submit"
@@ -281,7 +391,6 @@ export default function TacticalEngineCanvas({
               )}
             </button>
 
-            {/* Fix 6: Readable 12px supporting text */}
             <span className="hidden sm:inline-block text-xs font-mono text-[#52525b] font-medium">
               ⚡ Ingests to Notion + Triggers Real Mailer
             </span>
@@ -289,7 +398,7 @@ export default function TacticalEngineCanvas({
         </form>
       </div>
 
-      {/* Center Card 2: 5-STAGE PIPELINE PROGRESS (Fix 19: Clean, group-spaced flow) */}
+      {/* Center Card 2: 5-STAGE PIPELINE PROGRESS */}
       <div className="dev-card bg-white p-5 sm:p-6">
         <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#e2dfd6]">
           <h3 className="text-xs font-mono font-bold text-[#18181b] uppercase tracking-wider flex items-center gap-2">
@@ -423,7 +532,7 @@ export default function TacticalEngineCanvas({
               </div>
             </div>
 
-            {/* Operator Clearance Station (Fix 16: Semantic Green Approve & Red Reject) */}
+            {/* Operator Clearance Station */}
             <div className="p-4 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b] flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <span className="text-xs font-mono font-bold text-[#18181b] flex items-center gap-1.5">

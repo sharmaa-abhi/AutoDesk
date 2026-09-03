@@ -252,6 +252,8 @@ export default function DashboardPage() {
         userName: type.userName || 'Student Participant',
         userEmail: type.userEmail || 'rahul.sharma24@gmail.com',
         rawMessage: type.rawMessage,
+        eventId: type.eventId || 'automate-india-2026',
+        eventName: type.eventName || 'Automate India',
       };
     } else if (type === 'GARBAGE_INPUT') {
       payload = {
