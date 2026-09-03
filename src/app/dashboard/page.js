@@ -216,6 +216,8 @@ export default function DashboardPage() {
         body: JSON.stringify({
           action: 'reject',
           requestId: eventId,
+          eventId: target?.eventId || 'automate-india-2026',
+          eventName: target?.eventName || 'Automate India',
         }),
       });
       const data = await res.json();
@@ -273,14 +275,18 @@ export default function DashboardPage() {
         userName: 'Unknown Sender',
         userEmail: 'invalid-payload-format',
         rawMessage: '??? $$$ --DROP TABLE requests;',
+        eventId: 'automate-india-2026',
+        eventName: 'Automate India',
       };
     } else {
       payload = {
         action: 'ingest',
         requestId: newId,
         userName: 'Aman Dixit',
-        userEmail: 'sharmaa24434@gmail.com',
+        userEmail: 'aman.dixit@college.edu',
         rawMessage: 'Attended full day AI workshop yesterday, need verified certificate urgently for scholarship submission.',
+        eventId: 'ai-masterclass',
+        eventName: 'Next.js AI & Agentic Systems Masterclass',
       };
     }
 
