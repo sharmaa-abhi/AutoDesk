@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles, Send, CheckCircle2, AlertCircle, Loader2, Database, Mail, Brain } from "lucide-react";
+import { X, Sparkles, Send, CheckCircle2, AlertCircle, Loader2, Database, Mail, Brain, Calendar } from "lucide-react";
+import { EVENT_CATALOG, DEFAULT_EVENT_ID } from "@/lib/events";
 
 export default function SubmitRequestModal({ isOpen, onClose }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [selectedEventId, setSelectedEventId] = useState(DEFAULT_EVENT_ID);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -43,6 +45,8 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
     setResult(null);
 
     try {
+      const selectedEvent = EVENT_CATALOG[selectedEventId] || EVENT_CATALOG[DEFAULT_EVENT_ID];
+
       const res = await fetch("/api/pipeline", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -51,7 +55,8 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
           userName: name.trim(),
           userEmail: email.trim(),
           rawMessage: message,
-          eventName: "Automate India",
+          eventId: selectedEvent.id,
+          eventName: selectedEvent.name,
         }),
       });
 
@@ -71,14 +76,17 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
   const sampleMessages = [
     {
       title: "GenAI Workshop Missing",
+      eventId: "ai-masterclass",
       msg: "Sir, I attended both Day 1 and Day 2 of the GenAI Workshop. My attendance was marked at the venue, but I have not received my certificate email yet.",
     },
     {
       title: "Hackathon Finalist Merit",
+      eventId: "automate-india-2026",
       msg: "Hello team, our team 'NeuralCoders' secured 2nd position in the National Hackathon 2026 track. Requesting official merit certificate dispatch.",
     },
     {
       title: "Web3 Attendance Discrepancy",
+      eventId: "web3-builders",
       msg: "Respected organizers, I attended the complete Web3 Smart Contracts track yesterday. Kindly verify my attendance via project submission and issue badge.",
     },
   ];
@@ -131,6 +139,26 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
             <div className="p-6 space-y-4 max-h-[80vh] overflow-y-auto bg-[#faf9f6]">
               {!result ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Event Selector */}
+                  <div>
+                    <label htmlFor="event-selector-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5 flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-[#dc2626]" aria-hidden="true" />
+                      <span>SELECT EVENT / WORKSHOP TRACK</span>
+                    </label>
+                    <select
+                      id="event-selector-input"
+                      value={selectedEventId}
+                      onChange={(e) => setSelectedEventId(e.target.value)}
+                      className="dev-input font-medium cursor-pointer"
+                    >
+                      {Object.values(EVENT_CATALOG).map((ev) => (
+                        <option key={ev.id} value={ev.id}>
+                          {ev.name} ({ev.track})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="student-name-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
@@ -185,7 +213,10 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                         <button
                           key={i}
                           type="button"
-                          onClick={() => setMessage(sample.msg)}
+                          onClick={() => {
+                            setMessage(sample.msg);
+                            if (sample.eventId) setSelectedEventId(sample.eventId);
+                          }}
                           className="btn-secondary btn-secondary-sm text-xs font-mono text-left justify-start py-2 px-2.5 truncate"
                           title={sample.msg}
                         >
