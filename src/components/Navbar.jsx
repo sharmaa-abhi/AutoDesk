@@ -67,18 +67,16 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-[#18181b] focus-visible:outline-offset-2 ${
-                  isActive
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-[#18181b] focus-visible:outline-offset-2 ${isActive
                     ? "bg-[#18181b] text-[#ffffff]"
                     : "text-[#52525b] hover:text-[#18181b] hover:bg-[#f4f3ef]"
-                }`}
+                  }`}
               >
                 <span>{link.name}</span>
                 {link.badge && (
                   <span
-                    className={`text-[10px] font-mono px-1.5 py-0.5 rounded font-bold ${
-                      isActive ? "bg-[#dc2626] text-white" : "bg-[#ecfdf5] text-[#065f46] border border-[#059669]/40"
-                    }`}
+                    className={`text-[10px] font-mono px-1.5 py-0.5 rounded font-bold ${isActive ? "bg-[#dc2626] text-white" : "bg-[#ecfdf5] text-[#065f46] border border-[#059669]/40"
+                      }`}
                   >
                     {link.badge}
                   </span>
