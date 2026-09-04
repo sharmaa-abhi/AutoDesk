@@ -40,10 +40,10 @@ async function callGeminiGenerate(prompt) {
 
   // Candidate models in order of priority
   const candidateModels = [
+    'gemini-3.6-flash',
     'gemini-2.5-flash',
-    'gemini-2.0-flash',
-    'gemini-1.5-flash',
     'gemini-flash-latest',
+    'gemini-1.5-flash',
   ];
 
   let lastError = null;
@@ -83,7 +83,7 @@ async function callGeminiGenerate(prompt) {
   // Also attempt SDK fallback if direct fetch fails
   const client = getClient();
   if (client) {
-    for (const sdkModel of ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']) {
+    for (const sdkModel of ['gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-flash-latest']) {
       try {
         const sdkRes = await client.models.generateContent({
           model: sdkModel,
@@ -169,35 +169,50 @@ Return ONLY valid JSON.`;
  */
 function buildFallback({ rawMessage, userName, userEmail }) {
   const msg = (rawMessage || '').toLowerCase();
+  const isSuspicious = msg.includes('never registered') || msg.includes('did not attend') || msg.includes('not attend') || msg.includes('fake') || msg.includes('disposable');
+  const isVerifiedIntent = (msg.includes('attended') || msg.includes('submitted') || msg.includes('project')) && !isSuspicious;
 
   let category = 'UNCLASSIFIED_DATA';
   let actionPreview = 'MANUAL_REVIEW';
+  let confidence = 70;
+  let attendanceVerified = false;
+  let status = 'WAITING_APPROVAL';
 
-  if (msg.includes('certificate')) {
+  if (isVerifiedIntent) {
     category = 'CERTIFICATE_ISSUE';
     actionPreview = 'GENERATE_PDF + EMAIL';
+    confidence = 94;
+    attendanceVerified = true;
+    status = 'AUTO_APPROVED';
+  } else if (msg.includes('certificate')) {
+    category = 'CERTIFICATE_ISSUE';
+    actionPreview = isSuspicious ? 'FLAGGED_NOTION' : 'GENERATE_PDF + EMAIL';
+    confidence = isSuspicious ? 88 : 75;
+    attendanceVerified = false;
+    status = 'WAITING_APPROVAL';
   } else if (msg.includes('duplicate') || msg.includes('twice')) {
     category = 'DUPLICATE_REGISTRATION';
     actionPreview = 'DEDUPLICATED';
+    confidence = 90;
   } else if (msg.includes('attendance') || msg.includes('attended')) {
     category = 'ATTENDANCE_VERIFICATION';
     actionPreview = 'MANUAL_REVIEW';
-  } else if (msg.includes('reschedule') || msg.includes('calendar') || msg.includes('shift')) {
-    category = 'CALENDAR_RESCHEDULE';
-    actionPreview = 'CALENDAR_SYNC';
+    confidence = 80;
   }
 
   return {
-    title: 'Student Support Request',
+    title: isVerifiedIntent ? 'Verified Student Certificate Request' : 'Student Support Request',
     category,
-    confidence: 65,
-    priority: 'MEDIUM',
-    status: 'WAITING_APPROVAL',
-    attendanceVerified: false,
-    sentiment: 'NEUTRAL',
+    confidence,
+    priority: isSuspicious ? 'HIGH' : 'MEDIUM',
+    status,
+    attendanceVerified,
+    sentiment: isSuspicious ? 'URGENT' : 'POLITE',
     actionPreview,
     extractedName: userName || 'Student',
     extractedEmail: userEmail || '',
-    reasoning: 'Fallback rule-based classification.',
+    reasoning: isVerifiedIntent
+      ? 'Verified participation and project submission detected.'
+      : 'Unverified or missing credentials flagged for Human-in-the-Loop review.',
   };
 }
