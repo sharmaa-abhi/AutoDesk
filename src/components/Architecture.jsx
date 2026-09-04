@@ -1,15 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 
 const nodes = [
   { id: "user", label: "👤 Student / User", sub: "Submits natural complaint", category: "INPUT", type: "input" },
   { id: "webhook", label: "🌐 Webhook Gateway", sub: "POST /api/pipeline", category: "INPUT", type: "input" },
   { id: "validate", label: "🛡️ Sanitize & Deduplicate", sub: "MD5 24h Duplicate Guard", category: "PROCESSING", type: "process" },
-  { id: "ai", label: "🧠 Gemini Flash AI", sub: "Extract intent & schema JSON", category: "PROCESSING", type: "process" },
+  { id: "ai", label: "🧠 Gemini 3.6 Flash AI", sub: "Extract intent & schema JSON", category: "PROCESSING", type: "process" },
   { id: "notion", label: "🗄️ Notion Database", sub: "Create live incident page", category: "PROCESSING", type: "process" },
   { id: "human", label: "🙋 Human-in-the-Loop", sub: "Approve / Reject Cockpit", category: "PROCESSING", type: "process" },
-  { id: "action", label: "🚀 Action Dispatcher", sub: "HTML Certificate + Resend SMTP", category: "OUTPUT", type: "output" },
+  { id: "action", label: "🚀 Action Dispatcher", sub: "HTML Certificate + Resend/SMTP", category: "OUTPUT", type: "output" },
   { id: "runlog", label: "📜 Notion Run Log", sub: "Tamper-proof audit proof", category: "OUTPUT", type: "output" },
 ];
 
@@ -19,7 +20,7 @@ const nodeVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.35, ease: [0.21, 0.47, 0.32, 0.98] },
+    transition: { duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] },
   },
 };
 
@@ -28,7 +29,7 @@ const arrowVariants = {
   visible: {
     opacity: 1,
     scaleY: 1,
-    transition: { duration: 0.2 },
+    transition: { duration: 0.25 },
   },
 };
 
@@ -36,7 +37,7 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.07, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
   },
 };
 
@@ -53,6 +54,7 @@ export default function Architecture() {
           className="text-center space-y-3"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
+            <Sparkles className="w-3.5 h-3.5 text-[#dc2626]" />
             <span>SYSTEM BLUEPRINT</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#18181b] tracking-tight">
@@ -137,7 +139,12 @@ export default function Architecture() {
             </motion.div>
 
             {/* Merge Arrow */}
-            <motion.div variants={nodeVariants} className="text-[#71717a] text-xs font-mono my-2 font-bold">
+            <motion.div
+              variants={nodeVariants}
+              animate={{ opacity: [0.6, 1, 0.6] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="text-[#71717a] text-xs font-mono my-2 font-bold"
+            >
               ← Both Paths Merge →
             </motion.div>
 
@@ -149,7 +156,8 @@ export default function Architecture() {
             {/* Final Badge */}
             <motion.div
               variants={nodeVariants}
-              className="mt-4 px-4 py-2 rounded-full bg-[#ecfdf5] border-2 border-[#059669] text-[#065f46] text-xs font-mono font-bold shadow-[2px_2px_0px_#18181b]"
+              whileHover={{ scale: 1.05 }}
+              className="mt-4 px-4 py-2 rounded-full bg-[#ecfdf5] border-2 border-[#059669] text-[#065f46] text-xs font-mono font-bold shadow-[2px_2px_0px_#18181b] cursor-default"
             >
               🏁 TAMPER-PROOF RUN LOG PROOF SEALED
             </motion.div>
@@ -169,7 +177,11 @@ function FlowNode({ node }) {
       : "bg-[#ecfdf5] text-[#065f46] border-[#059669]";
 
   return (
-    <div className="w-full max-w-sm px-5 py-3 rounded-xl border-2 border-[#18181b] bg-[#fcfbfa] shadow-[2px_2px_0px_#18181b] text-center">
+    <motion.div
+      whileHover={{ scale: 1.03, y: -2 }}
+      transition={{ type: "spring", stiffness: 350 }}
+      className="w-full max-w-sm px-5 py-3 rounded-xl border-2 border-[#18181b] bg-[#fcfbfa] shadow-[2px_2px_0px_#18181b] text-center transition-shadow hover:shadow-[4px_4px_0px_#18181b] cursor-default"
+    >
       <div className="flex items-center justify-center mb-1">
         <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded border ${badgeClass}`}>
           {node.category}
@@ -177,12 +189,18 @@ function FlowNode({ node }) {
       </div>
       <div className="font-bold text-sm text-[#18181b]">{node.label}</div>
       <div className="text-[#52525b] text-xs mt-0.5 font-mono">{node.sub}</div>
-    </div>
+    </motion.div>
   );
 }
 
 function FlowArrow() {
   return (
-    <div className="w-[2px] h-6 bg-[#18181b] my-0.5" aria-hidden="true" />
+    <div className="relative w-[2px] h-6 bg-[#18181b] my-0.5 overflow-hidden">
+      <motion.div
+        animate={{ y: ["-100%", "100%"] }}
+        transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-x-0 h-3 bg-[#dc2626]"
+      />
+    </div>
   );
 }
