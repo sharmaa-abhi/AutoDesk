@@ -24,13 +24,6 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Clear stale error when modal reopens
-  useEffect(() => {
-    if (isOpen) {
-      setError(null);
-    }
-  }, [isOpen]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
