@@ -47,7 +47,7 @@ export default function CircularEngineWheel({
               }`}
             />
           </span>
-          <span className="font-bold text-[#18181b]">Autonomous Orbit Engine</span>
+          <span className="font-bold text-[var(--text-primary)]">Autonomous Orbit Engine</span>
         </div>
 
         <div className="flex items-center gap-1.5">
@@ -57,29 +57,29 @@ export default function CircularEngineWheel({
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.92 }}
             onClick={() => setIsRotating(!isRotating)}
-            className="px-2.5 py-1 rounded-md bg-[#f4f3ef] border border-[#18181b] text-[#18181b] font-bold text-[11px] flex items-center gap-1 shadow-[1px_1px_0px_#18181b] hover:bg-white transition-all cursor-pointer"
+            className="px-2.5 py-1 rounded-md bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] text-[var(--text-primary)] font-bold text-[11px] flex items-center gap-1 shadow-[1px_1px_0px_var(--border-charcoal)] hover:bg-[var(--bg-panel)] transition-all cursor-pointer"
             title={isRotating ? "Pause Orbit Wheel" : "Resume Orbit Wheel"}
           >
             {isRotating ? (
               <>
-                <Pause className="w-3 h-3 text-[#dc2626]" aria-hidden="true" />
+                <Pause className="w-3.5 h-3.5 text-[#dc2626]" aria-hidden="true" />
                 <span>Pause</span>
               </>
             ) : (
               <>
-                <Play className="w-3 h-3 text-[#059669]" aria-hidden="true" />
+                <Play className="w-3.5 h-3.5 text-[#059669]" aria-hidden="true" />
                 <span>Rotate</span>
               </>
             )}
           </motion.button>
 
-          {/* Speed Toggle (Slow / Normal) */}
+          {/* Speed Toggle */}
           <motion.button
             type="button"
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.92 }}
             onClick={() => setRotationSpeed((prev) => (prev === 32 ? 18 : prev === 18 ? 48 : 32))}
-            className="px-2 py-1 rounded-md bg-[#f4f3ef] border border-[#e2dfd6] text-[#52525b] font-bold text-[11px] hover:border-[#18181b] hover:text-[#18181b] transition-all cursor-pointer"
+            className="px-2 py-1 rounded-md bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-[var(--text-secondary)] font-bold text-[11px] hover:border-[var(--border-charcoal)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
             title="Cycle Orbit Wheel Speed"
           >
             {rotationSpeed === 48 ? "0.5x" : rotationSpeed === 32 ? "1x" : "2x"}
@@ -105,10 +105,11 @@ export default function CircularEngineWheel({
             cx="190"
             cy="190"
             r={radius}
-            stroke="#18181b"
+            stroke="currentColor"
+            className="text-[var(--border-charcoal)]"
             strokeWidth="1.5"
             strokeDasharray="4 4"
-            opacity="0.25"
+            opacity="0.3"
           />
 
           {/* Inner Secondary Ring */}
@@ -116,10 +117,11 @@ export default function CircularEngineWheel({
             cx="190"
             cy="190"
             r={radius * 0.55}
-            stroke="#18181b"
+            stroke="currentColor"
+            className="text-[var(--border-charcoal)]"
             strokeWidth="1"
             strokeDasharray="2 4"
-            opacity="0.15"
+            opacity="0.2"
           />
 
           {/* Subtle Crosshairs */}
@@ -128,32 +130,32 @@ export default function CircularEngineWheel({
             y1="20"
             x2="190"
             y2="360"
-            stroke="#18181b"
+            stroke="currentColor"
+            className="text-[var(--border-charcoal)]"
             strokeWidth="1"
             strokeDasharray="3 3"
-            opacity="0.1"
+            opacity="0.15"
           />
           <line
             x1="20"
             y1="190"
             x2="360"
             y2="190"
-            stroke="#18181b"
+            stroke="currentColor"
+            className="text-[var(--border-charcoal)]"
             strokeWidth="1"
             strokeDasharray="3 3"
-            opacity="0.1"
+            opacity="0.15"
           />
         </svg>
 
         {/* Pulsing Core Ambient Glow */}
-        <div className="absolute w-44 h-44 rounded-full bg-[#dc2626]/10 blur-2xl pointer-events-none animate-pulse" />
+        <div className="absolute w-44 h-44 rounded-full bg-[#dc2626]/15 dark:bg-[#dc2626]/20 blur-2xl pointer-events-none animate-pulse" />
 
         {/* ROTATING ORBIT CONTAINER */}
         <motion.div
           animate={
-            isRotating && !isHovered
-              ? { rotate: 360 }
-              : isRotating && isHovered
+            isRotating
               ? { rotate: 360 }
               : {}
           }
@@ -170,7 +172,7 @@ export default function CircularEngineWheel({
         >
           {/* Orbit Nodes placed radially */}
           {stages.map((stage, idx) => {
-            const angleDeg = idx * 72 - 90; // Start top (-90deg) and step 72deg for 5 nodes
+            const angleDeg = idx * 72 - 90;
             const angleRad = (angleDeg * Math.PI) / 180;
             const x = Math.round(radius * Math.cos(angleRad));
             const y = Math.round(radius * Math.sin(angleRad));
@@ -187,9 +189,7 @@ export default function CircularEngineWheel({
                 {/* Counter-Rotate so labels & icons stay upright while wheel spins */}
                 <motion.div
                   animate={
-                    isRotating && !isHovered
-                      ? { rotate: -360 }
-                      : isRotating && isHovered
+                    isRotating
                       ? { rotate: -360 }
                       : {}
                   }
@@ -216,30 +216,30 @@ export default function CircularEngineWheel({
                       setActiveStage(stage.id);
                     }
                   }}
-                  className={`px-3 py-2 rounded-xl border-2 transition-all cursor-pointer flex items-center gap-2 shadow-[2px_2px_0px_#18181b] ${
+                  className={`px-3 py-2 rounded-xl border-2 transition-all cursor-pointer flex items-center gap-2 shadow-[2px_2px_0px_var(--border-charcoal)] ${
                     isSelected
-                      ? "bg-white border-[#18181b] shadow-[4px_4px_0px_#dc2626] scale-105"
-                      : "bg-[#fcfbfa] border-[#18181b] hover:bg-white hover:shadow-[3px_3px_0px_#18181b]"
+                      ? "bg-[var(--bg-panel)] border-[var(--border-charcoal)] shadow-[4px_4px_0px_#dc2626] dark:shadow-[0_0_15px_rgba(220,38,38,0.4),2px_2px_0px_#dc2626] scale-105"
+                      : "bg-[var(--bg-panel-elevated)] border-[var(--border-charcoal)] hover:bg-[var(--bg-panel)] hover:shadow-[3px_3px_0px_var(--border-charcoal)]"
                   }`}
                 >
                   <div
-                    className="w-7 h-7 rounded-lg text-white flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_#18181b]"
+                    className="w-7 h-7 rounded-lg text-white flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_var(--border-charcoal)]"
                     style={{ backgroundColor: stage.color || "#18181b" }}
                   >
                     <stage.icon className="w-3.5 h-3.5 text-white" aria-hidden="true" />
                   </div>
 
                   <div className="text-left font-mono min-w-0 max-w-[90px] sm:max-w-[100px]">
-                    <div className="text-[11px] font-bold text-[#18181b] truncate leading-tight">
+                    <div className="text-[11px] font-bold text-[var(--text-primary)] truncate leading-tight">
                       {stage.title}
                     </div>
-                    <div className="text-[9px] font-semibold text-[#71717a] truncate">
+                    <div className="text-[9px] font-semibold text-[var(--text-muted)] truncate">
                       {stage.sub}
                     </div>
                   </div>
 
                   {isSelected && (
-                    <span className="w-2 h-2 rounded-full bg-[#dc2626] animate-pulse flex-shrink-0" />
+                    <span className="w-2 h-2 rounded-full bg-[#dc2626] animate-pulse flex-shrink-0 shadow-[0_0_6px_#dc2626]" />
                   )}
                 </motion.div>
               </div>
@@ -247,27 +247,27 @@ export default function CircularEngineWheel({
           })}
         </motion.div>
 
-        {/* STATIC CENTER HUB (Does not rotate, serves as anchor) */}
-        <div className="relative z-30 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-white border-2 border-[#18181b] shadow-[3.5px_3.5px_0px_#18181b] flex flex-col items-center justify-center text-center p-2">
+        {/* STATIC CENTER HUB */}
+        <div className="relative z-30 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[3.5px_3.5px_0px_var(--border-charcoal)] dark:shadow-[0_0_25px_rgba(220,38,38,0.3)] flex flex-col items-center justify-center text-center p-2">
           {/* Animated subtle border beacon ring */}
-          <div className="w-7 h-7 rounded-lg bg-[#18181b] text-white flex items-center justify-center shadow-[1px_1px_0px_#dc2626] mb-1">
+          <div className="w-7 h-7 rounded-lg bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center shadow-[1px_1px_0px_#dc2626] mb-1">
             <Zap className="w-4 h-4 text-white" strokeWidth={2.5} aria-hidden="true" />
           </div>
-          <span className="text-[10px] font-black text-[#18181b] uppercase tracking-tight">
+          <span className="text-[10px] font-black text-[var(--text-primary)] uppercase tracking-tight">
             AutoDesk<span className="text-[#dc2626]">.AI</span>
           </span>
-          <span className="text-[8px] font-mono font-bold text-[#71717a] px-1.5 py-0.2 rounded bg-[#f4f3ef] border border-[#e2dfd6] mt-0.5">
+          <span className="text-[8px] font-mono font-bold text-[var(--text-muted)] px-1.5 py-0.2 rounded bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] mt-0.5">
             STAGE {activeStage}/5
           </span>
-          <span className="text-[9px] font-mono font-bold text-[#059669] flex items-center gap-1 mt-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse" />
+          <span className="text-[9px] font-mono font-bold text-[#059669] dark:text-[#10b981] flex items-center gap-1 mt-0.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse shadow-[0_0_6px_#059669]" />
             <span>AUTONOMOUS</span>
           </span>
         </div>
       </div>
 
       {/* Helper text on wheel interaction */}
-      <div className="text-center mt-2 text-[11px] font-mono text-[#71717a] flex items-center justify-center gap-2">
+      <div className="text-center mt-2 text-[11px] font-mono text-[var(--text-muted)] flex items-center justify-center gap-2">
         <span>💡 Hover on wheel to inspect stages • Click any node to select</span>
       </div>
     </div>
