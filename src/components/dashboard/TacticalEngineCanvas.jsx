@@ -24,6 +24,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { EVENT_CATALOG, DEFAULT_EVENT_ID } from "@/lib/events";
+import CircularEngineWheel from "@/components/dashboard/CircularEngineWheel";
 
 export default function TacticalEngineCanvas({
   selectedEvent,
@@ -32,6 +33,7 @@ export default function TacticalEngineCanvas({
   onSimulateWebhook,
 }) {
   const [activeStage, setActiveStage] = useState(3);
+  const [flowLayout, setFlowLayout] = useState("WHEEL"); // WHEEL | GRID
   const [viewMode, setViewMode] = useState("TACTICAL"); // TACTICAL | PAYLOAD | NOTION_SYNC
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -427,69 +429,106 @@ export default function TacticalEngineCanvas({
         </form>
       </motion.div>
 
-      {/* Center Card 2: 5-STAGE PIPELINE PROGRESS WITH ANIMATED LIGHT */}
+      {/* Center Card 2: 5-STAGE PIPELINE PROGRESS (ROTATING WHEEL OR GRID VIEW) */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 280, damping: 22, delay: 0.08 }}
-        className="dev-card bg-white p-5 sm:p-6 shadow-[3.5px_3.5px_0px_#18181b]"
+        className="dev-card bg-white p-5 sm:p-6 shadow-[3.5px_3.5px_0px_#18181b] overflow-hidden"
       >
-        <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#e2dfd6]">
-          <h3 className="text-xs font-mono font-bold text-[#18181b] uppercase tracking-wider flex items-center gap-2">
-            <Layers className="w-4 h-4 text-[#dc2626]" aria-hidden="true" />
-            <span>Pipeline Execution Flow</span>
-          </h3>
-          <span className="text-xs font-mono text-[#71717a]">
-            Active Incident: <strong className="text-[#dc2626] font-bold">{selectedEvent?.id || "REQ-108"}</strong>
-          </span>
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-[#e2dfd6]">
+          <div className="flex items-center gap-2">
+            <h3 className="text-xs font-mono font-bold text-[#18181b] uppercase tracking-wider flex items-center gap-2">
+              <Layers className="w-4 h-4 text-[#dc2626]" aria-hidden="true" />
+              <span>Pipeline Execution Flow</span>
+            </h3>
+            <span className="text-xs font-mono text-[#71717a] hidden sm:inline">
+              • Incident: <strong className="text-[#dc2626] font-bold">{selectedEvent?.id || "REQ-108"}</strong>
+            </span>
+          </div>
+
+          {/* Layout Mode Switcher (Wheel vs Grid) */}
+          <div className="flex items-center gap-1 p-1 rounded-lg bg-[#f4f3ef] border border-[#e2dfd6] text-xs font-mono">
+            <button
+              type="button"
+              onClick={() => setFlowLayout("WHEEL")}
+              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
+                flowLayout === "WHEEL"
+                  ? "bg-[#18181b] text-white shadow-[1px_1px_0px_#dc2626]"
+                  : "text-[#52525b] hover:text-[#18181b]"
+              }`}
+            >
+              🔄 Circular Wheel
+            </button>
+            <button
+              type="button"
+              onClick={() => setFlowLayout("GRID")}
+              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
+                flowLayout === "GRID"
+                  ? "bg-[#18181b] text-white shadow-[1px_1px_0px_#dc2626]"
+                  : "text-[#52525b] hover:text-[#18181b]"
+              }`}
+            >
+              📊 Linear Grid
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
-          {stages.map((stage, idx) => {
-            const isTarget = activeStage === stage.id;
-            return (
-              <motion.div
-                key={stage.id}
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 350, damping: 18 }}
-                role="button"
-                tabIndex={0}
-                onClick={() => setActiveStage(stage.id)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setActiveStage(stage.id);
-                  }
-                }}
-                className={`p-3 rounded-xl border-2 transition-all cursor-pointer relative focus-visible:outline-2 focus-visible:outline-[#18181b] ${
-                  isTarget
-                    ? "bg-[#ffffff] border-[#18181b] shadow-[3.5px_3.5px_0px_#dc2626]"
-                    : "bg-[#fcfbfa] border-[#e2dfd6] hover:border-[#18181b] hover:bg-white hover:shadow-[2px_2px_0px_#18181b]"
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div
-                    className="w-7 h-7 rounded-md bg-[#18181b] text-white flex items-center justify-center shadow-[1px_1px_0px_#dc2626]"
-                  >
-                    <stage.icon className="w-3.5 h-3.5 text-white" aria-hidden="true" />
+        {flowLayout === "WHEEL" ? (
+          <CircularEngineWheel
+            stages={stages}
+            activeStage={activeStage}
+            setActiveStage={setActiveStage}
+            selectedEvent={selectedEvent}
+          />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+            {stages.map((stage, idx) => {
+              const isTarget = activeStage === stage.id;
+              return (
+                <motion.div
+                  key={stage.id}
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 18 }}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setActiveStage(stage.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setActiveStage(stage.id);
+                    }
+                  }}
+                  className={`p-3 rounded-xl border-2 transition-all cursor-pointer relative focus-visible:outline-2 focus-visible:outline-[#18181b] ${
+                    isTarget
+                      ? "bg-[#ffffff] border-[#18181b] shadow-[3.5px_3.5px_0px_#dc2626]"
+                      : "bg-[#fcfbfa] border-[#e2dfd6] hover:border-[#18181b] hover:bg-white hover:shadow-[2px_2px_0px_#18181b]"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div
+                      className="w-7 h-7 rounded-md bg-[#18181b] text-white flex items-center justify-center shadow-[1px_1px_0px_#dc2626]"
+                    >
+                      <stage.icon className="w-3.5 h-3.5 text-white" aria-hidden="true" />
+                    </div>
+                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[#f4f3ef] border border-[#e2dfd6] text-[#18181b]">
+                      {stage.status}
+                    </span>
                   </div>
-                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[#f4f3ef] border border-[#e2dfd6] text-[#18181b]">
-                    {stage.status}
-                  </span>
-                </div>
-                <div className="text-xs font-bold text-[#18181b] truncate">{stage.title}</div>
-                <div className="text-xs text-[#71717a] font-mono truncate">{stage.sub}</div>
+                  <div className="text-xs font-bold text-[#18181b] truncate">{stage.title}</div>
+                  <div className="text-xs text-[#71717a] font-mono truncate">{stage.sub}</div>
 
-                {idx < stages.length - 1 && (
-                  <div className="hidden sm:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
-                    <ArrowRight className="w-3.5 h-3.5 text-[#18181b]" aria-hidden="true" />
-                  </div>
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
+                  {idx < stages.length - 1 && (
+                    <div className="hidden sm:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
+                      <ArrowRight className="w-3.5 h-3.5 text-[#18181b]" aria-hidden="true" />
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
       </motion.div>
 
       {/* Center Card 3: STRUCTURED OUTPUT / CONTENT PANELS */}
