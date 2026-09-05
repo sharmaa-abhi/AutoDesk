@@ -103,7 +103,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#18181b]/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md"
           role="presentation"
           onClick={onClose}
         >
@@ -117,19 +117,19 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
             transition={{ type: "spring", stiffness: 350, damping: 25 }}
-            className="relative w-full max-w-xl bg-white border-2 border-[#18181b] rounded-2xl shadow-[5px_5px_0px_#18181b] overflow-hidden"
+            className="relative w-full max-w-xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] rounded-2xl shadow-[5px_5px_0px_var(--border-charcoal)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_30px_rgba(220,38,38,0.25)] overflow-hidden"
           >
             {/* Modal Header */}
-            <div className="p-5 border-b-2 border-[#18181b] flex items-center justify-between bg-[#fcfbfa]">
+            <div className="p-5 border-b-2 border-[var(--border-charcoal)] flex items-center justify-between bg-[var(--bg-panel-elevated)]">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-[#18181b] text-white flex items-center justify-center shadow-[1.5px_1.5px_0px_#dc2626]">
+                <div className="w-9 h-9 rounded-lg bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center shadow-[1.5px_1.5px_0px_#dc2626] dark:shadow-[0_0_10px_#dc2626]">
                   <Sparkles className="w-4 h-4 text-white animate-spin" style={{ animationDuration: "8s" }} aria-hidden="true" focusable="false" />
                 </div>
                 <div>
-                  <h3 id="ticket-modal-title" className="text-base font-bold text-[#18181b]">
+                  <h3 id="ticket-modal-title" className="text-base font-bold text-[var(--text-primary)]">
                     Submit Incident Ticket
                   </h3>
-                  <p className="text-xs text-[#52525b] font-mono mt-0.5">
+                  <p className="text-xs text-[var(--text-secondary)] font-mono mt-0.5">
                     Triggers live Gemini AI ➔ Notion DB ➔ Action Pipeline
                   </p>
                 </div>
@@ -147,12 +147,12 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 space-y-4 max-h-[80vh] overflow-y-auto bg-[#faf9f6]">
+            <div className="p-6 space-y-4 max-h-[80vh] overflow-y-auto bg-[var(--bg-canvas)]">
               {!result ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* Event Selector */}
                   <div>
-                    <label htmlFor="event-selector-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5 flex items-center gap-1.5">
+                    <label htmlFor="event-selector-input" className="block text-xs font-mono font-bold text-[var(--text-primary)] mb-1.5 flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5 text-[#dc2626]" aria-hidden="true" />
                       <span>SELECT EVENT / WORKSHOP TRACK</span>
                     </label>
@@ -163,7 +163,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                       className="dev-input font-medium cursor-pointer"
                     >
                       {Object.values(EVENT_CATALOG).map((ev) => (
-                        <option key={ev.id} value={ev.id}>
+                        <option key={ev.id} value={ev.id} className="bg-[var(--bg-panel)] text-[var(--text-primary)]">
                           {ev.name} ({ev.track})
                         </option>
                       ))}
@@ -172,7 +172,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="student-name-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
+                      <label htmlFor="student-name-input" className="block text-xs font-mono font-bold text-[var(--text-primary)] mb-1.5">
                         STUDENT / USER NAME
                       </label>
                       <input
@@ -185,7 +185,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                       />
                     </div>
                     <div>
-                      <label htmlFor="student-email-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
+                      <label htmlFor="student-email-input" className="block text-xs font-mono font-bold text-[var(--text-primary)] mb-1.5">
                         EMAIL ADDRESS
                       </label>
                       <input
@@ -200,7 +200,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                   </div>
 
                   <div>
-                    <label htmlFor="student-message-input" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
+                    <label htmlFor="student-message-input" className="block text-xs font-mono font-bold text-[var(--text-primary)] mb-1.5">
                       COMPLAINT / REQUEST MESSAGE (NATURAL LANGUAGE)
                     </label>
                     <textarea
@@ -216,7 +216,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
 
                   {/* Preset Buttons */}
                   <div>
-                    <span className="text-xs font-mono text-[#71717a] font-bold block mb-1.5">
+                    <span className="text-xs font-mono text-[var(--text-muted)] font-bold block mb-1.5">
                       QUICK TEST PRESETS:
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -244,7 +244,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                     <motion.div
                       initial={{ opacity: 0, y: -6 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-3 rounded-lg bg-[#fee2e2] border-2 border-[#dc2626] text-[#991b1b] text-xs font-mono flex items-center gap-2"
+                      className="p-3 rounded-lg bg-[#fee2e2] dark:bg-red-950/40 border-2 border-[#dc2626] text-[#991b1b] dark:text-red-300 text-xs font-mono flex items-center gap-2"
                       role="alert"
                     >
                       <AlertCircle className="w-4 h-4 flex-shrink-0 text-[#dc2626]" aria-hidden="true" focusable="false" />
@@ -257,7 +257,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     disabled={loading || !message.trim()}
-                    className="btn-primary w-full py-3 text-sm font-bold flex items-center justify-center gap-2 shadow-[2px_2px_0px_#18181b]"
+                    className="btn-primary w-full py-3 text-sm font-bold flex items-center justify-center gap-2 shadow-[2px_2px_0px_var(--border-charcoal)] dark:shadow-[0_0_15px_rgba(220,38,38,0.4)]"
                   >
                     {loading ? (
                       <>
@@ -280,12 +280,12 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   className="space-y-4 py-1"
                 >
-                  <div className="p-4 rounded-xl bg-[#ecfdf5] border-2 border-[#059669] flex items-center gap-3 shadow-[2px_2px_0px_#059669]">
-                    <CheckCircle2 className="w-6 h-6 text-[#059669] flex-shrink-0" aria-hidden="true" focusable="false" />
+                  <div className="p-4 rounded-xl bg-[#ecfdf5] dark:bg-emerald-950/40 border-2 border-[#059669] flex items-center gap-3 shadow-[2px_2px_0px_#059669] dark:shadow-[0_0_15px_rgba(5,150,105,0.3)]">
+                    <CheckCircle2 className="w-6 h-6 text-[#059669] dark:text-emerald-400 flex-shrink-0" aria-hidden="true" focusable="false" />
                     <div>
-                      <h4 className="text-sm font-bold text-[#065f46]">Pipeline Ingested Successfully!</h4>
-                      <p className="text-xs text-[#065f46]/90 font-mono mt-0.5">
-                        Ticket <strong className="text-[#18181b]">{result.requestId}</strong> processed in{" "}
+                      <h4 className="text-sm font-bold text-[#065f46] dark:text-emerald-300">Pipeline Ingested Successfully!</h4>
+                      <p className="text-xs text-[#065f46]/90 dark:text-emerald-400/90 font-mono mt-0.5">
+                        Ticket <strong className="text-[var(--text-primary)]">{result.requestId}</strong> processed in{" "}
                         <strong>{result.durationMs}ms</strong>.
                       </p>
                     </div>
@@ -293,18 +293,18 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
 
                   {/* AI Extraction Breakdown */}
                   {result.ai && (
-                    <div className="p-4 rounded-xl bg-white border-2 border-[#18181b] space-y-2.5 font-mono text-xs shadow-[2.5px_2.5px_0px_#18181b]">
-                      <div className="flex items-center gap-2 text-[#18181b] font-bold pb-2 border-b border-[#e2dfd6]">
+                    <div className="p-4 rounded-xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] space-y-2.5 font-mono text-xs shadow-[2.5px_2.5px_0px_var(--border-charcoal)]">
+                      <div className="flex items-center gap-2 text-[var(--text-primary)] font-bold pb-2 border-b border-[var(--border-subtle)]">
                         <Brain className="w-4 h-4 text-[#dc2626]" aria-hidden="true" focusable="false" />
                         <span>GEMINI AI INTENT EXTRACTION</span>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 text-[#52525b]">
-                        <div>CATEGORY: <strong className="text-[#18181b]">{result.ai.category}</strong></div>
-                        <div>CONFIDENCE: <strong className="text-[#059669]">{result.ai.confidence}%</strong></div>
+                      <div className="grid grid-cols-2 gap-2 text-[var(--text-secondary)]">
+                        <div>CATEGORY: <strong className="text-[var(--text-primary)]">{result.ai.category}</strong></div>
+                        <div>CONFIDENCE: <strong className="text-[#059669] dark:text-[#10b981]">{result.ai.confidence}%</strong></div>
                         <div>PRIORITY: <strong className="text-[#dc2626]">{result.ai.priority}</strong></div>
-                        <div>STATUS: <strong className="text-[#18181b]">{result.status}</strong></div>
+                        <div>STATUS: <strong className="text-[var(--text-primary)]">{result.status}</strong></div>
                       </div>
-                      <div className="text-xs text-[#71717a] pt-1 border-t border-[#f0eee6]">
+                      <div className="text-xs text-[var(--text-muted)] pt-1 border-t border-[var(--border-subtle)]">
                         Reasoning: {result.ai.reasoning}
                       </div>
                     </div>
@@ -312,11 +312,11 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
 
                   {/* Action Steps */}
                   <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-                    <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] flex items-center gap-2 text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
+                    <div className="p-3 rounded-xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] flex items-center gap-2 text-[var(--text-primary)] shadow-[1.5px_1.5px_0px_var(--border-charcoal)]">
                       <Database className="w-4 h-4 text-[#d97706]" aria-hidden="true" focusable="false" />
                       <span>Notion DB Synced ✓</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] flex items-center gap-2 text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
+                    <div className="p-3 rounded-xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] flex items-center gap-2 text-[var(--text-primary)] shadow-[1.5px_1.5px_0px_var(--border-charcoal)]">
                       <Mail className="w-4 h-4 text-[#059669]" aria-hidden="true" focusable="false" />
                       <span>{result.email ? "Email Dispatched ✓" : "Queued in Cockpit"}</span>
                     </div>
