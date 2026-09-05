@@ -10,8 +10,8 @@ const stats = [
     value: 1247,
     suffix: "",
     label: "Incidents Processed",
-    highlight: "text-[#18181b]",
-    accent: "#18181b",
+    highlight: "text-[var(--text-primary)]",
+    accent: "#3b82f6",
     pill: "LIVE FEED",
   },
   {
@@ -19,7 +19,7 @@ const stats = [
     value: 99.8,
     suffix: "%",
     label: "Autonomous Uptime",
-    highlight: "text-[#059669]",
+    highlight: "text-[#059669] dark:text-[#10b981]",
     accent: "#059669",
     pill: "24/7 ACTIVE",
   },
@@ -28,7 +28,7 @@ const stats = [
     value: 342,
     suffix: "",
     label: "Certificates Dispatched",
-    highlight: "text-[#dc2626]",
+    highlight: "text-[#dc2626] dark:text-[#f87171]",
     accent: "#dc2626",
     pill: "VERIFIED",
   },
@@ -37,8 +37,8 @@ const stats = [
     value: 1.4,
     suffix: "s",
     label: "Average Latency",
-    highlight: "text-[#18181b]",
-    accent: "#18181b",
+    highlight: "text-[var(--text-primary)]",
+    accent: "#eab308",
     pill: "OPTIMAL",
   },
 ];
@@ -120,7 +120,7 @@ export default function StatsStrip() {
               }}
               whileHover={{ y: -8, scale: 1.03 }}
               transition={{ type: "spring", stiffness: 350, damping: 18 }}
-              className="dev-card bg-white p-5 text-center relative group overflow-hidden transition-all hover:shadow-[5px_5px_0px_#18181b]"
+              className="dev-card bg-[var(--bg-panel)] p-5 text-center relative group overflow-hidden transition-all hover:shadow-[5px_5px_0px_var(--border-charcoal)] dark:hover:shadow-[0_12px_30px_rgba(0,0,0,0.9),0_0_20px_rgba(220,38,38,0.3)]"
             >
               {/* Subtle hover light glow */}
               <div
@@ -129,16 +129,16 @@ export default function StatsStrip() {
               />
 
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#f4f3ef] border border-[#18181b] text-[#18181b]">
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] text-[var(--text-primary)]">
                   {stat.pill}
                 </span>
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: stat.accent }} />
+                <span className="w-2 h-2 rounded-full shadow-[0_0_6px_currentColor]" style={{ backgroundColor: stat.accent, color: stat.accent }} />
               </div>
 
               <motion.div
                 whileHover={{ rotate: 15, scale: 1.15 }}
                 transition={{ type: "spring", stiffness: 400, damping: 12 }}
-                className="w-11 h-11 rounded-xl bg-[#18181b] text-white flex items-center justify-center mx-auto mb-3 shadow-[2px_2px_0px_#dc2626] transition-transform"
+                className="w-11 h-11 rounded-xl bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center mx-auto mb-3 shadow-[2px_2px_0px_#dc2626] dark:shadow-[0_0_12px_rgba(220,38,38,0.5)] transition-transform"
               >
                 <stat.icon className="w-5 h-5 text-white" aria-hidden="true" focusable="false" />
               </motion.div>
@@ -149,7 +149,7 @@ export default function StatsStrip() {
                   suffix={stat.suffix}
                 />
               </div>
-              <div className="text-[#52525b] text-xs font-mono font-bold mt-2 uppercase tracking-wider">
+              <div className="text-[var(--text-secondary)] text-xs font-mono font-bold mt-2 uppercase tracking-wider">
                 {stat.label}
               </div>
             </motion.div>
