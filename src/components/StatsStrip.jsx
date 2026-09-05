@@ -12,6 +12,7 @@ const stats = [
     label: "Incidents Processed",
     highlight: "text-[#18181b]",
     accent: "#18181b",
+    pill: "LIVE FEED",
   },
   {
     icon: Clock,
@@ -20,6 +21,7 @@ const stats = [
     label: "Autonomous Uptime",
     highlight: "text-[#059669]",
     accent: "#059669",
+    pill: "24/7 ACTIVE",
   },
   {
     icon: Award,
@@ -28,6 +30,7 @@ const stats = [
     label: "Certificates Dispatched",
     highlight: "text-[#dc2626]",
     accent: "#dc2626",
+    pill: "VERIFIED",
   },
   {
     icon: Zap,
@@ -36,10 +39,11 @@ const stats = [
     label: "Average Latency",
     highlight: "text-[#18181b]",
     accent: "#18181b",
+    pill: "OPTIMAL",
   },
 ];
 
-function AnimatedCounter({ value, suffix, duration = 2 }) {
+function AnimatedCounter({ value, suffix, duration = 1.8 }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -50,14 +54,21 @@ function AnimatedCounter({ value, suffix, duration = 2 }) {
     let start = 0;
     const end = value;
     const isDecimal = value % 1 !== 0;
-    const increment = end / (duration * 60);
+    const totalFrames = duration * 60;
+    let frame = 0;
+
     const timer = setInterval(() => {
-      start += increment;
-      if (start >= end) {
+      frame++;
+      const progress = frame / totalFrames;
+      // Exponential ease out
+      const easeOutProgress = 1 - Math.pow(2, -10 * progress);
+      const current = start + (end - start) * easeOutProgress;
+
+      if (frame >= totalFrames) {
         setCount(end);
         clearInterval(timer);
       } else {
-        setCount(isDecimal ? parseFloat(start.toFixed(1)) : Math.floor(start));
+        setCount(isDecimal ? parseFloat(current.toFixed(1)) : Math.floor(current));
       }
     }, 1000 / 60);
 
@@ -65,17 +76,23 @@ function AnimatedCounter({ value, suffix, duration = 2 }) {
   }, [isInView, value, duration]);
 
   return (
-    <span ref={ref} className="font-mono font-black text-3xl sm:text-4xl">
+    <motion.span
+      ref={ref}
+      initial={{ scale: 0.9 }}
+      animate={isInView ? { scale: 1 } : { scale: 0.9 }}
+      transition={{ type: "spring", stiffness: 300, damping: 15 }}
+      className="font-mono font-black text-3xl sm:text-4xl inline-block"
+    >
       {count}
       {suffix}
-    </span>
+    </motion.span>
   );
 }
 
 export default function StatsStrip() {
   return (
-    <section className="py-12 px-4 sm:px-6">
-      <div className="max-w-6xl mx-auto">
+    <section className="py-12 px-4 sm:px-6 relative overflow-hidden">
+      <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -93,16 +110,17 @@ export default function StatsStrip() {
             <motion.div
               key={stat.label}
               variants={{
-                hidden: { opacity: 0, y: 20, scale: 0.95 },
+                hidden: { opacity: 0, y: 24, scale: 0.94 },
                 visible: {
                   opacity: 1,
                   y: 0,
                   scale: 1,
-                  transition: { duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] },
+                  transition: { type: "spring", stiffness: 280, damping: 20 },
                 },
               }}
-              whileHover={{ y: -6, scale: 1.02 }}
-              className="dev-card bg-white p-5 text-center relative group overflow-hidden transition-shadow hover:shadow-[4px_4px_0px_#18181b]"
+              whileHover={{ y: -8, scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 350, damping: 18 }}
+              className="dev-card bg-white p-5 text-center relative group overflow-hidden transition-all hover:shadow-[5px_5px_0px_#18181b]"
             >
               {/* Subtle hover light glow */}
               <div
@@ -110,10 +128,17 @@ export default function StatsStrip() {
                 style={{ backgroundColor: stat.accent }}
               />
 
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#f4f3ef] border border-[#18181b] text-[#18181b]">
+                  {stat.pill}
+                </span>
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: stat.accent }} />
+              </div>
+
               <motion.div
-                whileHover={{ rotate: 10, scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="w-10 h-10 rounded-lg bg-[#18181b] text-white flex items-center justify-center mx-auto mb-3 shadow-[1.5px_1.5px_0px_#dc2626] transition-transform"
+                whileHover={{ rotate: 15, scale: 1.15 }}
+                transition={{ type: "spring", stiffness: 400, damping: 12 }}
+                className="w-11 h-11 rounded-xl bg-[#18181b] text-white flex items-center justify-center mx-auto mb-3 shadow-[2px_2px_0px_#dc2626] transition-transform"
               >
                 <stat.icon className="w-5 h-5 text-white" aria-hidden="true" focusable="false" />
               </motion.div>

@@ -2,7 +2,19 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles, Send, CheckCircle2, AlertCircle, Loader2, Database, Mail, Brain, Calendar } from "lucide-react";
+import {
+  X,
+  Sparkles,
+  Send,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+  Database,
+  Mail,
+  Brain,
+  Calendar,
+  Zap,
+} from "lucide-react";
 import { EVENT_CATALOG, DEFAULT_EVENT_ID } from "@/lib/events";
 
 export default function SubmitRequestModal({ isOpen, onClose }) {
@@ -87,8 +99,11 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#18181b]/50 backdrop-blur-sm"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#18181b]/60 backdrop-blur-sm"
           role="presentation"
           onClick={onClose}
         >
@@ -98,16 +113,17 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
             aria-modal="true"
             aria-labelledby="ticket-modal-title"
             onClick={(e) => e.stopPropagation()}
-            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 15 }}
-            className="relative w-full max-w-xl bg-white border-2 border-[#18181b] rounded-2xl shadow-[4px_4px_0px_#18181b] overflow-hidden"
+            exit={{ opacity: 0, scale: 0.92, y: 20 }}
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            className="relative w-full max-w-xl bg-white border-2 border-[#18181b] rounded-2xl shadow-[5px_5px_0px_#18181b] overflow-hidden"
           >
             {/* Modal Header */}
             <div className="p-5 border-b-2 border-[#18181b] flex items-center justify-between bg-[#fcfbfa]">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-lg bg-[#18181b] text-white flex items-center justify-center shadow-[1.5px_1.5px_0px_#dc2626]">
-                  <Sparkles className="w-4 h-4 text-white" aria-hidden="true" focusable="false" />
+                  <Sparkles className="w-4 h-4 text-white animate-spin" style={{ animationDuration: "8s" }} aria-hidden="true" focusable="false" />
                 </div>
                 <div>
                   <h3 id="ticket-modal-title" className="text-base font-bold text-[#18181b]">
@@ -118,14 +134,16 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                   </p>
                 </div>
               </div>
-              <button
+              <motion.button
                 type="button"
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
                 aria-label="Close dialog"
                 onClick={onClose}
                 className="btn-icon w-8 h-8 rounded-lg"
               >
                 <X className="w-4 h-4" aria-hidden="true" focusable="false" />
-              </button>
+              </motion.button>
             </div>
 
             {/* Modal Body */}
@@ -192,7 +210,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Sir I attended AI workshop yesterday but didn't get certificate..."
                       required
-                      className="dev-input resize-none text-xs sm:text-sm"
+                      className="dev-input resize-none text-xs sm:text-sm leading-relaxed"
                     />
                   </div>
 
@@ -203,9 +221,11 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                       {sampleMessages.map((sample, i) => (
-                        <button
+                        <motion.button
                           key={i}
                           type="button"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
                           onClick={() => {
                             setMessage(sample.msg);
                             if (sample.eventId) setSelectedEventId(sample.eventId);
@@ -215,22 +235,29 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                         >
                           <span className="font-bold text-[#dc2626] mr-1">P{i + 1}:</span>
                           <span className="truncate">{sample.title}</span>
-                        </button>
+                        </motion.button>
                       ))}
                     </div>
                   </div>
 
                   {error && (
-                    <div className="p-3 rounded-lg bg-[#fee2e2] border-2 border-[#dc2626] text-[#991b1b] text-xs font-mono flex items-center gap-2" role="alert">
+                    <motion.div
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-3 rounded-lg bg-[#fee2e2] border-2 border-[#dc2626] text-[#991b1b] text-xs font-mono flex items-center gap-2"
+                      role="alert"
+                    >
                       <AlertCircle className="w-4 h-4 flex-shrink-0 text-[#dc2626]" aria-hidden="true" focusable="false" />
                       <span>{error}</span>
-                    </div>
+                    </motion.div>
                   )}
 
-                  <button
+                  <motion.button
                     type="submit"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     disabled={loading || !message.trim()}
-                    className="btn-primary w-full py-3 text-sm font-bold flex items-center justify-center gap-2"
+                    className="btn-primary w-full py-3 text-sm font-bold flex items-center justify-center gap-2 shadow-[2px_2px_0px_#18181b]"
                   >
                     {loading ? (
                       <>
@@ -243,16 +270,21 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                         <span>Launch Automated Pipeline</span>
                       </>
                     )}
-                  </button>
+                  </motion.button>
                 </form>
               ) : (
                 /* Success View */
-                <div className="space-y-4 py-1">
-                  <div className="p-4 rounded-xl bg-[#ecfdf5] border-2 border-[#059669] flex items-center gap-3">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="space-y-4 py-1"
+                >
+                  <div className="p-4 rounded-xl bg-[#ecfdf5] border-2 border-[#059669] flex items-center gap-3 shadow-[2px_2px_0px_#059669]">
                     <CheckCircle2 className="w-6 h-6 text-[#059669] flex-shrink-0" aria-hidden="true" focusable="false" />
                     <div>
                       <h4 className="text-sm font-bold text-[#065f46]">Pipeline Ingested Successfully!</h4>
-                      <p className="text-xs text-[#065f46]/80 font-mono mt-0.5">
+                      <p className="text-xs text-[#065f46]/90 font-mono mt-0.5">
                         Ticket <strong className="text-[#18181b]">{result.requestId}</strong> processed in{" "}
                         <strong>{result.durationMs}ms</strong>.
                       </p>
@@ -261,7 +293,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
 
                   {/* AI Extraction Breakdown */}
                   {result.ai && (
-                    <div className="p-4 rounded-xl bg-white border-2 border-[#18181b] space-y-2.5 font-mono text-xs shadow-[2px_2px_0px_#18181b]">
+                    <div className="p-4 rounded-xl bg-white border-2 border-[#18181b] space-y-2.5 font-mono text-xs shadow-[2.5px_2.5px_0px_#18181b]">
                       <div className="flex items-center gap-2 text-[#18181b] font-bold pb-2 border-b border-[#e2dfd6]">
                         <Brain className="w-4 h-4 text-[#dc2626]" aria-hidden="true" focusable="false" />
                         <span>GEMINI AI INTENT EXTRACTION</span>
@@ -280,19 +312,21 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
 
                   {/* Action Steps */}
                   <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-                    <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] flex items-center gap-2 text-[#18181b]">
+                    <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] flex items-center gap-2 text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
                       <Database className="w-4 h-4 text-[#d97706]" aria-hidden="true" focusable="false" />
                       <span>Notion DB Synced ✓</span>
                     </div>
-                    <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] flex items-center gap-2 text-[#18181b]">
+                    <div className="p-3 rounded-xl bg-white border-2 border-[#18181b] flex items-center gap-2 text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
                       <Mail className="w-4 h-4 text-[#059669]" aria-hidden="true" focusable="false" />
                       <span>{result.email ? "Email Dispatched ✓" : "Queued in Cockpit"}</span>
                     </div>
                   </div>
 
                   <div className="flex gap-3 pt-2">
-                    <button
+                    <motion.button
                       type="button"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => {
                         setResult(null);
                         setName("");
@@ -303,20 +337,22 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                       className="btn-secondary flex-1 py-2.5 text-xs font-mono"
                     >
                       Submit Another Ticket
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
                       type="button"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={onClose}
                       className="btn-primary flex-1 py-2.5 text-xs font-mono"
                     >
                       Close & View Cockpit
-                    </button>
+                    </motion.button>
                   </div>
-                </div>
+                </motion.div>
               )}
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

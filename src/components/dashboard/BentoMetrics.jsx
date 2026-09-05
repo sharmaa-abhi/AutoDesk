@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   ShieldCheck,
   Zap,
@@ -7,23 +8,33 @@ import {
   ExternalLink,
   Code2,
   Database,
+  Radio,
 } from "lucide-react";
 
 export default function BentoMetrics({ stats, runLogs }) {
   return (
     <div className="space-y-5">
       {/* Sidebar Section Header */}
-      <h2 className="text-xs font-mono text-[#71717a] uppercase font-bold tracking-wider px-1">
-        Utilities & Telemetry
-      </h2>
+      <div className="flex items-center justify-between px-1">
+        <h2 className="text-xs font-mono text-[#71717a] uppercase font-bold tracking-wider">
+          Utilities & Telemetry
+        </h2>
+        <span className="flex items-center gap-1 text-[10px] font-mono text-[#059669] font-bold">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-ping" />
+          <span>CONNECTED</span>
+        </span>
+      </div>
 
       {/* Card 1: Notion Workspace DB */}
-      <a
+      <motion.a
         href="https://notion.so"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Open Notion Workspace in new tab"
-        className="dev-card bg-white p-4 flex items-start gap-3.5 border-2 border-[#18181b] hover:shadow-[3px_3px_0px_#18181b] transition-all group block focus-visible:outline-2 focus-visible:outline-[#18181b]"
+        whileHover={{ scale: 1.02, y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 350, damping: 20 }}
+        className="dev-card bg-white p-4 flex items-start gap-3.5 border-2 border-[#18181b] hover:shadow-[4px_4px_0px_#18181b] transition-all group block focus-visible:outline-2 focus-visible:outline-[#18181b]"
       >
         <div className="w-9 h-9 rounded-lg bg-[#18181b] text-white flex items-center justify-center flex-shrink-0 shadow-[1.5px_1.5px_0px_#dc2626]">
           <Database className="w-4 h-4 text-white" aria-hidden="true" />
@@ -38,21 +49,24 @@ export default function BentoMetrics({ stats, runLogs }) {
               LIVE
             </span>
           </div>
-          {/* Fix 7: Minimum 12px description text */}
           <p className="text-xs text-[#52525b] mt-1 leading-relaxed font-mono">
             Human-in-the-loop audit cockpit & synchronized request records.
           </p>
         </div>
-      </a>
+      </motion.a>
 
-      {/* Card 2: Engine SLA & Performance Telemetry (Fix 8 & 9) */}
-      <div className="dev-card bg-white p-5 border-2 border-[#18181b]">
+      {/* Card 2: Engine SLA & Performance Telemetry */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 280, damping: 22 }}
+        className="dev-card bg-white p-5 border-2 border-[#18181b] shadow-[3px_3px_0px_#18181b]"
+      >
         <div className="flex items-center justify-between mb-3.5 pb-2.5 border-b border-[#e2dfd6]">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-md bg-[#18181b] text-white flex items-center justify-center">
               <Zap className="w-3.5 h-3.5 text-white" aria-hidden="true" />
             </div>
-            {/* Fix 8: Sentence Case heading */}
             <h3 className="text-xs sm:text-sm font-bold text-[#18181b] tracking-tight">
               Engine Performance
             </h3>
@@ -62,7 +76,6 @@ export default function BentoMetrics({ stats, runLogs }) {
           </span>
         </div>
 
-        {/* Fix 9: Metric Labels minimum 12px */}
         <div className="grid grid-cols-2 gap-2.5 mb-4 font-mono">
           <div className="p-2.5 rounded-lg bg-[#fcfbfa] border-2 border-[#18181b]">
             <span className="text-xs text-[#71717a] block font-semibold">AVG LATENCY</span>
@@ -77,15 +90,20 @@ export default function BentoMetrics({ stats, runLogs }) {
           </div>
         </div>
 
-        {/* Action Type Progress Bars (Fix 9: minimum 12px text) */}
-        <div className="space-y-2.5 pt-1 text-xs font-mono">
+        {/* Action Type Progress Bars with Smooth Width Animations */}
+        <div className="space-y-3 pt-1 text-xs font-mono">
           <div>
             <div className="flex justify-between text-[#52525b] mb-1">
               <span>PDF Certificates Dispatched</span>
               <strong className="text-[#18181b]">42% (148)</strong>
             </div>
-            <div className="h-2 w-full bg-[#f4f3ef] border border-[#e2dfd6] rounded-full overflow-hidden">
-              <div className="h-full bg-[#18181b] rounded-full" style={{ width: "42%" }} />
+            <div className="h-2.5 w-full bg-[#f4f3ef] border border-[#e2dfd6] rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: "42%" }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                className="h-full bg-[#18181b] rounded-full"
+              />
             </div>
           </div>
           <div>
@@ -93,8 +111,13 @@ export default function BentoMetrics({ stats, runLogs }) {
               <span>Transactional Emails</span>
               <strong className="text-[#dc2626]">38% (134)</strong>
             </div>
-            <div className="h-2 w-full bg-[#f4f3ef] border border-[#e2dfd6] rounded-full overflow-hidden">
-              <div className="h-full bg-[#dc2626] rounded-full" style={{ width: "38%" }} />
+            <div className="h-2.5 w-full bg-[#f4f3ef] border border-[#e2dfd6] rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: "38%" }}
+                transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
+                className="h-full bg-[#dc2626] rounded-full"
+              />
             </div>
           </div>
           <div>
@@ -102,16 +125,25 @@ export default function BentoMetrics({ stats, runLogs }) {
               <span>Operator Clearance</span>
               <strong className="text-[#059669]">20% (71)</strong>
             </div>
-            <div className="h-2 w-full bg-[#f4f3ef] border border-[#e2dfd6] rounded-full overflow-hidden">
-              <div className="h-full bg-[#059669] rounded-full" style={{ width: "20%" }} />
+            <div className="h-2.5 w-full bg-[#f4f3ef] border border-[#e2dfd6] rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: "20%" }}
+                transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+                className="h-full bg-[#059669] rounded-full"
+              />
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Card 3: Tamper-Proof Notion Run Log Feed (Fix 10–14 & Fix 17) */}
-      <div className="dev-card bg-white p-5 flex flex-col border-2 border-[#18181b]">
-        {/* Clean Structured Header (Fix 17: No floating overlapping icons) */}
+      {/* Card 3: Tamper-Proof Notion Run Log Feed */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 280, damping: 22, delay: 0.1 }}
+        className="dev-card bg-white p-5 flex flex-col border-2 border-[#18181b] shadow-[3px_3px_0px_#18181b]"
+      >
         <div className="flex items-center justify-between mb-3 pb-2.5 border-b border-[#e2dfd6]">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-md bg-[#059669] text-white flex items-center justify-center font-bold text-xs shadow-[1px_1px_0px_#18181b]">
@@ -131,19 +163,22 @@ export default function BentoMetrics({ stats, runLogs }) {
           </span>
         </div>
 
-        {/* Live Run Log Rows (Fix 10–14: Complete, untruncated, wrapping text with min-w-0) */}
+        {/* Live Run Log Rows with Smooth Hover */}
         <div className="overflow-y-auto space-y-2.5 max-h-[220px]">
           {runLogs.map((log) => (
-            <div
+            <motion.div
               key={log.runId}
+              initial={{ opacity: 0, x: -6 }}
+              animate={{ opacity: 1, x: 0 }}
+              whileHover={{ scale: 1.015, x: 2 }}
+              transition={{ type: "spring", stiffness: 350, damping: 20 }}
               title={log.action}
-              className="p-2.5 rounded-lg bg-[#fcfbfa] border border-[#18181b] font-mono text-xs hover:bg-white transition-all min-w-0"
+              className="p-2.5 rounded-lg bg-[#fcfbfa] border border-[#18181b] font-mono text-xs hover:bg-white hover:shadow-[1.5px_1.5px_0px_#18181b] transition-all min-w-0"
             >
               <div className="flex items-center justify-between text-[#71717a] text-[11px] mb-1">
                 <strong className="text-[#18181b]">{log.runId}</strong>
                 <span>{log.timestamp}</span>
               </div>
-              {/* Fix 10–14: Wrapped readable activity action message */}
               <div className="text-[#18181b] font-medium flex items-start gap-1.5 whitespace-normal break-words leading-relaxed">
                 <span
                   className={`flex-shrink-0 font-bold ${
@@ -163,7 +198,7 @@ export default function BentoMetrics({ stats, runLogs }) {
                 <span className="truncate">{log.trigger}</span>
                 <span className="text-[#059669] font-bold flex-shrink-0">{log.duration}ms</span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
@@ -171,15 +206,18 @@ export default function BentoMetrics({ stats, runLogs }) {
           <Lock className="w-3.5 h-3.5 text-[#059669] flex-shrink-0" aria-hidden="true" />
           <span className="leading-snug">Written by Notion bot token — verifiable audit trail.</span>
         </div>
-      </div>
+      </motion.div>
 
       {/* Card 4: Open Source Repository */}
-      <a
+      <motion.a
         href="https://github.com/sharmaa-abhi/Notion.AI"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Open GitHub Repository in new tab"
-        className="dev-card bg-white p-4 flex items-start gap-3.5 border-2 border-[#18181b] hover:shadow-[3px_3px_0px_#18181b] transition-all group block focus-visible:outline-2 focus-visible:outline-[#18181b]"
+        whileHover={{ scale: 1.02, y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 350, damping: 20 }}
+        className="dev-card bg-white p-4 flex items-start gap-3.5 border-2 border-[#18181b] hover:shadow-[4px_4px_0px_#18181b] transition-all group block focus-visible:outline-2 focus-visible:outline-[#18181b]"
       >
         <div className="w-8 h-8 rounded-lg bg-[#18181b] text-white flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_#dc2626]">
           <Code2 className="w-4 h-4 text-white" aria-hidden="true" />
@@ -191,12 +229,11 @@ export default function BentoMetrics({ stats, runLogs }) {
               <ExternalLink className="w-3.5 h-3.5 text-[#71717a]" aria-hidden="true" />
             </h3>
           </div>
-          {/* Fix 7: Minimum 12px description text */}
           <p className="text-xs text-[#52525b] mt-1 leading-relaxed font-mono">
             Autonomous backend daemon, API handlers & integration tests.
           </p>
         </div>
-      </a>
+      </motion.a>
     </div>
   );
 }

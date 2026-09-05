@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ArrowDown } from "lucide-react";
 
 const nodes = [
   { id: "user", label: "👤 Student / User", sub: "Submits natural complaint", category: "INPUT", type: "input" },
@@ -15,12 +15,16 @@ const nodes = [
 ];
 
 const nodeVariants = {
-  hidden: { opacity: 0, y: 16, scale: 0.96 },
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] },
+    transition: {
+      type: "spring",
+      stiffness: 280,
+      damping: 22,
+    },
   },
 };
 
@@ -29,7 +33,7 @@ const arrowVariants = {
   visible: {
     opacity: 1,
     scaleY: 1,
-    transition: { duration: 0.25 },
+    transition: { duration: 0.35, ease: "easeOut" },
   },
 };
 
@@ -43,38 +47,38 @@ const containerVariants = {
 
 export default function Architecture() {
   return (
-    <section className="py-20 px-4 sm:px-6">
-      <div className="max-w-5xl mx-auto space-y-12">
+    <section className="py-20 px-4 sm:px-6 relative overflow-hidden">
+      <div className="max-w-5xl mx-auto space-y-12 relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
           className="text-center space-y-3"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
-            <Sparkles className="w-3.5 h-3.5 text-[#dc2626]" />
-            <span>SYSTEM BLUEPRINT</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[2px_2px_0px_#18181b]">
+            <Sparkles className="w-3.5 h-3.5 text-[#dc2626] animate-spin" style={{ animationDuration: "6s" }} />
+            <span className="font-bold">SYSTEM BLUEPRINT</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#18181b] tracking-tight">
             End-to-End Pipeline Architecture
           </h2>
-          <p className="text-sm sm:text-base text-[#52525b] max-w-xl mx-auto">
+          <p className="text-sm sm:text-base text-[#52525b] max-w-xl mx-auto leading-relaxed">
             The complete blueprint — from student complaint ingestion to audited real-world execution.
           </p>
 
           {/* Semantic Category Legend */}
           <div className="flex items-center justify-center gap-4 sm:gap-6 flex-wrap mt-4 text-xs font-mono">
-            <span className="flex items-center gap-1.5 font-bold text-[#18181b]">
+            <span className="flex items-center gap-1.5 font-bold text-[#18181b] bg-white px-3 py-1 rounded-full border border-[#18181b] shadow-[1px_1px_0px_#18181b]">
               <span className="w-2.5 h-2.5 rounded-full bg-[#18181b]" aria-hidden="true" />
               <span>INPUT (Ingestion)</span>
             </span>
-            <span className="flex items-center gap-1.5 font-bold text-[#18181b]">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#dc2626]" aria-hidden="true" />
+            <span className="flex items-center gap-1.5 font-bold text-[#18181b] bg-white px-3 py-1 rounded-full border border-[#18181b] shadow-[1px_1px_0px_#dc2626]">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#dc2626] animate-pulse" aria-hidden="true" />
               <span>PROCESSING (AI & Notion)</span>
             </span>
-            <span className="flex items-center gap-1.5 font-bold text-[#18181b]">
+            <span className="flex items-center gap-1.5 font-bold text-[#18181b] bg-white px-3 py-1 rounded-full border border-[#18181b] shadow-[1px_1px_0px_#059669]">
               <span className="w-2.5 h-2.5 rounded-full bg-[#059669]" aria-hidden="true" />
               <span>OUTPUT (Action & Audit)</span>
             </span>
@@ -87,15 +91,18 @@ export default function Architecture() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          className="dev-card bg-white p-6 sm:p-10 relative overflow-hidden"
+          className="dev-card bg-white p-6 sm:p-10 relative overflow-hidden shadow-[4px_4px_0px_#18181b] hover:shadow-[6px_6px_0px_#18181b] transition-all"
         >
+          {/* Subtle Grid Paper Pattern Background */}
+          <div className="absolute inset-0 grid-paper opacity-60 pointer-events-none" />
+
           <div className="relative z-10 flex flex-col items-center gap-3">
             {/* Row 1: User */}
             <motion.div variants={nodeVariants} className="w-full flex justify-center">
               <FlowNode node={nodes[0]} />
             </motion.div>
             <motion.div variants={arrowVariants} className="origin-top">
-              <FlowArrow />
+              <FlowArrow color="#18181b" />
             </motion.div>
 
             {/* Row 2: Webhook */}
@@ -103,7 +110,7 @@ export default function Architecture() {
               <FlowNode node={nodes[1]} />
             </motion.div>
             <motion.div variants={arrowVariants} className="origin-top">
-              <FlowArrow />
+              <FlowArrow color="#2563eb" />
             </motion.div>
 
             {/* Row 3: Validate */}
@@ -111,41 +118,58 @@ export default function Architecture() {
               <FlowNode node={nodes[2]} />
             </motion.div>
             <motion.div variants={arrowVariants} className="origin-top">
-              <FlowArrow />
+              <FlowArrow color="#7c3aed" />
             </motion.div>
 
             {/* Row 4: AI */}
             <motion.div variants={nodeVariants} className="w-full flex justify-center">
-              <FlowNode node={nodes[3]} />
+              <FlowNode node={nodes[3]} highlightAI />
             </motion.div>
 
-            {/* Branch */}
+            {/* Branching Stage */}
             <motion.div variants={nodeVariants} className="flex items-start gap-4 sm:gap-8 w-full mt-2">
               {/* Left Branch: Notion + Approval */}
               <div className="flex-1 flex flex-col items-center gap-3">
-                <div className="text-[#dc2626] text-xs font-mono font-bold">↓ Needs Approval (High Risk)</div>
+                <motion.div
+                  animate={{ opacity: [0.7, 1, 0.7] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="text-[#dc2626] text-xs font-mono font-bold flex items-center gap-1"
+                >
+                  <span>↓ Needs Approval (High Risk)</span>
+                </motion.div>
                 <FlowNode node={nodes[4]} />
-                <FlowArrow />
+                <FlowArrow color="#dc2626" />
                 <FlowNode node={nodes[5]} />
               </div>
 
               {/* Right Branch: Direct Action */}
               <div className="flex-1 flex flex-col items-center gap-3">
-                <div className="text-[#059669] text-xs font-mono font-bold">↓ Verified (Auto Execute)</div>
+                <motion.div
+                  animate={{ opacity: [0.7, 1, 0.7] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                  className="text-[#059669] text-xs font-mono font-bold flex items-center gap-1"
+                >
+                  <span>↓ Verified (Auto Execute)</span>
+                </motion.div>
                 <FlowNode node={nodes[6]} />
-                <div className="h-[44px]" />
-                <div className="text-[#71717a] text-xs font-mono">↓ auto-dispatch</div>
+                <div className="h-[44px] flex items-center justify-center">
+                  <FlowArrow color="#059669" />
+                </div>
+                <div className="text-[#71717a] text-xs font-mono font-semibold">↓ auto-dispatch</div>
               </div>
             </motion.div>
 
-            {/* Merge Arrow */}
+            {/* Merge Arrow with Animated Travelling Pulse */}
             <motion.div
               variants={nodeVariants}
-              animate={{ opacity: [0.6, 1, 0.6] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="text-[#71717a] text-xs font-mono my-2 font-bold"
+              className="my-3 px-4 py-1 rounded-full bg-[#f4f3ef] border border-[#18181b] text-[#18181b] text-xs font-mono font-bold flex items-center gap-2 shadow-[1px_1px_0px_#18181b]"
             >
-              ← Both Paths Merge →
+              <motion.span
+                animate={{ x: [-3, 3, -3] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                ⮜ Both Execution Paths Converge ⮞
+              </motion.span>
             </motion.div>
 
             {/* Run Log */}
@@ -153,13 +177,15 @@ export default function Architecture() {
               <FlowNode node={nodes[7]} />
             </motion.div>
 
-            {/* Final Badge */}
+            {/* Final Badge with interactive bounce */}
             <motion.div
               variants={nodeVariants}
-              whileHover={{ scale: 1.05 }}
-              className="mt-4 px-4 py-2 rounded-full bg-[#ecfdf5] border-2 border-[#059669] text-[#065f46] text-xs font-mono font-bold shadow-[2px_2px_0px_#18181b] cursor-default"
+              whileHover={{ scale: 1.05, y: -2 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+              className="mt-4 px-5 py-2.5 rounded-full bg-[#ecfdf5] border-2 border-[#059669] text-[#065f46] text-xs font-mono font-bold shadow-[2.5px_2.5px_0px_#18181b] cursor-default flex items-center gap-2"
             >
-              🏁 TAMPER-PROOF RUN LOG PROOF SEALED
+              <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse" />
+              <span>🏁 TAMPER-PROOF RUN LOG PROOF SEALED</span>
             </motion.div>
           </div>
         </motion.div>
@@ -168,7 +194,7 @@ export default function Architecture() {
   );
 }
 
-function FlowNode({ node }) {
+function FlowNode({ node, highlightAI = false }) {
   const badgeClass =
     node.type === "input"
       ? "bg-[#f4f3ef] text-[#18181b] border-[#18181b]"
@@ -178,10 +204,17 @@ function FlowNode({ node }) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.03, y: -2 }}
-      transition={{ type: "spring", stiffness: 350 }}
-      className="w-full max-w-sm px-5 py-3 rounded-xl border-2 border-[#18181b] bg-[#fcfbfa] shadow-[2px_2px_0px_#18181b] text-center transition-shadow hover:shadow-[4px_4px_0px_#18181b] cursor-default"
+      whileHover={{ scale: 1.035, y: -3 }}
+      transition={{ type: "spring", stiffness: 350, damping: 18 }}
+      className={`w-full max-w-sm px-5 py-3 rounded-xl border-2 border-[#18181b] bg-[#fcfbfa] shadow-[2.5px_2.5px_0px_#18181b] text-center transition-all hover:shadow-[4.5px_4.5px_0px_#18181b] cursor-default relative overflow-hidden ${
+        highlightAI ? "border-[#dc2626] shadow-[2.5px_2.5px_0px_#dc2626]" : ""
+      }`}
     >
+      {highlightAI && (
+        <div className="absolute top-0 right-0 px-2 py-0.5 bg-[#dc2626] text-white text-[9px] font-mono font-bold rounded-bl-lg">
+          CORE
+        </div>
+      )}
       <div className="flex items-center justify-center mb-1">
         <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded border ${badgeClass}`}>
           {node.category}
@@ -193,13 +226,14 @@ function FlowNode({ node }) {
   );
 }
 
-function FlowArrow() {
+function FlowArrow({ color = "#dc2626" }) {
   return (
-    <div className="relative w-[2px] h-6 bg-[#18181b] my-0.5 overflow-hidden">
+    <div className="relative w-[2.5px] h-7 bg-[#18181b] my-0.5 overflow-hidden rounded-full">
       <motion.div
-        animate={{ y: ["-100%", "100%"] }}
+        animate={{ y: ["-100%", "200%"] }}
         transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-x-0 h-3 bg-[#dc2626]"
+        className="absolute inset-x-0 h-4 rounded-full"
+        style={{ backgroundColor: color }}
       />
     </div>
   );
