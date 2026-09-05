@@ -2,7 +2,7 @@
 
 /* ===== CLEAN MODERN DEVELOPER-TOOL DESIGN SYSTEM ===== */
 :root {
-  /* Surface Colors — Warm Off-White / Light Beige System */
+  /* Surface Colors — Warm Off-White / Light System */
   --bg-canvas: #f7f6f2;
   --bg-panel: #ffffff;
   --bg-panel-elevated: #fcfbfa;
@@ -39,6 +39,37 @@
   --shadow-card-hover: 3px 3px 0px #18181b;
   --shadow-button: 2px 2px 0px #18181b;
   --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 15px rgba(220, 38, 38, 0.15);
+}
+
+/* ===== DARK MODE OVERRIDES & DEEP CYBER SHADOWS ===== */
+.dark,
+[data-theme="dark"] {
+  /* Surface Colors — High-Tech Deep OLED Charcoal System */
+  --bg-canvas: #090a0d;
+  --bg-panel: #111318;
+  --bg-panel-elevated: #161922;
+  --bg-card-hover: #1c202b;
+  --bg-surface-active: #242938;
+  --bg-input: #0d0f13;
+
+  /* Borders & Outlines — Crisp Cyber Outline */
+  --border-charcoal: #2d3240;
+  --border-subtle: #1e222d;
+  --border-mid: #383e50;
+
+  /* Typography Colors — Luminescent Off-White & Crisp Slate */
+  --text-primary: #f4f4f6;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --text-white: #ffffff;
+
+  /* Rich Deep Cybernetic Shadows with Layered Ambient Depth & Red Edge Accent */
+  --shadow-card: 0 10px 25px -4px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.07), 2px 2px 0px #1e222d;
+  --shadow-card-hover: 0 16px 36px -4px rgba(0, 0, 0, 0.9), 0 0 25px rgba(220, 38, 38, 0.35), 2px 2px 0px #dc2626;
+  --shadow-button: 0 4px 14px rgba(0, 0, 0, 0.7), 2px 2px 0px #1e222d;
+  --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 30px rgba(220, 38, 38, 0.45);
 }
 
 /* ===== TAILWIND v4 THEME INLINE TOKENS ===== */
@@ -75,6 +106,7 @@
 /* ===== BASE STYLES ===== */
 html {
   scroll-behavior: smooth;
+  color-scheme: light dark;
 }
 
 body {
@@ -83,11 +115,17 @@ body {
   font-family: var(--font-sans);
   overflow-x: hidden;
   line-height: 1.5;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* ===== EDITORIAL WARM DOT MATRIX GRID & ANIMATED BACKGROUNDS ===== */
+/* ===== DOT MATRIX GRID & ANIMATED BACKGROUNDS ===== */
 .dot-grid {
   background-image: radial-gradient(#d3cfc2 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+}
+
+.dark .dot-grid {
+  background-image: radial-gradient(#242937 1.2px, transparent 1.2px);
   background-size: 24px 24px;
 }
 
@@ -96,6 +134,34 @@ body {
     linear-gradient(to right, rgba(24, 24, 27, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(24, 24, 27, 0.04) 1px, transparent 1px);
   background-size: 28px 28px;
+}
+
+.dark .grid-paper {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ===== SPECIALIZED CYBER SHADOW UTILITIES ===== */
+.shadow-neon {
+  box-shadow: 0 0 25px rgba(220, 38, 38, 0.35), 2px 2px 0px #dc2626;
+}
+
+.shadow-neon-glow {
+  box-shadow: 0 0 40px rgba(220, 38, 38, 0.5), inset 0 0 20px rgba(220, 38, 38, 0.15);
+}
+
+.shadow-emerald-neon {
+  box-shadow: 0 0 25px rgba(5, 150, 105, 0.35), 2px 2px 0px #059669;
+}
+
+.shadow-cyber-depth {
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.85), 0 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.shadow-tactical-rim {
+  box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08), 2px 2px 0px var(--border-charcoal);
 }
 
 /* ===== KEYFRAME ANIMATIONS ===== */
@@ -157,7 +223,7 @@ body {
 }
 
 .shimmer-text {
-  background: linear-gradient(90deg, #18181b 0%, #dc2626 50%, #18181b 100%);
+  background: linear-gradient(90deg, var(--text-primary) 0%, #dc2626 50%, var(--text-primary) 100%);
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
@@ -171,7 +237,7 @@ body {
   border: 2px solid var(--border-charcoal);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .dev-card:hover {
@@ -182,6 +248,7 @@ body {
   background-color: var(--bg-panel);
   border: 2px solid var(--border-charcoal);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }
 
 .dev-panel {
@@ -217,7 +284,7 @@ body {
 .btn-primary:hover:not(:disabled) {
   background-color: var(--accent-red-hover);
   transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px var(--border-charcoal);
+  box-shadow: 3px 3px 0px var(--border-charcoal), 0 0 15px rgba(220, 38, 38, 0.4);
 }
 
 .btn-primary:active:not(:disabled) {
@@ -226,7 +293,7 @@ body {
 }
 
 .btn-primary:focus-visible {
-  outline: 2px solid var(--border-charcoal);
+  outline: 2px solid var(--accent-red);
   outline-offset: 2px;
 }
 
@@ -249,7 +316,7 @@ body {
   font-weight: 700;
 }
 
-/* 2. Secondary Button (Supporting actions, presets, navigation, neutral utilities) */
+/* 2. Secondary Button */
 .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -260,12 +327,12 @@ body {
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: var(--text-primary);
-  background-color: #ffffff;
+  background-color: var(--bg-panel);
   border: 2px solid var(--border-charcoal);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-button);
   padding: 0.625rem 1.25rem;
-  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   cursor: pointer;
   text-decoration: none;
   user-select: none;
@@ -306,7 +373,7 @@ body {
   font-weight: 700;
 }
 
-/* 3. Success Button (Approve, complete, positive dispatches) */
+/* 3. Success Button */
 .btn-success {
   display: inline-flex;
   align-items: center;
@@ -331,7 +398,7 @@ body {
 .btn-success:hover:not(:disabled) {
   background-color: #047857;
   transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px var(--border-charcoal);
+  box-shadow: 3px 3px 0px var(--border-charcoal), 0 0 15px rgba(5, 150, 105, 0.4);
 }
 
 .btn-success:active:not(:disabled) {
@@ -340,7 +407,7 @@ body {
 }
 
 .btn-success:focus-visible {
-  outline: 2px solid var(--border-charcoal);
+  outline: 2px solid var(--accent-emerald);
   outline-offset: 2px;
 }
 
@@ -356,7 +423,7 @@ body {
   font-weight: 600;
 }
 
-/* 4. Danger Button (Reject, destructive or irreversible actions) */
+/* 4. Danger Button */
 .btn-danger {
   display: inline-flex;
   align-items: center;
@@ -367,7 +434,7 @@ body {
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: var(--accent-red);
-  background-color: #ffffff;
+  background-color: var(--bg-panel);
   border: 2px solid var(--border-charcoal);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-button);
@@ -379,10 +446,10 @@ body {
 }
 
 .btn-danger:hover:not(:disabled) {
-  background-color: #fee2e2;
-  color: #991b1b;
+  background-color: rgba(220, 38, 38, 0.12);
+  color: #ef4444;
   transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px var(--border-charcoal);
+  box-shadow: 3px 3px 0px var(--border-charcoal), 0 0 15px rgba(220, 38, 38, 0.3);
 }
 
 .btn-danger:active:not(:disabled) {
@@ -407,7 +474,7 @@ body {
   font-weight: 600;
 }
 
-/* 5. Icon Button (Consistent Sizing & Accessible States) */
+/* 5. Icon Button */
 .btn-icon {
   display: inline-flex;
   align-items: center;
@@ -415,7 +482,7 @@ body {
   width: 2.25rem;
   height: 2.25rem;
   border-radius: var(--radius-md);
-  background-color: #ffffff;
+  background-color: var(--bg-panel);
   border: 2px solid var(--border-charcoal);
   color: var(--text-primary);
   box-shadow: 1.5px 1.5px 0px var(--border-charcoal);
@@ -447,8 +514,8 @@ body {
   gap: 0.375rem;
   padding: 0.2rem 0.6rem;
   border-radius: var(--radius-sm);
-  background-color: #ecfdf5;
-  color: #065f46;
+  background-color: rgba(5, 150, 105, 0.12);
+  color: #10b981;
   border: 1.5px solid #059669;
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -460,7 +527,8 @@ body {
   width: 0.4rem;
   height: 0.4rem;
   border-radius: 9999px;
-  background-color: #059669;
+  background-color: #10b981;
+  box-shadow: 0 0 8px #10b981;
 }
 
 .badge-tag {
@@ -469,7 +537,7 @@ body {
   gap: 0.25rem;
   padding: 0.25rem 0.6rem;
   border-radius: var(--radius-sm);
-  background-color: #f4f3ef;
+  background-color: var(--bg-card-hover);
   color: var(--text-primary);
   border: 1px solid var(--border-subtle);
   font-family: var(--font-mono);
@@ -486,14 +554,14 @@ body {
   border: 1.5px solid var(--border-subtle);
   color: var(--text-primary);
   font-size: 0.875rem;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
 .dev-input:focus {
   outline: none;
-  border-color: var(--border-charcoal);
-  box-shadow: 0 0 0 1px var(--border-charcoal);
-  background-color: #ffffff;
+  border-color: var(--accent-red);
+  box-shadow: 0 0 0 1px var(--accent-red), 0 0 12px rgba(220, 38, 38, 0.25);
+  background-color: var(--bg-panel);
 }
 
 .dev-input::placeholder {
@@ -511,16 +579,16 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d0c5;
+  background: var(--border-mid);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a29e;
+  background: var(--accent-red);
 }
 
 /* ===== SELECTION ===== */
 ::selection {
-  background: #fee2e2;
-  color: #991b1b;
+  background: rgba(220, 38, 38, 0.25);
+  color: #ef4444;
 }
