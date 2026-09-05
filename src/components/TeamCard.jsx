@@ -11,7 +11,7 @@ export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {
       whileHover={{ y: -8, scale: 1.02 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ type: "spring", stiffness: 280, damping: 20, delay: delay * 0.1 }}
-      className="dev-card bg-white p-7 relative flex flex-col justify-between shadow-[3.5px_3.5px_0px_#18181b] hover:shadow-[6px_6px_0px_#18181b] transition-all group overflow-hidden"
+      className="dev-card bg-[var(--bg-panel)] p-7 relative flex flex-col justify-between shadow-[3.5px_3.5px_0px_var(--border-charcoal)] hover:shadow-[6px_6px_0px_var(--border-charcoal)] dark:hover:shadow-[0_16px_36px_rgba(0,0,0,0.9),0_0_20px_rgba(220,38,38,0.25)] transition-all group overflow-hidden"
     >
       {/* Top accent line */}
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#dc2626] opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -21,7 +21,7 @@ export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {
         <motion.div
           whileHover={{ rotate: 12, scale: 1.1 }}
           transition={{ type: "spring", stiffness: 400, damping: 12 }}
-          className="w-16 h-16 rounded-xl bg-[#18181b] text-white flex items-center justify-center mb-5 shadow-[2.5px_2.5px_0px_#dc2626] cursor-default"
+          className="w-16 h-16 rounded-xl bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center mb-5 shadow-[2.5px_2.5px_0px_#dc2626] dark:shadow-[0_0_15px_rgba(220,38,38,0.5)] cursor-default"
         >
           <span className="text-2xl font-black">
             {name ? name.charAt(0) : "?"}
@@ -29,18 +29,18 @@ export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {
         </motion.div>
 
         {/* Info */}
-        <h3 className="text-xl font-bold text-[#18181b] mb-1 group-hover:text-[#dc2626] transition-colors">{name || "Team Member"}</h3>
+        <h3 className="text-xl font-bold text-[var(--text-primary)] mb-1 group-hover:text-[#dc2626] transition-colors">{name || "Team Member"}</h3>
         <p className="text-[#dc2626] text-xs font-mono font-bold uppercase tracking-wider mb-3 flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-[#dc2626]" />
           <span>{role || "Developer"}</span>
         </p>
-        <p className="text-[#52525b] text-sm leading-relaxed mb-5">
+        <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-5">
           {bio || "A passionate developer building the future of autonomous workflows."}
         </p>
       </div>
 
       {/* Social Links with magnetic hover */}
-      <div className="flex items-center gap-2 pt-3 border-t border-[#f0eee6]">
+      <div className="flex items-center gap-2 pt-3 border-t border-[var(--border-subtle)]">
         {links.github && (
           <motion.a
             href={links.github}
@@ -49,7 +49,7 @@ export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {
             whileHover={{ scale: 1.1, y: -2 }}
             whileTap={{ scale: 0.95 }}
             aria-label={`${name || "Team Member"} GitHub Profile`}
-            className="w-8 h-8 rounded-lg bg-white border-2 border-[#18181b] flex items-center justify-center text-[#18181b] hover:bg-[#f4f3ef] shadow-[1px_1px_0px_#18181b] transition-all"
+            className="w-8 h-8 rounded-lg bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] flex items-center justify-center text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] shadow-[1px_1px_0px_var(--border-charcoal)] transition-all"
           >
             <Code2 className="w-4 h-4" aria-hidden="true" focusable="false" />
           </motion.a>
@@ -62,7 +62,7 @@ export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {
             whileHover={{ scale: 1.1, y: -2 }}
             whileTap={{ scale: 0.95 }}
             aria-label={`${name || "Team Member"} LinkedIn Profile`}
-            className="w-8 h-8 rounded-lg bg-white border-2 border-[#18181b] flex items-center justify-center text-[#18181b] hover:bg-[#f4f3ef] shadow-[1px_1px_0px_#18181b] transition-all"
+            className="w-8 h-8 rounded-lg bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] flex items-center justify-center text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] shadow-[1px_1px_0px_var(--border-charcoal)] transition-all"
           >
             <Link className="w-4 h-4" aria-hidden="true" focusable="false" />
           </motion.a>
@@ -75,7 +75,7 @@ export default function TeamCard({ name, role, bio, links = {}, delay = 0 }) {
             whileHover={{ scale: 1.1, y: -2 }}
             whileTap={{ scale: 0.95 }}
             aria-label={`${name || "Team Member"} Personal Website`}
-            className="w-8 h-8 rounded-lg bg-white border-2 border-[#18181b] flex items-center justify-center text-[#18181b] hover:bg-[#f4f3ef] shadow-[1px_1px_0px_#18181b] transition-all"
+            className="w-8 h-8 rounded-lg bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] flex items-center justify-center text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] shadow-[1px_1px_0px_var(--border-charcoal)] transition-all"
           >
             <Globe className="w-4 h-4" aria-hidden="true" focusable="false" />
           </motion.a>

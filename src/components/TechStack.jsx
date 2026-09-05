@@ -3,11 +3,11 @@
 import { motion } from "framer-motion";
 
 const techStack = [
-  { name: "Next.js 16", category: "App Router", color: "#18181b" },
+  { name: "Next.js 16", category: "App Router", color: "#6366f1" },
   { name: "Tailwind CSS v4", category: "Styling", color: "#0ea5e9" },
   { name: "Framer Motion", category: "Animation", color: "#ec4899" },
   { name: "Node.js", category: "Backend Engine", color: "#10b981" },
-  { name: "Gemini AI", category: "Flash Classifier", color: "#7c3aed" },
+  { name: "Gemini AI", category: "Flash Classifier", color: "#8b5cf6" },
   { name: "Notion API", category: "Human Cockpit", color: "#f59e0b" },
   { name: "Resend", category: "Transactional Mail", color: "#dc2626" },
   { name: "HTML Engine", category: "Verified Certs", color: "#2563eb" },
@@ -46,12 +46,12 @@ export default function TechStack() {
           variants={itemVariants}
           whileHover={{ scale: 1.08, y: -3 }}
           transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          className="dev-card bg-white px-4 py-2.5 flex flex-col items-center gap-1 min-w-[130px] text-center shadow-[2px_2px_0px_#18181b] hover:shadow-[3.5px_3.5px_0px_#18181b] transition-all cursor-default"
+          className="dev-card bg-[var(--bg-panel)] px-4 py-2.5 flex flex-col items-center gap-1 min-w-[130px] text-center shadow-[2px_2px_0px_var(--border-charcoal)] hover:shadow-[3.5px_3.5px_0px_var(--border-charcoal)] dark:hover:shadow-[0_8px_20px_rgba(0,0,0,0.8),0_0_12px_rgba(220,38,38,0.2)] transition-all cursor-default"
         >
-          <span className="text-xs font-black text-[#18181b]">{tech.name}</span>
+          <span className="text-xs font-black text-[var(--text-primary)]">{tech.name}</span>
           <span
             className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border"
-            style={{ color: tech.color, borderColor: `${tech.color}44`, backgroundColor: `${tech.color}0d` }}
+            style={{ color: tech.color, borderColor: `${tech.color}44`, backgroundColor: `${tech.color}15` }}
           >
             {tech.category}
           </span>
