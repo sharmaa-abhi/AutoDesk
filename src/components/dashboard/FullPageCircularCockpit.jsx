@@ -45,7 +45,6 @@ export default function FullPageCircularCockpit({
   const [isRotating, setIsRotating] = useState(true);
   const [speed, setSpeed] = useState(48); // seconds per full 360deg rotation (slow and continuous)
   const [isHovered, setIsHovered] = useState(false);
-  const [activeExpanded, setActiveExpanded] = useState(null); // node id for modal/drawer detail if clicked
 
   // Form states for central generator
   const [userName, setUserName] = useState("");
@@ -56,7 +55,7 @@ export default function FullPageCircularCockpit({
   const [feedback, setFeedback] = useState(null);
 
   // Orbital radius in pixels for satellites
-  const orbitalRadius = 350; // on desktop (scaled with container)
+  const orbitalRadius = 350;
 
   const handleRunPipeline = async (e) => {
     e.preventDefault();
@@ -98,19 +97,19 @@ export default function FullPageCircularCockpit({
       angle: 0, // 12 o'clock (top)
       title: "1. Inbound Queue",
       tag: `${events.length} ACTIVE`,
-      accent: "#2563eb",
+      accent: "#3b82f6",
       icon: Globe,
       render: (
         <div className="space-y-2">
-          <div className="text-[10px] text-[#71717a] font-mono flex items-center justify-between">
-            <span>Latest: <strong className="text-[#18181b]">{events[0]?.id || "REQ-108"}</strong></span>
-            <span className="text-[#059669] font-bold">● Live Ingest</span>
+          <div className="text-[10px] text-[var(--text-muted)] font-mono flex items-center justify-between">
+            <span>Latest: <strong className="text-[var(--text-primary)]">{events[0]?.id || "REQ-108"}</strong></span>
+            <span className="text-[#059669] dark:text-[#10b981] font-bold">● Live Ingest</span>
           </div>
-          <p className="text-xs text-[#18181b] font-medium line-clamp-2 italic">
+          <p className="text-xs text-[var(--text-primary)] font-medium line-clamp-2 italic">
             &ldquo;{selectedEvent?.rawMessage || "Waiting for student request..."}&rdquo;
           </p>
-          <div className="flex items-center justify-between text-[10px] font-mono text-[#71717a] pt-1 border-t border-[#f0eee6]">
-            <span>From: <strong className="text-[#18181b]">{selectedEvent?.userName || "Student"}</strong></span>
+          <div className="flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)] pt-1 border-t border-[var(--border-subtle)]">
+            <span>From: <strong className="text-[var(--text-primary)]">{selectedEvent?.userName || "Student"}</strong></span>
             <span className="text-[#dc2626] font-bold">{selectedEvent?.time || "Now"}</span>
           </div>
         </div>
@@ -121,21 +120,21 @@ export default function FullPageCircularCockpit({
       angle: 60, // 2 o'clock
       title: "2. Gemini 3.6 AI",
       tag: `${selectedEvent?.confidence || 98}% ACCURACY`,
-      accent: "#7c3aed",
+      accent: "#8b5cf6",
       icon: Brain,
       render: (
         <div className="space-y-1.5 text-xs font-mono">
-          <div className="flex justify-between text-[#52525b]">
+          <div className="flex justify-between text-[var(--text-secondary)]">
             <span>Category:</span>
-            <strong className="text-[#18181b]">{selectedEvent?.category || "CERTIFICATE_ISSUE"}</strong>
+            <strong className="text-[var(--text-primary)]">{selectedEvent?.category || "CERTIFICATE_ISSUE"}</strong>
           </div>
-          <div className="flex justify-between text-[#52525b]">
+          <div className="flex justify-between text-[var(--text-secondary)]">
             <span>Roster Check:</span>
-            <strong className="text-[#059669]">
+            <strong className="text-[#059669] dark:text-[#10b981]">
               {selectedEvent?.attendanceVerified ? "Verified (100%) ✓" : "Unverified ⚠️"}
             </strong>
           </div>
-          <div className="flex justify-between text-[#52525b]">
+          <div className="flex justify-between text-[var(--text-secondary)]">
             <span>Priority:</span>
             <strong className="text-[#dc2626]">{selectedEvent?.priority || "HIGH"}</strong>
           </div>
@@ -147,11 +146,11 @@ export default function FullPageCircularCockpit({
       angle: 120, // 4 o'clock
       title: "3. Notion Clearance",
       tag: selectedEvent?.status === "SUCCESS" ? "APPROVED" : "REVIEW",
-      accent: "#d97706",
+      accent: "#f59e0b",
       icon: UserCheck,
       render: (
         <div className="space-y-2">
-          <p className="text-[11px] text-[#52525b] leading-tight">
+          <p className="text-[11px] text-[var(--text-secondary)] leading-tight">
             {selectedEvent?.status === "WAITING_APPROVAL"
               ? "Operator clearance required to dispatch."
               : selectedEvent?.status === "SUCCESS"
@@ -166,7 +165,7 @@ export default function FullPageCircularCockpit({
                   e.stopPropagation();
                   onApproveEvent(selectedEvent?.id);
                 }}
-                className="btn-success btn-success-sm text-[10px] font-mono py-1 px-2 flex-1"
+                className="btn-success btn-success-sm text-[10px] font-mono py-1 px-2 flex-1 shadow-[1px_1px_0px_var(--border-charcoal)]"
               >
                 <Check className="w-3 h-3 stroke-[3]" />
                 <span>Approve</span>
@@ -177,14 +176,14 @@ export default function FullPageCircularCockpit({
                   e.stopPropagation();
                   onRejectEvent(selectedEvent?.id);
                 }}
-                className="btn-danger btn-danger-sm text-[10px] font-mono py-1 px-2 flex-1"
+                className="btn-danger btn-danger-sm text-[10px] font-mono py-1 px-2 flex-1 shadow-[1px_1px_0px_var(--border-charcoal)]"
               >
                 <X className="w-3 h-3 stroke-[3]" />
                 <span>Reject</span>
               </button>
             </div>
           ) : (
-            <div className="text-[11px] font-mono font-bold text-[#059669] bg-[#ecfdf5] p-1.5 rounded text-center border border-[#059669]/30">
+            <div className="text-[11px] font-mono font-bold text-[#059669] dark:text-[#10b981] bg-[#ecfdf5] dark:bg-emerald-950/40 p-1.5 rounded text-center border border-[#059669]/30">
               ✓ Status: {selectedEvent?.status || "SUCCESS"}
             </div>
           )}
@@ -200,19 +199,19 @@ export default function FullPageCircularCockpit({
       icon: Mail,
       render: (
         <div className="space-y-1.5 text-xs font-mono">
-          <div className="flex justify-between text-[#52525b]">
+          <div className="flex justify-between text-[var(--text-secondary)]">
             <span>Payload:</span>
-            <strong className="text-[#18181b]">HTML/SVG Cert</strong>
+            <strong className="text-[var(--text-primary)]">HTML/SVG Cert</strong>
           </div>
-          <div className="flex justify-between text-[#52525b]">
+          <div className="flex justify-between text-[var(--text-secondary)]">
             <span>Recipient:</span>
-            <strong className="text-[#18181b] truncate max-w-[120px]">
+            <strong className="text-[var(--text-primary)] truncate max-w-[120px]">
               {selectedEvent?.userEmail || "rahul.sharma@gmail.com"}
             </strong>
           </div>
-          <div className="flex justify-between text-[#52525b]">
+          <div className="flex justify-between text-[var(--text-secondary)]">
             <span>Dispatch:</span>
-            <strong className="text-[#059669]">
+            <strong className="text-[#059669] dark:text-[#10b981]">
               {selectedEvent?.status === "SUCCESS" ? "Sent ✓" : "Queued"}
             </strong>
           </div>
@@ -228,14 +227,14 @@ export default function FullPageCircularCockpit({
       icon: FileCheck,
       render: (
         <div className="space-y-1.5 text-[11px] font-mono">
-          <div className="flex justify-between text-[#71717a]">
+          <div className="flex justify-between text-[var(--text-muted)]">
             <span>Audit Proof ID:</span>
-            <strong className="text-[#18181b]">{runLogs[0]?.runId || "RUN-0045"}</strong>
+            <strong className="text-[var(--text-primary)]">{runLogs[0]?.runId || "RUN-0045"}</strong>
           </div>
-          <p className="text-xs text-[#18181b] line-clamp-2 leading-tight">
+          <p className="text-xs text-[var(--text-primary)] line-clamp-2 leading-tight">
             {runLogs[0]?.action || "Verified Certificate Dispatched to student"}
           </p>
-          <div className="text-[10px] text-[#059669] font-bold flex items-center justify-between pt-1 border-t border-[#f0eee6]">
+          <div className="text-[10px] text-[#059669] dark:text-[#10b981] font-bold flex items-center justify-between pt-1 border-t border-[var(--border-subtle)]">
             <span>Bot Signed</span>
             <span>{runLogs[0]?.duration || "1,240"}ms</span>
           </div>
@@ -247,21 +246,21 @@ export default function FullPageCircularCockpit({
       angle: 300, // 10 o'clock
       title: "6. SLA & Performance",
       tag: "99.8% UPTIME",
-      accent: "#18181b",
+      accent: "#6366f1",
       icon: Activity,
       render: (
         <div className="space-y-1.5 text-xs font-mono">
           <div className="grid grid-cols-2 gap-1.5 text-center">
-            <div className="p-1 rounded bg-[#f4f3ef] border border-[#e2dfd6]">
-              <span className="text-[9px] text-[#71717a] block">LATENCY</span>
-              <strong className="text-xs text-[#18181b]">1.42s</strong>
+            <div className="p-1 rounded bg-[var(--bg-card-hover)] border border-[var(--border-subtle)]">
+              <span className="text-[9px] text-[var(--text-muted)] block">LATENCY</span>
+              <strong className="text-xs text-[var(--text-primary)]">1.42s</strong>
             </div>
-            <div className="p-1 rounded bg-[#f4f3ef] border border-[#e2dfd6]">
-              <span className="text-[9px] text-[#71717a] block">ACCURACY</span>
+            <div className="p-1 rounded bg-[var(--bg-card-hover)] border border-[var(--border-subtle)]">
+              <span className="text-[9px] text-[var(--text-muted)] block">ACCURACY</span>
               <strong className="text-xs text-[#dc2626]">98.6%</strong>
             </div>
           </div>
-          <div className="text-[10px] text-[#059669] font-bold text-center">
+          <div className="text-[10px] text-[#059669] dark:text-[#10b981] font-bold text-center">
             ● 24/7 Autonomous Daemon
           </div>
         </div>
@@ -274,24 +273,24 @@ export default function FullPageCircularCockpit({
       {/* Top Floating Radar Control Bar */}
       <div className="w-full max-w-5xl flex flex-wrap items-center justify-between gap-3 px-4 mb-6 z-40">
         <div className="flex items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[2px_2px_0px_#18181b]">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] text-xs font-mono text-[var(--text-primary)] shadow-[2px_2px_0px_var(--border-charcoal)] dark:shadow-[0_0_15px_rgba(5,150,105,0.25)]">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#059669] opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#059669]" />
             </span>
             <span className="font-bold">360° Circular Radar Cockpit</span>
           </div>
-          <span className="text-xs font-mono text-[#71717a] hidden sm:inline">
+          <span className="text-xs font-mono text-[var(--text-muted)] hidden sm:inline">
             Active: <strong className="text-[#dc2626] font-bold">{selectedEvent?.id || "REQ-108"}</strong>
           </span>
         </div>
 
         {/* Orbit Wheel Controls */}
-        <div className="flex items-center gap-2 bg-white p-1.5 rounded-xl border-2 border-[#18181b] shadow-[2px_2px_0px_#18181b] text-xs font-mono">
+        <div className="flex items-center gap-2 bg-[var(--bg-panel)] p-1.5 rounded-xl border-2 border-[var(--border-charcoal)] shadow-[2px_2px_0px_var(--border-charcoal)] dark:shadow-[0_4px_14px_rgba(0,0,0,0.6)] text-xs font-mono">
           <button
             type="button"
             onClick={() => setIsRotating(!isRotating)}
-            className="px-3 py-1 rounded-lg bg-[#f4f3ef] border border-[#18181b] text-[#18181b] font-bold flex items-center gap-1.5 hover:bg-white shadow-[1px_1px_0px_#18181b] transition-all cursor-pointer"
+            className="px-3 py-1 rounded-lg bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] text-[var(--text-primary)] font-bold flex items-center gap-1.5 hover:bg-[var(--bg-panel)] shadow-[1px_1px_0px_var(--border-charcoal)] transition-all cursor-pointer"
           >
             {isRotating ? (
               <>
@@ -309,7 +308,7 @@ export default function FullPageCircularCockpit({
           <button
             type="button"
             onClick={() => setSpeed((prev) => (prev === 48 ? 24 : prev === 24 ? 72 : 48))}
-            className="px-2.5 py-1 rounded-lg bg-[#f4f3ef] border border-[#e2dfd6] text-[#52525b] font-bold hover:border-[#18181b] hover:text-[#18181b] transition-all cursor-pointer"
+            className="px-2.5 py-1 rounded-lg bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-[var(--text-secondary)] font-bold hover:border-[var(--border-charcoal)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
             title="Toggle Orbital Speed"
           >
             Speed: {speed === 72 ? "0.5x" : speed === 48 ? "1x (Slow)" : "2x"}
@@ -335,10 +334,11 @@ export default function FullPageCircularCockpit({
             cx="430"
             cy="430"
             r={orbitalRadius}
-            stroke="#18181b"
+            stroke="currentColor"
+            className="text-[var(--border-charcoal)]"
             strokeWidth="2"
             strokeDasharray="6 6"
-            opacity="0.28"
+            opacity="0.35"
           />
 
           {/* Middle Ring */}
@@ -346,10 +346,11 @@ export default function FullPageCircularCockpit({
             cx="430"
             cy="430"
             r={orbitalRadius * 0.65}
-            stroke="#18181b"
+            stroke="currentColor"
+            className="text-[var(--border-charcoal)]"
             strokeWidth="1.5"
             strokeDasharray="4 4"
-            opacity="0.16"
+            opacity="0.22"
           />
 
           {/* Inner Ring */}
@@ -357,22 +358,23 @@ export default function FullPageCircularCockpit({
             cx="430"
             cy="430"
             r={orbitalRadius * 0.35}
-            stroke="#18181b"
+            stroke="currentColor"
+            className="text-[var(--border-charcoal)]"
             strokeWidth="1"
             strokeDasharray="2 4"
-            opacity="0.12"
+            opacity="0.18"
           />
 
           {/* 360° Radar Crosshairs */}
-          <line x1="430" y1="40" x2="430" y2="820" stroke="#18181b" strokeWidth="1" strokeDasharray="4 4" opacity="0.15" />
-          <line x1="40" y1="430" x2="820" y2="430" stroke="#18181b" strokeWidth="1" strokeDasharray="4 4" opacity="0.15" />
-          <line x1="154" y1="154" x2="706" y2="706" stroke="#18181b" strokeWidth="1" strokeDasharray="4 4" opacity="0.08" />
-          <line x1="706" y1="154" x2="154" y2="706" stroke="#18181b" strokeWidth="1" strokeDasharray="4 4" opacity="0.08" />
+          <line x1="430" y1="40" x2="430" y2="820" stroke="currentColor" className="text-[var(--border-charcoal)]" strokeWidth="1" strokeDasharray="4 4" opacity="0.2" />
+          <line x1="40" y1="430" x2="820" y2="430" stroke="currentColor" className="text-[var(--border-charcoal)]" strokeWidth="1" strokeDasharray="4 4" opacity="0.2" />
+          <line x1="154" y1="154" x2="706" y2="706" stroke="currentColor" className="text-[var(--border-charcoal)]" strokeWidth="1" strokeDasharray="4 4" opacity="0.12" />
+          <line x1="706" y1="154" x2="154" y2="706" stroke="currentColor" className="text-[var(--border-charcoal)]" strokeWidth="1" strokeDasharray="4 4" opacity="0.12" />
         </svg>
 
         {/* Ambient Glowing Orbs */}
-        <div className="absolute w-96 h-96 rounded-full bg-[#dc2626]/12 blur-3xl pointer-events-none animate-pulse" />
-        <div className="absolute w-[32rem] h-[32rem] rounded-full bg-[#059669]/10 blur-3xl pointer-events-none" />
+        <div className="absolute w-96 h-96 rounded-full bg-[#dc2626]/15 dark:bg-[#dc2626]/20 blur-3xl pointer-events-none animate-pulse" />
+        <div className="absolute w-[32rem] h-[32rem] rounded-full bg-[#059669]/12 dark:bg-[#059669]/18 blur-3xl pointer-events-none" />
 
         {/* ROTATING SATELLITE ORBIT CONTAINER */}
         <motion.div
@@ -424,7 +426,7 @@ export default function FullPageCircularCockpit({
                   }
                   whileHover={{ scale: 1.08, y: -4 }}
                   whileTap={{ scale: 0.96 }}
-                  className="w-[220px] sm:w-[240px] p-4 rounded-2xl bg-white border-2 border-[#18181b] shadow-[3.5px_3.5px_0px_#18181b] hover:shadow-[6px_6px_0px_#18181b] transition-all cursor-pointer relative overflow-hidden group"
+                  className="w-[220px] sm:w-[240px] p-4 rounded-2xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[3.5px_3.5px_0px_var(--border-charcoal)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.85),2px_2px_0px_var(--border-charcoal)] hover:shadow-[6px_6px_0px_var(--border-charcoal)] dark:hover:shadow-[0_16px_36px_rgba(0,0,0,0.95),0_0_20px_rgba(220,38,38,0.3)] transition-all cursor-pointer relative overflow-hidden group"
                 >
                   {/* Top Color Accent Line */}
                   <div
@@ -436,18 +438,18 @@ export default function FullPageCircularCockpit({
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-6 h-6 rounded-md text-white flex items-center justify-center shadow-[1px_1px_0px_#18181b]"
+                        className="w-6 h-6 rounded-md text-white flex items-center justify-center shadow-[1px_1px_0px_var(--border-charcoal)]"
                         style={{ backgroundColor: sat.accent }}
                       >
                         <sat.icon className="w-3.5 h-3.5 text-white" />
                       </div>
-                      <span className="text-xs font-bold text-[#18181b] leading-none">
+                      <span className="text-xs font-bold text-[var(--text-primary)] leading-none">
                         {sat.title}
                       </span>
                     </div>
                     <span
                       className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border"
-                      style={{ color: sat.accent, borderColor: `${sat.accent}55`, backgroundColor: `${sat.accent}12` }}
+                      style={{ color: sat.accent, borderColor: `${sat.accent}55`, backgroundColor: `${sat.accent}15` }}
                     >
                       {sat.tag}
                     </span>
@@ -462,20 +464,20 @@ export default function FullPageCircularCockpit({
         </motion.div>
 
         {/* STATIC CENTER ENGINE CORE (SUN / HUB) */}
-        <div className="relative z-40 w-[290px] sm:w-[320px] p-5 rounded-3xl bg-white border-2 border-[#18181b] shadow-[6px_6px_0px_#18181b] flex flex-col justify-between overflow-hidden">
+        <div className="relative z-40 w-[290px] sm:w-[320px] p-5 rounded-3xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[6px_6px_0px_var(--border-charcoal)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_35px_rgba(220,38,38,0.3)] flex flex-col justify-between overflow-hidden">
           {/* Top light sweep indicator */}
           <div className="absolute top-0 left-0 right-0 h-[3.5px] bg-gradient-to-r from-[#dc2626] via-[#059669] to-[#2563eb]" />
 
-          <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-[#e2dfd6]">
+          <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-[var(--border-subtle)]">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[#18181b] text-white flex items-center justify-center shadow-[1px_1px_0px_#dc2626]">
+              <div className="w-7 h-7 rounded-lg bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center shadow-[1px_1px_0px_#dc2626] dark:shadow-[0_0_10px_#dc2626]">
                 <Zap className="w-4 h-4 text-white" strokeWidth={2.5} />
               </div>
               <div>
-                <h2 className="text-xs font-black text-[#18181b] uppercase tracking-tight">
+                <h2 className="text-xs font-black text-[var(--text-primary)] uppercase tracking-tight">
                   AutoDesk<span className="text-[#dc2626]">.Core</span>
                 </h2>
-                <span className="text-[9px] font-mono text-[#71717a] block">
+                <span className="text-[9px] font-mono text-[var(--text-muted)] block">
                   Autonomous Triage Hub
                 </span>
               </div>
@@ -489,7 +491,7 @@ export default function FullPageCircularCockpit({
           {/* Central Live Request Trigger Form */}
           <form onSubmit={handleRunPipeline} className="space-y-2.5">
             <div>
-              <label htmlFor="core-track" className="block text-[10px] font-mono font-bold text-[#18181b] mb-1">
+              <label htmlFor="core-track" className="block text-[10px] font-mono font-bold text-[var(--text-primary)] mb-1">
                 EVENT TRACK
               </label>
               <select
@@ -499,7 +501,7 @@ export default function FullPageCircularCockpit({
                 className="dev-input text-xs py-1.5 px-2 font-medium cursor-pointer"
               >
                 {Object.values(EVENT_CATALOG).map((ev) => (
-                  <option key={ev.id} value={ev.id}>
+                  <option key={ev.id} value={ev.id} className="bg-[var(--bg-panel)] text-[var(--text-primary)]">
                     {ev.shortName}
                   </option>
                 ))}
@@ -507,7 +509,7 @@ export default function FullPageCircularCockpit({
             </div>
 
             <div>
-              <label htmlFor="core-prompt" className="block text-[10px] font-mono font-bold text-[#18181b] mb-1">
+              <label htmlFor="core-prompt" className="block text-[10px] font-mono font-bold text-[var(--text-primary)] mb-1">
                 STUDENT NATURAL PROMPT
               </label>
               <textarea
@@ -524,8 +526,8 @@ export default function FullPageCircularCockpit({
               <div
                 className={`p-2 rounded text-[10px] font-mono font-bold ${
                   feedback.type === "success"
-                    ? "bg-[#ecfdf5] text-[#065f46] border border-[#059669]"
-                    : "bg-[#fee2e2] text-[#991b1b] border border-[#dc2626]"
+                    ? "bg-[#ecfdf5] dark:bg-emerald-950/40 text-[#065f46] dark:text-emerald-300 border border-[#059669]"
+                    : "bg-[#fee2e2] dark:bg-red-950/40 text-[#991b1b] dark:text-red-300 border border-[#dc2626]"
                 }`}
               >
                 {feedback.msg}
@@ -537,7 +539,7 @@ export default function FullPageCircularCockpit({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               disabled={isSubmitting || !rawPrompt.trim()}
-              className="btn-primary w-full py-2 text-xs font-bold font-mono flex items-center justify-center gap-1.5 shadow-[2px_2px_0px_#18181b]"
+              className="btn-primary w-full py-2 text-xs font-bold font-mono flex items-center justify-center gap-1.5 shadow-[2px_2px_0px_var(--border-charcoal)] dark:shadow-[0_0_15px_rgba(220,38,38,0.4)]"
             >
               {isSubmitting ? (
                 <>
@@ -554,15 +556,15 @@ export default function FullPageCircularCockpit({
           </form>
 
           {/* Quick Info Footer */}
-          <div className="mt-2.5 pt-2 border-t border-[#f0eee6] flex items-center justify-between text-[10px] font-mono text-[#71717a]">
-            <span>Active Queue: <strong className="text-[#18181b]">{events.length}</strong></span>
-            <span className="text-[#059669] font-bold">100% Audited</span>
+          <div className="mt-2.5 pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)]">
+            <span>Active Queue: <strong className="text-[var(--text-primary)]">{events.length}</strong></span>
+            <span className="text-[#059669] dark:text-[#10b981] font-bold">100% Audited</span>
           </div>
         </div>
       </div>
 
       {/* Bottom helper notification */}
-      <div className="text-center mt-4 text-xs font-mono text-[#71717a] flex items-center justify-center gap-2">
+      <div className="text-center mt-4 text-xs font-mono text-[var(--text-muted)] flex items-center justify-center gap-2">
         <span>💡 Hover anywhere on the wheel to slow down & interact with orbital stations.</span>
       </div>
     </div>
