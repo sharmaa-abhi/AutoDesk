@@ -68,14 +68,14 @@ export default function Features() {
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
           className="text-center space-y-3"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border-2 border-[#18181b] text-xs font-mono text-[#18181b] shadow-[2px_2px_0px_#18181b]">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] text-xs font-mono text-[var(--text-primary)] shadow-[2px_2px_0px_var(--border-charcoal)]">
             <Sparkles className="w-3.5 h-3.5 text-[#dc2626] animate-spin" style={{ animationDuration: "6s" }} />
             <span className="font-bold">CORE ARCHITECTURE</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#18181b] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[var(--text-primary)] tracking-tight">
             Engineered For True Autonomy
           </h2>
-          <p className="text-sm sm:text-base text-[#52525b] max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-[var(--text-secondary)] max-w-xl mx-auto leading-relaxed">
             Not a mockup or chatbot. A robust, audited production automation system with live backend dispatching.
           </p>
         </motion.div>
@@ -94,7 +94,7 @@ export default function Features() {
               variants={itemVariants}
               whileHover={{ y: -8, scale: 1.02 }}
               transition={{ type: "spring", stiffness: 350, damping: 20 }}
-              className="dev-card bg-white p-7 relative flex flex-col justify-between group overflow-hidden transition-all hover:shadow-[6px_6px_0px_#18181b]"
+              className="dev-card bg-[var(--bg-panel)] p-7 relative flex flex-col justify-between group overflow-hidden transition-all hover:shadow-[6px_6px_0px_var(--border-charcoal)] dark:hover:shadow-[0_16px_36px_rgba(0,0,0,0.9),0_0_25px_rgba(220,38,38,0.25)]"
             >
               {/* Dynamic top Accent Line */}
               <div
@@ -107,28 +107,28 @@ export default function Features() {
                   <motion.div
                     whileHover={{ rotate: 15, scale: 1.15 }}
                     transition={{ type: "spring", stiffness: 400, damping: 12 }}
-                    className="w-13 h-13 rounded-xl bg-[#18181b] text-white flex items-center justify-center shadow-[2.5px_2.5px_0px_#dc2626] transition-transform p-3"
+                    className="w-13 h-13 rounded-xl bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center shadow-[2.5px_2.5px_0px_#dc2626] dark:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-transform p-3"
                   >
                     <f.icon className="w-6 h-6 text-white" aria-hidden="true" focusable="false" />
                   </motion.div>
-                  <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md bg-[#f4f3ef] border border-[#18181b] text-[#18181b] group-hover:bg-[#18181b] group-hover:text-white transition-all shadow-[1px_1px_0px_#18181b] flex items-center gap-1.5">
+                  <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] text-[var(--text-primary)] group-hover:bg-[var(--border-charcoal)] group-hover:text-white transition-all shadow-[1px_1px_0px_var(--border-charcoal)] flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: f.accent }} />
                     <span>{f.tag}</span>
                   </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-[#18181b] mb-3 group-hover:text-[#dc2626] transition-colors flex items-center justify-between">
+                <h3 className="text-xl font-bold text-[var(--text-primary)] mb-3 group-hover:text-[#dc2626] transition-colors flex items-center justify-between">
                   <span>{f.title}</span>
-                  <ArrowUpRight className="w-4 h-4 text-[#71717a] opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  <ArrowUpRight className="w-4 h-4 text-[var(--text-muted)] opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                 </h3>
-                <p className="text-xs sm:text-sm text-[#52525b] leading-relaxed">
+                <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
                   {f.desc}
                 </p>
               </div>
 
-              <div className="mt-6 pt-3 border-t border-[#f0eee6] flex items-center justify-between text-xs font-mono text-[#71717a]">
-                <span>Integrity: <strong className="text-[#059669]">Audited</strong></span>
-                <span className="text-[11px] font-bold text-[#18181b] opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="mt-6 pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs font-mono text-[var(--text-muted)]">
+                <span>Integrity: <strong className="text-[#059669] dark:text-[#10b981]">Audited</strong></span>
+                <span className="text-[11px] font-bold text-[var(--text-primary)] opacity-0 group-hover:opacity-100 transition-opacity">
                   Learn more ➔
                 </span>
               </div>
