@@ -358,15 +358,15 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f6f2] text-[#18181b] font-sans flex flex-col">
+    <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--text-primary)] font-sans flex flex-col transition-colors duration-200">
       <Navbar />
 
       <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Page Top Header with View Switcher */}
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#e2dfd6]">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[var(--border-subtle)]">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-xl sm:text-2xl font-black text-[#18181b] tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
                 Live Automation Cockpit
               </h1>
               <span className="badge-live">
@@ -374,21 +374,21 @@ export default function DashboardPage() {
                 <span>LIVE ENGINE</span>
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[#52525b] mt-1">
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1">
               Autonomous request triage, human-in-the-loop approvals, and real-time execution telemetry.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
             {/* View Mode Switcher */}
-            <div className="flex items-center gap-1 p-1 rounded-xl bg-white border-2 border-[#18181b] shadow-[2px_2px_0px_#18181b] text-xs font-mono">
+            <div className="flex items-center gap-1 p-1 rounded-xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[2px_2px_0px_var(--border-charcoal)] dark:shadow-[0_4px_14px_rgba(0,0,0,0.6)] text-xs font-mono">
               <button
                 type="button"
                 onClick={() => setDashboardMode("CIRCULAR_WHEEL")}
                 className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
                   dashboardMode === "CIRCULAR_WHEEL"
-                    ? "bg-[#18181b] text-white shadow-[1px_1px_0px_#dc2626]"
-                    : "text-[#52525b] hover:text-[#18181b]"
+                    ? "bg-[#18181b] dark:bg-[#dc2626] text-white shadow-[1px_1px_0px_#dc2626] dark:shadow-[0_0_12px_rgba(220,38,38,0.5)]"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 🎡 Full-Page Circular Wheel
@@ -398,16 +398,16 @@ export default function DashboardPage() {
                 onClick={() => setDashboardMode("STANDARD_GRID")}
                 className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
                   dashboardMode === "STANDARD_GRID"
-                    ? "bg-[#18181b] text-white shadow-[1px_1px_0px_#dc2626]"
-                    : "text-[#52525b] hover:text-[#18181b]"
+                    ? "bg-[#18181b] dark:bg-[#dc2626] text-white shadow-[1px_1px_0px_#dc2626] dark:shadow-[0_0_12px_rgba(220,38,38,0.5)]"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 🎛️ Standard Cockpit
               </button>
             </div>
 
-            <span className="text-xs font-mono text-[#52525b] bg-white px-3 py-1.5 rounded-lg border border-[#e2dfd6] shadow-[1px_1px_0px_#18181b]">
-              Queue: <strong className="text-[#18181b]">{events.length} Active</strong>
+            <span className="text-xs font-mono text-[var(--text-secondary)] bg-[var(--bg-panel)] px-3 py-1.5 rounded-lg border border-[var(--border-subtle)] shadow-[1px_1px_0px_var(--border-charcoal)]">
+              Queue: <strong className="text-[var(--text-primary)]">{events.length} Active</strong>
             </span>
           </div>
         </div>
@@ -478,4 +478,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
 
