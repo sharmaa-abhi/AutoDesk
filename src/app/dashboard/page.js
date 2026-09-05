@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EventStreamTimeline from "@/components/dashboard/EventStreamTimeline";
 import TacticalEngineCanvas from "@/components/dashboard/TacticalEngineCanvas";
 import BentoMetrics from "@/components/dashboard/BentoMetrics";
+import FullPageCircularCockpit from "@/components/dashboard/FullPageCircularCockpit";
 
 const initialEvents = [
   {
@@ -142,6 +144,7 @@ export default function DashboardPage() {
   const [events, setEvents] = useState(initialEvents);
   const [selectedEventId, setSelectedEventId] = useState("REQ-108");
   const [filterTab, setFilterTab] = useState("ALL");
+  const [dashboardMode, setDashboardMode] = useState("CIRCULAR_WHEEL"); // "CIRCULAR_WHEEL" | "STANDARD_GRID"
   const [runLogs, setRunLogs] = useState(initialRunLogs);
   const [stats, setStats] = useState({
     completed: 248,
@@ -359,8 +362,8 @@ export default function DashboardPage() {
       <Navbar />
 
       <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        {/* Page Top Header with semantic, visible H1 (Fix 15) */}
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-[#e2dfd6]">
+        {/* Page Top Header with View Switcher */}
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#e2dfd6]">
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-xl sm:text-2xl font-black text-[#18181b] tracking-tight">
@@ -375,47 +378,104 @@ export default function DashboardPage() {
               Autonomous request triage, human-in-the-loop approvals, and real-time execution telemetry.
             </p>
           </div>
-          <div className="flex items-center gap-2">
+
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* View Mode Switcher */}
+            <div className="flex items-center gap-1 p-1 rounded-xl bg-white border-2 border-[#18181b] shadow-[2px_2px_0px_#18181b] text-xs font-mono">
+              <button
+                type="button"
+                onClick={() => setDashboardMode("CIRCULAR_WHEEL")}
+                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                  dashboardMode === "CIRCULAR_WHEEL"
+                    ? "bg-[#18181b] text-white shadow-[1px_1px_0px_#dc2626]"
+                    : "text-[#52525b] hover:text-[#18181b]"
+                }`}
+              >
+                🎡 Full-Page Circular Wheel
+              </button>
+              <button
+                type="button"
+                onClick={() => setDashboardMode("STANDARD_GRID")}
+                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                  dashboardMode === "STANDARD_GRID"
+                    ? "bg-[#18181b] text-white shadow-[1px_1px_0px_#dc2626]"
+                    : "text-[#52525b] hover:text-[#18181b]"
+                }`}
+              >
+                🎛️ Standard Cockpit
+              </button>
+            </div>
+
             <span className="text-xs font-mono text-[#52525b] bg-white px-3 py-1.5 rounded-lg border border-[#e2dfd6] shadow-[1px_1px_0px_#18181b]">
               Queue: <strong className="text-[#18181b]">{events.length} Active</strong>
             </span>
-            <span className="text-xs font-mono text-[#059669] bg-[#ecfdf5] px-3 py-1.5 rounded-lg border border-[#059669]/40 font-bold">
-              Uptime: 99.8%
-            </span>
           </div>
         </div>
 
-        {/* 3-Column Desktop Dashboard Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Column 1: Left Panel (Match Stream & Event Timeline) [3.5 cols] */}
-          <div className="lg:col-span-3 h-full">
-            <EventStreamTimeline
-              events={events}
-              selectedEventId={selectedEventId}
-              onSelectEvent={setSelectedEventId}
-              filterTab={filterTab}
-              setFilterTab={setFilterTab}
-            />
-          </div>
+        {/* Dynamic Mode Switcher Render */}
+        <AnimatePresence mode="wait">
+          {dashboardMode === "CIRCULAR_WHEEL" ? (
+            <motion.div
+              key="circular-wheel-page"
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="w-full"
+            >
+              <FullPageCircularCockpit
+                events={events}
+                selectedEvent={selectedEvent}
+                selectedEventId={selectedEventId}
+                onSelectEvent={setSelectedEventId}
+                onApproveEvent={handleApproveEvent}
+                onRejectEvent={handleRejectEvent}
+                onSimulateWebhook={handleSimulateWebhook}
+                stats={stats}
+                runLogs={runLogs}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="standard-grid-page"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 15 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+            >
+              {/* Column 1: Left Panel (Match Stream & Event Timeline) [3.5 cols] */}
+              <div className="lg:col-span-3 h-full">
+                <EventStreamTimeline
+                  events={events}
+                  selectedEventId={selectedEventId}
+                  onSelectEvent={setSelectedEventId}
+                  filterTab={filterTab}
+                  setFilterTab={setFilterTab}
+                />
+              </div>
 
-          {/* Column 2: Center Canvas (Tactical Field & Live Cockpit) [5.5 cols] */}
-          <div className="lg:col-span-6 h-full">
-            <TacticalEngineCanvas
-              selectedEvent={selectedEvent}
-              onApproveEvent={handleApproveEvent}
-              onRejectEvent={handleRejectEvent}
-              onSimulateWebhook={handleSimulateWebhook}
-            />
-          </div>
+              {/* Column 2: Center Canvas (Tactical Field & Live Cockpit) [5.5 cols] */}
+              <div className="lg:col-span-6 h-full">
+                <TacticalEngineCanvas
+                  selectedEvent={selectedEvent}
+                  onApproveEvent={handleApproveEvent}
+                  onRejectEvent={handleRejectEvent}
+                  onSimulateWebhook={handleSimulateWebhook}
+                />
+              </div>
 
-          {/* Column 3: Right Panel (Deep Metrics & Bento Breakdown) [3 cols] */}
-          <div className="lg:col-span-3 h-full">
-            <BentoMetrics stats={stats} runLogs={runLogs} />
-          </div>
-        </div>
+              {/* Column 3: Right Panel (Deep Metrics & Bento Breakdown) [3 cols] */}
+              <div className="lg:col-span-3 h-full">
+                <BentoMetrics stats={stats} runLogs={runLogs} />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
 
       <Footer />
     </div>
   );
 }
+
