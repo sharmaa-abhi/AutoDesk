@@ -16,10 +16,10 @@ export default function BentoMetrics({ stats, runLogs }) {
     <div className="space-y-5">
       {/* Sidebar Section Header */}
       <div className="flex items-center justify-between px-1">
-        <h2 className="text-xs font-mono text-[#71717a] uppercase font-bold tracking-wider">
+        <h2 className="text-xs font-mono text-[var(--text-muted)] uppercase font-bold tracking-wider">
           Utilities & Telemetry
         </h2>
-        <span className="flex items-center gap-1 text-[10px] font-mono text-[#059669] font-bold">
+        <span className="flex items-center gap-1 text-[10px] font-mono text-[#059669] dark:text-[#10b981] font-bold">
           <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-ping" />
           <span>CONNECTED</span>
         </span>
@@ -34,22 +34,22 @@ export default function BentoMetrics({ stats, runLogs }) {
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
         transition={{ type: "spring", stiffness: 350, damping: 20 }}
-        className="dev-card bg-white p-4 flex items-start gap-3.5 border-2 border-[#18181b] hover:shadow-[4px_4px_0px_#18181b] transition-all group block focus-visible:outline-2 focus-visible:outline-[#18181b]"
+        className="dev-card bg-[var(--bg-panel)] p-4 flex items-start gap-3.5 border-2 border-[var(--border-charcoal)] hover:shadow-[4px_4px_0px_var(--border-charcoal)] dark:hover:shadow-[0_10px_25px_rgba(0,0,0,0.85)] transition-all group block focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)]"
       >
-        <div className="w-9 h-9 rounded-lg bg-[#18181b] text-white flex items-center justify-center flex-shrink-0 shadow-[1.5px_1.5px_0px_#dc2626]">
+        <div className="w-9 h-9 rounded-lg bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center flex-shrink-0 shadow-[1.5px_1.5px_0px_#dc2626] dark:shadow-[0_0_10px_#dc2626]">
           <Database className="w-4 h-4 text-white" aria-hidden="true" />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-1">
-            <h3 className="text-xs sm:text-sm font-bold text-[#18181b] group-hover:text-[#dc2626] transition-colors flex items-center gap-1">
+            <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] group-hover:text-[#dc2626] transition-colors flex items-center gap-1">
               <span>Notion Workspace DB</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#71717a]" aria-hidden="true" />
+              <ExternalLink className="w-3.5 h-3.5 text-[var(--text-muted)]" aria-hidden="true" />
             </h3>
-            <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#ecfdf5] text-[#065f46] border border-[#059669]">
+            <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#ecfdf5] dark:bg-emerald-950/40 text-[#065f46] dark:text-emerald-300 border border-[#059669]">
               LIVE
             </span>
           </div>
-          <p className="text-xs text-[#52525b] mt-1 leading-relaxed font-mono">
+          <p className="text-xs text-[var(--text-secondary)] mt-1 leading-relaxed font-mono">
             Human-in-the-loop audit cockpit & synchronized request records.
           </p>
         </div>
@@ -60,77 +60,77 @@ export default function BentoMetrics({ stats, runLogs }) {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 280, damping: 22 }}
-        className="dev-card bg-white p-5 border-2 border-[#18181b] shadow-[3px_3px_0px_#18181b]"
+        className="dev-card bg-[var(--bg-panel)] p-5 border-2 border-[var(--border-charcoal)] shadow-[3px_3px_0px_var(--border-charcoal)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.85)]"
       >
-        <div className="flex items-center justify-between mb-3.5 pb-2.5 border-b border-[#e2dfd6]">
+        <div className="flex items-center justify-between mb-3.5 pb-2.5 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-[#18181b] text-white flex items-center justify-center">
+            <div className="w-7 h-7 rounded-md bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center">
               <Zap className="w-3.5 h-3.5 text-white" aria-hidden="true" />
             </div>
-            <h3 className="text-xs sm:text-sm font-bold text-[#18181b] tracking-tight">
+            <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] tracking-tight">
               Engine Performance
             </h3>
           </div>
-          <span className="text-[10px] font-mono text-[#065f46] font-bold px-2 py-0.5 rounded bg-[#ecfdf5] border border-[#059669]">
+          <span className="text-[10px] font-mono text-[#065f46] dark:text-emerald-400 font-bold px-2 py-0.5 rounded bg-[#ecfdf5] dark:bg-emerald-950/40 border border-[#059669]">
             OPTIMAL
           </span>
         </div>
 
         <div className="grid grid-cols-2 gap-2.5 mb-4 font-mono">
-          <div className="p-2.5 rounded-lg bg-[#fcfbfa] border-2 border-[#18181b]">
-            <span className="text-xs text-[#71717a] block font-semibold">AVG LATENCY</span>
-            <span className="text-lg sm:text-xl font-black text-[#18181b] block mt-0.5">1.42s</span>
-            <span className="text-xs text-[#059669] font-bold block mt-0.5">Target: &lt;3.0s</span>
+          <div className="p-2.5 rounded-lg bg-[var(--bg-panel-elevated)] border-2 border-[var(--border-charcoal)]">
+            <span className="text-xs text-[var(--text-muted)] block font-semibold">AVG LATENCY</span>
+            <span className="text-lg sm:text-xl font-black text-[var(--text-primary)] block mt-0.5">1.42s</span>
+            <span className="text-xs text-[#059669] dark:text-[#10b981] font-bold block mt-0.5">Target: &lt;3.0s</span>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-[#fcfbfa] border-2 border-[#18181b]">
-            <span className="text-xs text-[#71717a] block font-semibold">AI ACCURACY</span>
+          <div className="p-2.5 rounded-lg bg-[var(--bg-panel-elevated)] border-2 border-[var(--border-charcoal)]">
+            <span className="text-xs text-[var(--text-muted)] block font-semibold">AI ACCURACY</span>
             <span className="text-lg sm:text-xl font-black text-[#dc2626] block mt-0.5">98.6%</span>
-            <span className="text-xs text-[#52525b] block mt-0.5">Gemini Flash</span>
+            <span className="text-xs text-[var(--text-secondary)] block mt-0.5">Gemini Flash</span>
           </div>
         </div>
 
         {/* Action Type Progress Bars with Smooth Width Animations */}
         <div className="space-y-3 pt-1 text-xs font-mono">
           <div>
-            <div className="flex justify-between text-[#52525b] mb-1">
+            <div className="flex justify-between text-[var(--text-secondary)] mb-1">
               <span>PDF Certificates Dispatched</span>
-              <strong className="text-[#18181b]">42% (148)</strong>
+              <strong className="text-[var(--text-primary)]">42% (148)</strong>
             </div>
-            <div className="h-2.5 w-full bg-[#f4f3ef] border border-[#e2dfd6] rounded-full overflow-hidden">
+            <div className="h-2.5 w-full bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: "42%" }}
                 transition={{ duration: 1, ease: "easeOut" }}
-                className="h-full bg-[#18181b] rounded-full"
+                className="h-full bg-[var(--border-charcoal)] dark:bg-[#3b82f6] rounded-full"
               />
             </div>
           </div>
           <div>
-            <div className="flex justify-between text-[#52525b] mb-1">
+            <div className="flex justify-between text-[var(--text-secondary)] mb-1">
               <span>Transactional Emails</span>
               <strong className="text-[#dc2626]">38% (134)</strong>
             </div>
-            <div className="h-2.5 w-full bg-[#f4f3ef] border border-[#e2dfd6] rounded-full overflow-hidden">
+            <div className="h-2.5 w-full bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: "38%" }}
                 transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
-                className="h-full bg-[#dc2626] rounded-full"
+                className="h-full bg-[#dc2626] rounded-full shadow-[0_0_8px_#dc2626]"
               />
             </div>
           </div>
           <div>
-            <div className="flex justify-between text-[#52525b] mb-1">
+            <div className="flex justify-between text-[var(--text-secondary)] mb-1">
               <span>Operator Clearance</span>
-              <strong className="text-[#059669]">20% (71)</strong>
+              <strong className="text-[#059669] dark:text-[#10b981]">20% (71)</strong>
             </div>
-            <div className="h-2.5 w-full bg-[#f4f3ef] border border-[#e2dfd6] rounded-full overflow-hidden">
+            <div className="h-2.5 w-full bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: "20%" }}
                 transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-                className="h-full bg-[#059669] rounded-full"
+                className="h-full bg-[#059669] rounded-full shadow-[0_0_8px_#059669]"
               />
             </div>
           </div>
@@ -142,23 +142,23 @@ export default function BentoMetrics({ stats, runLogs }) {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 280, damping: 22, delay: 0.1 }}
-        className="dev-card bg-white p-5 flex flex-col border-2 border-[#18181b] shadow-[3px_3px_0px_#18181b]"
+        className="dev-card bg-[var(--bg-panel)] p-5 flex flex-col border-2 border-[var(--border-charcoal)] shadow-[3px_3px_0px_var(--border-charcoal)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.85)]"
       >
-        <div className="flex items-center justify-between mb-3 pb-2.5 border-b border-[#e2dfd6]">
+        <div className="flex items-center justify-between mb-3 pb-2.5 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-[#059669] text-white flex items-center justify-center font-bold text-xs shadow-[1px_1px_0px_#18181b]">
+            <div className="w-7 h-7 rounded-md bg-[#059669] text-white flex items-center justify-center font-bold text-xs shadow-[1px_1px_0px_var(--border-charcoal)]">
               <ShieldCheck className="w-4 h-4 text-white" aria-hidden="true" />
             </div>
             <div>
-              <h3 className="text-xs sm:text-sm font-bold text-[#18181b] tracking-tight">
+              <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] tracking-tight">
                 Tamper-Proof Run Log
               </h3>
-              <span className="text-[10px] text-[#71717a] font-mono block">
+              <span className="text-[10px] text-[var(--text-muted)] font-mono block">
                 Notion Bot Token
               </span>
             </div>
           </div>
-          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#ecfdf5] text-[#065f46] border border-[#059669]">
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#ecfdf5] dark:bg-emerald-950/40 text-[#065f46] dark:text-emerald-300 border border-[#059669]">
             PROOF
           </span>
         </div>
@@ -173,13 +173,13 @@ export default function BentoMetrics({ stats, runLogs }) {
               whileHover={{ scale: 1.015, x: 2 }}
               transition={{ type: "spring", stiffness: 350, damping: 20 }}
               title={log.action}
-              className="p-2.5 rounded-lg bg-[#fcfbfa] border border-[#18181b] font-mono text-xs hover:bg-white hover:shadow-[1.5px_1.5px_0px_#18181b] transition-all min-w-0"
+              className="p-2.5 rounded-lg bg-[var(--bg-panel-elevated)] border border-[var(--border-charcoal)] font-mono text-xs hover:bg-[var(--bg-panel)] hover:shadow-[1.5px_1.5px_0px_var(--border-charcoal)] transition-all min-w-0"
             >
-              <div className="flex items-center justify-between text-[#71717a] text-[11px] mb-1">
-                <strong className="text-[#18181b]">{log.runId}</strong>
+              <div className="flex items-center justify-between text-[var(--text-muted)] text-[11px] mb-1">
+                <strong className="text-[var(--text-primary)]">{log.runId}</strong>
                 <span>{log.timestamp}</span>
               </div>
-              <div className="text-[#18181b] font-medium flex items-start gap-1.5 whitespace-normal break-words leading-relaxed">
+              <div className="text-[var(--text-primary)] font-medium flex items-start gap-1.5 whitespace-normal break-words leading-relaxed">
                 <span
                   className={`flex-shrink-0 font-bold ${
                     log.status === "REJECTED"
@@ -194,15 +194,15 @@ export default function BentoMetrics({ stats, runLogs }) {
                 </span>
                 <span className="flex-1 min-w-0 break-words">{log.action}</span>
               </div>
-              <div className="flex items-center justify-between text-[#71717a] text-[11px] mt-1.5 pt-1.5 border-t border-[#f0eee6]">
+              <div className="flex items-center justify-between text-[var(--text-muted)] text-[11px] mt-1.5 pt-1.5 border-t border-[var(--border-subtle)]">
                 <span className="truncate">{log.trigger}</span>
-                <span className="text-[#059669] font-bold flex-shrink-0">{log.duration}ms</span>
+                <span className="text-[#059669] dark:text-[#10b981] font-bold flex-shrink-0">{log.duration}ms</span>
               </div>
             </motion.div>
           ))}
         </div>
 
-        <div className="mt-3 p-2 rounded bg-[#f4f3ef] border border-[#e2dfd6] flex items-center gap-2 text-xs font-mono text-[#52525b]">
+        <div className="mt-3 p-2 rounded bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] flex items-center gap-2 text-xs font-mono text-[var(--text-secondary)]">
           <Lock className="w-3.5 h-3.5 text-[#059669] flex-shrink-0" aria-hidden="true" />
           <span className="leading-snug">Written by Notion bot token — verifiable audit trail.</span>
         </div>
@@ -217,19 +217,19 @@ export default function BentoMetrics({ stats, runLogs }) {
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
         transition={{ type: "spring", stiffness: 350, damping: 20 }}
-        className="dev-card bg-white p-4 flex items-start gap-3.5 border-2 border-[#18181b] hover:shadow-[4px_4px_0px_#18181b] transition-all group block focus-visible:outline-2 focus-visible:outline-[#18181b]"
+        className="dev-card bg-[var(--bg-panel)] p-4 flex items-start gap-3.5 border-2 border-[var(--border-charcoal)] hover:shadow-[4px_4px_0px_var(--border-charcoal)] dark:hover:shadow-[0_10px_25px_rgba(0,0,0,0.85)] transition-all group block focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)]"
       >
-        <div className="w-8 h-8 rounded-lg bg-[#18181b] text-white flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_#dc2626]">
+        <div className="w-8 h-8 rounded-lg bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_#dc2626] dark:shadow-[0_0_8px_#dc2626]">
           <Code2 className="w-4 h-4 text-white" aria-hidden="true" />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs sm:text-sm font-bold text-[#18181b] group-hover:text-[#dc2626] transition-colors flex items-center gap-1">
+            <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] group-hover:text-[#dc2626] transition-colors flex items-center gap-1">
               <span>GitHub Repository</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#71717a]" aria-hidden="true" />
+              <ExternalLink className="w-3.5 h-3.5 text-[var(--text-muted)]" aria-hidden="true" />
             </h3>
           </div>
-          <p className="text-xs text-[#52525b] mt-1 leading-relaxed font-mono">
+          <p className="text-xs text-[var(--text-secondary)] mt-1 leading-relaxed font-mono">
             Autonomous backend daemon, API handlers & integration tests.
           </p>
         </div>

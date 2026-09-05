@@ -41,20 +41,20 @@ export default function EventStreamTimeline({
   };
 
   return (
-    <div className="dev-card bg-white flex flex-col overflow-hidden shadow-[3px_3px_0px_#18181b]">
+    <div className="dev-card bg-[var(--bg-panel)] flex flex-col overflow-hidden shadow-[3px_3px_0px_var(--border-charcoal)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.85)]">
       {/* Header */}
-      <div className="p-4 border-b-2 border-[#18181b] bg-[#fcfbfa] flex items-center justify-between">
-        <h2 className="text-sm font-bold text-[#18181b] tracking-tight flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse" />
+      <div className="p-4 border-b-2 border-[var(--border-charcoal)] bg-[var(--bg-panel-elevated)] flex items-center justify-between">
+        <h2 className="text-sm font-bold text-[var(--text-primary)] tracking-tight flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse shadow-[0_0_6px_#059669]" />
           <span>Live Tickets Stream</span>
         </h2>
-        <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[#f4f3ef] border border-[#e2dfd6] text-[#18181b]">
+        <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-[var(--text-primary)]">
           {events.length} Tickets
         </span>
       </div>
 
       {/* Filter Tabs */}
-      <div className="p-2.5 border-b border-[#e2dfd6] bg-[#f9f8f5] flex gap-1.5 text-xs font-mono" role="tablist" aria-label="Ticket Status Filter">
+      <div className="p-2.5 border-b border-[var(--border-subtle)] bg-[var(--bg-card-hover)] flex gap-1.5 text-xs font-mono" role="tablist" aria-label="Ticket Status Filter">
         {filterTabs.map((tab) => {
           const isActive = filterTab === tab.id;
           return (
@@ -65,16 +65,16 @@ export default function EventStreamTimeline({
               type="button"
               whileTap={{ scale: 0.95 }}
               onClick={() => setFilterTab(tab.id)}
-              className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold text-xs transition-all flex items-center justify-center gap-1.5 focus-visible:outline-2 focus-visible:outline-[#18181b] relative ${
+              className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold text-xs transition-all flex items-center justify-center gap-1.5 focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] relative ${
                 isActive
-                  ? "bg-[#18181b] text-white border-2 border-[#18181b] shadow-[1.5px_1.5px_0px_#dc2626]"
-                  : "bg-white text-[#52525b] border-2 border-[#e2dfd6] hover:border-[#18181b] hover:text-[#18181b]"
+                  ? "bg-[#18181b] dark:bg-[#dc2626] text-white border-2 border-[var(--border-charcoal)] shadow-[1.5px_1.5px_0px_#dc2626]"
+                  : "bg-[var(--bg-panel)] text-[var(--text-secondary)] border-2 border-[var(--border-subtle)] hover:border-[var(--border-charcoal)] hover:text-[var(--text-primary)]"
               }`}
             >
               <span>{tab.label}</span>
               <span
                 className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${
-                  isActive ? "bg-[#dc2626] text-white" : "bg-[#f4f3ef] text-[#71717a]"
+                  isActive ? "bg-[#dc2626] text-white" : "bg-[var(--bg-card-hover)] text-[var(--text-muted)]"
                 }`}
               >
                 {tab.count}
@@ -92,7 +92,7 @@ export default function EventStreamTimeline({
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="p-6 text-center text-xs font-mono text-[#71717a] bg-[#fcfbfa] rounded-xl border border-dashed border-[#d3cfc2]"
+              className="p-6 text-center text-xs font-mono text-[var(--text-muted)] bg-[var(--bg-panel-elevated)] rounded-xl border border-dashed border-[var(--border-subtle)]"
             >
               No tickets matching &quot;{filterTab}&quot; filter.
             </motion.div>
@@ -128,48 +128,48 @@ export default function EventStreamTimeline({
                       onSelectEvent(item.id);
                     }
                   }}
-                  className={`p-3.5 rounded-xl border-2 transition-all duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#18181b] relative overflow-hidden ${
+                  className={`p-3.5 rounded-xl border-2 transition-all duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] relative overflow-hidden ${
                     isSelected
-                      ? "bg-[#ffffff] border-[#18181b] shadow-[3.5px_3.5px_0px_#18181b]"
-                      : "bg-[#fcfbfa] border-[#e2dfd6] hover:border-[#18181b] hover:bg-white hover:shadow-[2px_2px_0px_#18181b]"
+                      ? "bg-[var(--bg-panel)] border-[var(--border-charcoal)] shadow-[3.5px_3.5px_0px_var(--border-charcoal)] dark:shadow-[0_0_15px_rgba(220,38,38,0.3),2px_2px_0px_#dc2626]"
+                      : "bg-[var(--bg-panel-elevated)] border-[var(--border-subtle)] hover:border-[var(--border-charcoal)] hover:bg-[var(--bg-panel)] hover:shadow-[2px_2px_0px_var(--border-charcoal)]"
                   }`}
                 >
                   {/* Selected Active Marker Bar */}
                   {isSelected && (
                     <motion.div
                       layoutId="selectedTicketBar"
-                      className="absolute left-0 top-0 bottom-0 w-1 bg-[#dc2626]"
+                      className="absolute left-0 top-0 bottom-0 w-1 bg-[#dc2626] shadow-[0_0_8px_#dc2626]"
                     />
                   )}
 
                   {/* Header: Time and ID */}
-                  <div className="flex items-center justify-between mb-2 text-xs font-mono text-[#71717a]">
+                  <div className="flex items-center justify-between mb-2 text-xs font-mono text-[var(--text-muted)]">
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-[#dc2626]" aria-hidden="true" />
                       <span>{item.time}</span>
                       <span>•</span>
-                      <strong className="text-[#18181b]">{item.id}</strong>
+                      <strong className="text-[var(--text-primary)]">{item.id}</strong>
                     </div>
 
                     {item.status === "WAITING_APPROVAL" && (
-                      <span className="px-2 py-0.5 rounded-full bg-[#fef3c7] text-[#92400e] border border-[#f59e0b] font-bold text-[10px] flex items-center gap-1">
+                      <span className="px-2 py-0.5 rounded-full bg-[#fef3c7] dark:bg-amber-950/40 text-[#92400e] dark:text-amber-300 border border-[#f59e0b] font-bold text-[10px] flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b] animate-pulse" />
                         <span>REVIEW</span>
                       </span>
                     )}
                     {item.status === "SUCCESS" && (
-                      <span className="px-2 py-0.5 rounded-full bg-[#ecfdf5] text-[#065f46] border border-[#059669] font-bold text-[10px] flex items-center gap-1">
+                      <span className="px-2 py-0.5 rounded-full bg-[#ecfdf5] dark:bg-emerald-950/40 text-[#065f46] dark:text-emerald-300 border border-[#059669] font-bold text-[10px] flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#059669]" />
                         <span>DISPATCHED</span>
                       </span>
                     )}
                     {item.status === "NEEDS_FIX" && (
-                      <span className="px-2 py-0.5 rounded-full bg-[#fee2e2] text-[#991b1b] border border-[#dc2626] font-bold text-[10px]">
+                      <span className="px-2 py-0.5 rounded-full bg-[#fee2e2] dark:bg-red-950/40 text-[#991b1b] dark:text-red-300 border border-[#dc2626] font-bold text-[10px]">
                         DATA FIX
                       </span>
                     )}
                     {item.status === "FAILED" && (
-                      <span className="px-2 py-0.5 rounded-full bg-[#fee2e2] text-[#991b1b] border border-[#dc2626] font-bold text-[10px]">
+                      <span className="px-2 py-0.5 rounded-full bg-[#fee2e2] dark:bg-red-950/40 text-[#991b1b] dark:text-red-300 border border-[#dc2626] font-bold text-[10px]">
                         REJECTED
                       </span>
                     )}
@@ -177,22 +177,22 @@ export default function EventStreamTimeline({
 
                   {/* Title with Icon */}
                   <div className="flex items-start gap-2.5 mb-1.5">
-                    <div className="w-6 h-6 rounded bg-[#f4f3ef] border border-[#18181b] flex items-center justify-center flex-shrink-0 mt-0.5 text-[#18181b]">
+                    <div className="w-6 h-6 rounded bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] flex items-center justify-center flex-shrink-0 mt-0.5 text-[var(--text-primary)]">
                       <StatusIcon className="w-3.5 h-3.5" aria-hidden="true" />
                     </div>
-                    <h3 className="text-xs sm:text-sm font-bold text-[#18181b] leading-tight line-clamp-1">
+                    <h3 className="text-xs sm:text-sm font-bold text-[var(--text-primary)] leading-tight line-clamp-1">
                       {item.title}
                     </h3>
                   </div>
 
                   {/* Ticket Body Text */}
-                  <p className="text-xs sm:text-sm text-[#52525b] line-clamp-2 leading-relaxed pl-8">
+                  <p className="text-xs sm:text-sm text-[var(--text-secondary)] line-clamp-2 leading-relaxed pl-8">
                     &ldquo;{item.rawMessage}&rdquo;
                   </p>
 
                   {/* Footer metadata and human-readable action label */}
-                  <div className="flex items-center justify-between text-xs font-mono text-[#71717a] mt-2.5 pt-2 border-t border-[#f0eee6] pl-8">
-                    <span>By: <strong className="text-[#18181b]">{item.userName}</strong></span>
+                  <div className="flex items-center justify-between text-xs font-mono text-[var(--text-muted)] mt-2.5 pt-2 border-t border-[var(--border-subtle)] pl-8">
+                    <span>By: <strong className="text-[var(--text-primary)]">{item.userName}</strong></span>
                     <span className="text-[#dc2626] font-bold">
                       {formatActionLabel(item.actionPreview)}
                     </span>

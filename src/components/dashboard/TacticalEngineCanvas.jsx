@@ -52,7 +52,7 @@ export default function TacticalEngineCanvas({
       sub: "Sanitize & Hash",
       icon: Globe,
       status: "✓ Ready",
-      color: "#2563eb",
+      color: "#3b82f6",
     },
     {
       id: 2,
@@ -60,7 +60,7 @@ export default function TacticalEngineCanvas({
       sub: "Intent Extractor",
       icon: Brain,
       status: `✓ ${selectedEvent?.confidence || 98}%`,
-      color: "#7c3aed",
+      color: "#8b5cf6",
     },
     {
       id: 3,
@@ -73,7 +73,7 @@ export default function TacticalEngineCanvas({
           : selectedEvent?.status === "FAILED"
           ? "✗ Rejected"
           : "Review",
-      color: "#d97706",
+      color: "#f59e0b",
     },
     {
       id: 4,
@@ -234,18 +234,18 @@ export default function TacticalEngineCanvas({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 280, damping: 22 }}
-        className="dev-card bg-white p-6 sm:p-7 shadow-[3.5px_3.5px_0px_#18181b]"
+        className="dev-card bg-[var(--bg-panel)] p-6 sm:p-7 shadow-[3.5px_3.5px_0px_var(--border-charcoal)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.85)]"
       >
-        <div className="mb-5 pb-3 border-b-2 border-[#18181b] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="mb-5 pb-3 border-b-2 border-[var(--border-charcoal)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-base font-bold text-[#18181b] tracking-tight flex items-center gap-2">
+            <h2 className="text-base font-bold text-[var(--text-primary)] tracking-tight flex items-center gap-2">
               <span>Autonomous Request Automation Engine</span>
-              <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[#18181b] text-white flex items-center gap-1">
+              <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[var(--border-charcoal)] text-white flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse" />
                 <span>LIVE</span>
               </span>
             </h2>
-            <p className="text-xs sm:text-sm text-[#52525b] mt-1 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1 leading-relaxed">
               Enter natural language student requests. The engine categorizes with Gemini AI, synchronizes Notion, and executes actions.
             </p>
           </div>
@@ -257,7 +257,7 @@ export default function TacticalEngineCanvas({
             whileTap={{ scale: 0.96 }}
             onClick={handleTriggerDaemonPoll}
             disabled={daemonLoading}
-            className="btn-secondary btn-secondary-sm text-xs font-mono flex items-center gap-1.5 self-start sm:self-auto"
+            className="btn-secondary btn-secondary-sm text-xs font-mono flex items-center gap-1.5 self-start sm:self-auto shadow-[1.5px_1.5px_0px_var(--border-charcoal)]"
             title="Poll Notion Database for Operator Approvals"
           >
             {daemonLoading ? (
@@ -277,10 +277,10 @@ export default function TacticalEngineCanvas({
               exit={{ opacity: 0, y: -10 }}
               className={`p-3 mb-4 rounded-lg border-2 text-xs font-mono font-semibold flex items-center justify-between ${
                 daemonFeedback.type === "success"
-                  ? "bg-[#ecfdf5] border-[#059669] text-[#065f46]"
+                  ? "bg-[#ecfdf5] dark:bg-emerald-950/40 border-[#059669] text-[#065f46] dark:text-emerald-300"
                   : daemonFeedback.type === "error"
-                  ? "bg-[#fee2e2] border-[#dc2626] text-[#991b1b]"
-                  : "bg-[#f4f3ef] border-[#18181b] text-[#18181b]"
+                  ? "bg-[#fee2e2] dark:bg-red-950/40 border-[#dc2626] text-[#991b1b] dark:text-red-300"
+                  : "bg-[var(--bg-card-hover)] border-[var(--border-charcoal)] text-[var(--text-primary)]"
               }`}
             >
               <span>🤖 {daemonFeedback.msg}</span>
@@ -297,7 +297,7 @@ export default function TacticalEngineCanvas({
 
         {/* Quick Fill Presets */}
         <div className="mb-5">
-          <span className="text-xs font-mono uppercase font-bold text-[#71717a] block mb-2">
+          <span className="text-xs font-mono uppercase font-bold text-[var(--text-muted)] block mb-2">
             Quick Test Presets:
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -308,7 +308,7 @@ export default function TacticalEngineCanvas({
                 whileHover={{ scale: 1.02, y: -1 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleApplyPreset(p)}
-                className="btn-secondary btn-secondary-sm w-full text-xs font-mono text-left justify-start py-2.5 px-3 font-semibold h-full truncate"
+                className="btn-secondary btn-secondary-sm w-full text-xs font-mono text-left justify-start py-2.5 px-3 font-semibold h-full truncate shadow-[1.5px_1.5px_0px_var(--border-charcoal)]"
                 title={`Preset ${idx + 1}: ${p.label}`}
               >
                 <span className="font-bold text-[#dc2626] mr-1.5 flex-shrink-0">P{idx + 1}:</span>
@@ -322,7 +322,7 @@ export default function TacticalEngineCanvas({
         <form onSubmit={handleRunPipeline} className="space-y-4">
           {/* Event Track Selector */}
           <div>
-            <label htmlFor="engine-event" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5 flex items-center gap-1.5">
+            <label htmlFor="engine-event" className="block text-xs font-mono font-bold text-[var(--text-primary)] mb-1.5 flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5 text-[#dc2626]" aria-hidden="true" />
               <span>EVENT / WORKSHOP TRACK</span>
             </label>
@@ -333,7 +333,7 @@ export default function TacticalEngineCanvas({
               className="dev-input font-medium cursor-pointer"
             >
               {Object.values(EVENT_CATALOG).map((ev) => (
-                <option key={ev.id} value={ev.id}>
+                <option key={ev.id} value={ev.id} className="bg-[var(--bg-panel)] text-[var(--text-primary)]">
                   {ev.name} ({ev.track})
                 </option>
               ))}
@@ -342,7 +342,7 @@ export default function TacticalEngineCanvas({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="engine-username" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
+              <label htmlFor="engine-username" className="block text-xs font-mono font-bold text-[var(--text-primary)] mb-1.5">
                 STUDENT / SENDER NAME
               </label>
               <input
@@ -355,7 +355,7 @@ export default function TacticalEngineCanvas({
               />
             </div>
             <div>
-              <label htmlFor="engine-email" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
+              <label htmlFor="engine-email" className="block text-xs font-mono font-bold text-[var(--text-primary)] mb-1.5">
                 STUDENT EMAIL ADDRESS
               </label>
               <input
@@ -370,7 +370,7 @@ export default function TacticalEngineCanvas({
           </div>
 
           <div>
-            <label htmlFor="engine-prompt" className="block text-xs font-mono font-bold text-[#18181b] mb-1.5">
+            <label htmlFor="engine-prompt" className="block text-xs font-mono font-bold text-[var(--text-primary)] mb-1.5">
               REQUEST / COMPLAINT PROMPT (NATURAL LANGUAGE)
             </label>
             <textarea
@@ -391,8 +391,8 @@ export default function TacticalEngineCanvas({
                 exit={{ opacity: 0, scale: 0.96 }}
                 className={`p-3 rounded-lg border-2 text-xs font-mono font-semibold ${
                   submitFeedback.type === "success"
-                    ? "bg-[#ecfdf5] border-[#059669] text-[#065f46]"
-                    : "bg-[#fee2e2] border-[#dc2626] text-[#991b1b]"
+                    ? "bg-[#ecfdf5] dark:bg-emerald-950/40 border-[#059669] text-[#065f46] dark:text-emerald-300"
+                    : "bg-[#fee2e2] dark:bg-red-950/40 border-[#dc2626] text-[#991b1b] dark:text-red-300"
                 }`}
               >
                 {submitFeedback.msg}
@@ -406,7 +406,7 @@ export default function TacticalEngineCanvas({
               whileHover={{ scale: 1.03, y: -1 }}
               whileTap={{ scale: 0.97 }}
               disabled={isSubmitting || !rawPrompt.trim()}
-              className="btn-primary w-full sm:w-auto px-8 py-3 text-sm font-bold flex items-center justify-center gap-2 relative overflow-hidden group shadow-[2.5px_2.5px_0px_#18181b]"
+              className="btn-primary w-full sm:w-auto px-8 py-3 text-sm font-bold flex items-center justify-center gap-2 relative overflow-hidden group shadow-[2.5px_2.5px_0px_var(--border-charcoal)] dark:shadow-[0_0_15px_rgba(220,38,38,0.35)]"
             >
               {isSubmitting ? (
                 <>
@@ -422,40 +422,40 @@ export default function TacticalEngineCanvas({
               )}
             </motion.button>
 
-            <span className="hidden sm:inline-block text-xs font-mono text-[#52525b] font-medium">
+            <span className="hidden sm:inline-block text-xs font-mono text-[var(--text-secondary)] font-medium">
               ⚡ Ingests to Notion + Triggers Real Mailer
             </span>
           </div>
         </form>
       </motion.div>
 
-      {/* Center Card 2: 5-STAGE PIPELINE PROGRESS (ROTATING WHEEL OR GRID VIEW) */}
+      {/* Center Card 2: 5-STAGE PIPELINE PROGRESS */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 280, damping: 22, delay: 0.08 }}
-        className="dev-card bg-white p-5 sm:p-6 shadow-[3.5px_3.5px_0px_#18181b] overflow-hidden"
+        className="dev-card bg-[var(--bg-panel)] p-5 sm:p-6 shadow-[3.5px_3.5px_0px_var(--border-charcoal)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.85)] overflow-hidden"
       >
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-[#e2dfd6]">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-2">
-            <h3 className="text-xs font-mono font-bold text-[#18181b] uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-xs font-mono font-bold text-[var(--text-primary)] uppercase tracking-wider flex items-center gap-2">
               <Layers className="w-4 h-4 text-[#dc2626]" aria-hidden="true" />
               <span>Pipeline Execution Flow</span>
             </h3>
-            <span className="text-xs font-mono text-[#71717a] hidden sm:inline">
+            <span className="text-xs font-mono text-[var(--text-muted)] hidden sm:inline">
               • Incident: <strong className="text-[#dc2626] font-bold">{selectedEvent?.id || "REQ-108"}</strong>
             </span>
           </div>
 
-          {/* Layout Mode Switcher (Wheel vs Grid) */}
-          <div className="flex items-center gap-1 p-1 rounded-lg bg-[#f4f3ef] border border-[#e2dfd6] text-xs font-mono">
+          {/* Layout Mode Switcher */}
+          <div className="flex items-center gap-1 p-1 rounded-lg bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-xs font-mono">
             <button
               type="button"
               onClick={() => setFlowLayout("WHEEL")}
               className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
                 flowLayout === "WHEEL"
-                  ? "bg-[#18181b] text-white shadow-[1px_1px_0px_#dc2626]"
-                  : "text-[#52525b] hover:text-[#18181b]"
+                  ? "bg-[#18181b] dark:bg-[#dc2626] text-white shadow-[1px_1px_0px_#dc2626]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               🔄 Circular Wheel
@@ -465,8 +465,8 @@ export default function TacticalEngineCanvas({
               onClick={() => setFlowLayout("GRID")}
               className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
                 flowLayout === "GRID"
-                  ? "bg-[#18181b] text-white shadow-[1px_1px_0px_#dc2626]"
-                  : "text-[#52525b] hover:text-[#18181b]"
+                  ? "bg-[#18181b] dark:bg-[#dc2626] text-white shadow-[1px_1px_0px_#dc2626]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               📊 Linear Grid
@@ -500,28 +500,28 @@ export default function TacticalEngineCanvas({
                       setActiveStage(stage.id);
                     }
                   }}
-                  className={`p-3 rounded-xl border-2 transition-all cursor-pointer relative focus-visible:outline-2 focus-visible:outline-[#18181b] ${
+                  className={`p-3 rounded-xl border-2 transition-all cursor-pointer relative focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] ${
                     isTarget
-                      ? "bg-[#ffffff] border-[#18181b] shadow-[3.5px_3.5px_0px_#dc2626]"
-                      : "bg-[#fcfbfa] border-[#e2dfd6] hover:border-[#18181b] hover:bg-white hover:shadow-[2px_2px_0px_#18181b]"
+                      ? "bg-[var(--bg-panel)] border-[var(--border-charcoal)] shadow-[3.5px_3.5px_0px_#dc2626] dark:shadow-[0_0_15px_rgba(220,38,38,0.35),2px_2px_0px_#dc2626]"
+                      : "bg-[var(--bg-panel-elevated)] border-[var(--border-subtle)] hover:border-[var(--border-charcoal)] hover:bg-[var(--bg-panel)] hover:shadow-[2px_2px_0px_var(--border-charcoal)]"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div
-                      className="w-7 h-7 rounded-md bg-[#18181b] text-white flex items-center justify-center shadow-[1px_1px_0px_#dc2626]"
+                      className="w-7 h-7 rounded-md bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center shadow-[1px_1px_0px_#dc2626]"
                     >
                       <stage.icon className="w-3.5 h-3.5 text-white" aria-hidden="true" />
                     </div>
-                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[#f4f3ef] border border-[#e2dfd6] text-[#18181b]">
+                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-[var(--text-primary)]">
                       {stage.status}
                     </span>
                   </div>
-                  <div className="text-xs font-bold text-[#18181b] truncate">{stage.title}</div>
-                  <div className="text-xs text-[#71717a] font-mono truncate">{stage.sub}</div>
+                  <div className="text-xs font-bold text-[var(--text-primary)] truncate">{stage.title}</div>
+                  <div className="text-xs text-[var(--text-muted)] font-mono truncate">{stage.sub}</div>
 
                   {idx < stages.length - 1 && (
                     <div className="hidden sm:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
-                      <ArrowRight className="w-3.5 h-3.5 text-[#18181b]" aria-hidden="true" />
+                      <ArrowRight className="w-3.5 h-3.5 text-[var(--text-primary)]" aria-hidden="true" />
                     </div>
                   )}
                 </motion.div>
@@ -536,20 +536,20 @@ export default function TacticalEngineCanvas({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 280, damping: 22, delay: 0.14 }}
-        className="dev-card bg-white p-6 space-y-5 shadow-[3.5px_3.5px_0px_#18181b]"
+        className="dev-card bg-[var(--bg-panel)] p-6 space-y-5 shadow-[3.5px_3.5px_0px_var(--border-charcoal)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.85)]"
       >
         {/* Output Panel Header */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-[#18181b]">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-[var(--border-charcoal)]">
           <div className="flex items-center gap-2">
-            <h3 className="text-xs font-mono font-bold uppercase text-[#18181b]">
+            <h3 className="text-xs font-mono font-bold uppercase text-[var(--text-primary)]">
               Incident Output & Clearance:
             </h3>
-            <span className="px-2.5 py-0.5 rounded bg-[#18181b] text-white text-xs font-mono font-bold shadow-[1px_1px_0px_#dc2626]">
+            <span className="px-2.5 py-0.5 rounded bg-[#18181b] dark:bg-[#dc2626] text-white text-xs font-mono font-bold shadow-[1px_1px_0px_#dc2626]">
               {selectedEvent?.id || "REQ-108"}
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 p-1 rounded-lg bg-[#f4f3ef] border border-[#e2dfd6] text-xs font-mono">
+          <div className="flex items-center gap-1.5 p-1 rounded-lg bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-xs font-mono">
             {[
               { id: "TACTICAL", label: "Analysis" },
               { id: "PAYLOAD", label: "JSON Schema" },
@@ -560,10 +560,10 @@ export default function TacticalEngineCanvas({
                 type="button"
                 whileTap={{ scale: 0.96 }}
                 onClick={() => setViewMode(tab.id)}
-                className={`px-3 py-1 rounded-md text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-[#18181b] relative ${
+                className={`px-3 py-1 rounded-md text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] relative ${
                   viewMode === tab.id
-                    ? "bg-[#18181b] text-white shadow-[1.5px_1.5px_0px_#dc2626]"
-                    : "text-[#52525b] hover:text-[#18181b]"
+                    ? "bg-[#18181b] dark:bg-[#dc2626] text-white shadow-[1.5px_1.5px_0px_#dc2626]"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 {tab.label}
@@ -584,43 +584,43 @@ export default function TacticalEngineCanvas({
               className="space-y-4"
             >
               {/* Raw Complaint Panel */}
-              <div className="p-4 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b]">
-                <div className="flex flex-wrap items-center justify-between text-xs font-mono text-[#71717a] mb-2 gap-1">
-                  <span className="font-bold text-[#18181b] flex items-center gap-1.5">
+              <div className="p-4 rounded-xl bg-[var(--bg-panel-elevated)] border-2 border-[var(--border-charcoal)]">
+                <div className="flex flex-wrap items-center justify-between text-xs font-mono text-[var(--text-muted)] mb-2 gap-1">
+                  <span className="font-bold text-[var(--text-primary)] flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-[#dc2626]" />
                     <span>RAW COMPLAINT INGESTED:</span>
                   </span>
                   <span>
-                    From: <strong className="text-[#18181b]">{selectedEvent?.userName}</strong> ({selectedEvent?.userEmail})
+                    From: <strong className="text-[var(--text-primary)]">{selectedEvent?.userName}</strong> ({selectedEvent?.userEmail})
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-[#18181b] font-medium italic leading-relaxed">
+                <p className="text-xs sm:text-sm text-[var(--text-primary)] font-medium italic leading-relaxed">
                   &ldquo;{selectedEvent?.rawMessage}&rdquo;
                 </p>
               </div>
 
               {/* AI Classification Breakdown Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
-                <motion.div whileHover={{ y: -2 }} className="p-3 rounded-xl bg-white border-2 border-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
-                  <span className="text-xs text-[#71717a] block font-bold">CATEGORY</span>
-                  <strong className="text-xs text-[#18181b] truncate block mt-1">
+                <motion.div whileHover={{ y: -2 }} className="p-3 rounded-xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[1.5px_1.5px_0px_var(--border-charcoal)]">
+                  <span className="text-xs text-[var(--text-muted)] block font-bold">CATEGORY</span>
+                  <strong className="text-xs text-[var(--text-primary)] truncate block mt-1">
                     {formatDisplayCategory(selectedEvent?.category)}
                   </strong>
                 </motion.div>
-                <motion.div whileHover={{ y: -2 }} className="p-3 rounded-xl bg-white border-2 border-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
-                  <span className="text-xs text-[#71717a] block font-bold">AI CONFIDENCE</span>
-                  <strong className="text-xs text-[#059669] block mt-1">
+                <motion.div whileHover={{ y: -2 }} className="p-3 rounded-xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[1.5px_1.5px_0px_var(--border-charcoal)]">
+                  <span className="text-xs text-[var(--text-muted)] block font-bold">AI CONFIDENCE</span>
+                  <strong className="text-xs text-[#059669] dark:text-[#10b981] block mt-1">
                     {selectedEvent?.confidence || 98}% Accuracy
                   </strong>
                 </motion.div>
-                <motion.div whileHover={{ y: -2 }} className="p-3 rounded-xl bg-white border-2 border-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
-                  <span className="text-xs text-[#71717a] block font-bold">ATTENDANCE</span>
-                  <strong className="text-xs text-[#18181b] block mt-1">
+                <motion.div whileHover={{ y: -2 }} className="p-3 rounded-xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[1.5px_1.5px_0px_var(--border-charcoal)]">
+                  <span className="text-xs text-[var(--text-muted)] block font-bold">ATTENDANCE</span>
+                  <strong className="text-xs text-[var(--text-primary)] block mt-1">
                     {selectedEvent?.attendanceVerified ? "Verified (100%) ✓" : "Unverified ⚠️"}
                   </strong>
                 </motion.div>
-                <motion.div whileHover={{ y: -2 }} className="p-3 rounded-xl bg-white border-2 border-[#18181b] shadow-[1.5px_1.5px_0px_#18181b]">
-                  <span className="text-xs text-[#71717a] block font-bold">PRIORITY</span>
+                <motion.div whileHover={{ y: -2 }} className="p-3 rounded-xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[1.5px_1.5px_0px_var(--border-charcoal)]">
+                  <span className="text-xs text-[var(--text-muted)] block font-bold">PRIORITY</span>
                   <strong className="text-xs text-[#dc2626] block mt-1">
                     {selectedEvent?.priority || "HIGH"}
                   </strong>
@@ -628,13 +628,13 @@ export default function TacticalEngineCanvas({
               </div>
 
               {/* Operator Clearance Station */}
-              <div className="p-4 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b] flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="p-4 rounded-xl bg-[var(--bg-panel-elevated)] border-2 border-[var(--border-charcoal)] flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <span className="text-xs font-mono font-bold text-[#18181b] flex items-center gap-1.5">
+                  <span className="text-xs font-mono font-bold text-[var(--text-primary)] flex items-center gap-1.5">
                     <UserCheck className="w-4 h-4 text-[#dc2626]" aria-hidden="true" />
                     <span>Human-in-the-Loop Clearance:</span>
                   </span>
-                  <p className="text-xs sm:text-sm text-[#52525b] mt-1 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1 leading-relaxed">
                     {selectedEvent?.status === "WAITING_APPROVAL"
                       ? "Requires operator review before real certificate dispatch."
                       : selectedEvent?.status === "FAILED"
@@ -652,7 +652,7 @@ export default function TacticalEngineCanvas({
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => onApproveEvent(selectedEvent?.id)}
-                      className="btn-success btn-success-sm text-xs font-mono shadow-[2px_2px_0px_#18181b]"
+                      className="btn-success btn-success-sm text-xs font-mono shadow-[2px_2px_0px_var(--border-charcoal)]"
                     >
                       <Check className="w-4 h-4 stroke-[3]" aria-hidden="true" />
                       <span>Approve & Dispatch</span>
@@ -662,22 +662,22 @@ export default function TacticalEngineCanvas({
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => onRejectEvent(selectedEvent?.id)}
-                      className="btn-danger btn-danger-sm text-xs font-mono shadow-[2px_2px_0px_#18181b]"
+                      className="btn-danger btn-danger-sm text-xs font-mono shadow-[2px_2px_0px_var(--border-charcoal)]"
                     >
                       <X className="w-4 h-4 stroke-[3]" aria-hidden="true" />
                       <span>Reject</span>
                     </motion.button>
                   </div>
                 ) : selectedEvent?.status === "FAILED" ? (
-                  <span className="px-3 py-1.5 rounded-lg bg-[#fee2e2] border-2 border-[#dc2626] text-[#991b1b] text-xs font-mono font-bold">
+                  <span className="px-3 py-1.5 rounded-lg bg-[#fee2e2] dark:bg-red-950/40 border-2 border-[#dc2626] text-[#991b1b] dark:text-red-300 text-xs font-mono font-bold">
                     ✗ Rejected by Operator
                   </span>
                 ) : selectedEvent?.status === "NEEDS_FIX" ? (
-                  <span className="px-3 py-1.5 rounded-lg bg-[#fef3c7] border-2 border-[#f59e0b] text-[#92400e] text-xs font-mono font-bold">
+                  <span className="px-3 py-1.5 rounded-lg bg-[#fef3c7] dark:bg-amber-950/40 border-2 border-[#f59e0b] text-[#92400e] dark:text-amber-300 text-xs font-mono font-bold">
                     ⚠️ Requires Data Fix
                   </span>
                 ) : (
-                  <span className="px-3 py-1.5 rounded-lg bg-[#ecfdf5] border-2 border-[#059669] text-[#065f46] text-xs font-mono font-bold">
+                  <span className="px-3 py-1.5 rounded-lg bg-[#ecfdf5] dark:bg-emerald-950/40 border-2 border-[#059669] text-[#065f46] dark:text-emerald-300 text-xs font-mono font-bold">
                     ✓ Executed & Sealed
                   </span>
                 )}
@@ -696,7 +696,7 @@ export default function TacticalEngineCanvas({
               className="space-y-3"
             >
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-[#18181b] font-bold flex items-center gap-1.5">
+                <span className="text-[var(--text-primary)] font-bold flex items-center gap-1.5">
                   <Terminal className="w-4 h-4 text-[#dc2626]" aria-hidden="true" />
                   Extracted JSON Entity (Gemini AI):
                 </span>
@@ -705,7 +705,7 @@ export default function TacticalEngineCanvas({
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
                   onClick={handleCopyJson}
-                  className="btn-secondary btn-secondary-sm text-xs font-mono font-bold flex items-center gap-1.5"
+                  className="btn-secondary btn-secondary-sm text-xs font-mono font-bold flex items-center gap-1.5 shadow-[1.5px_1.5px_0px_var(--border-charcoal)]"
                 >
                   {copied ? (
                     <>
@@ -714,13 +714,13 @@ export default function TacticalEngineCanvas({
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5 text-[#18181b]" aria-hidden="true" />
+                      <Copy className="w-3.5 h-3.5 text-[var(--text-primary)]" aria-hidden="true" />
                       <span>Copy JSON</span>
                     </>
                   )}
                 </motion.button>
               </div>
-              <pre className="p-4 rounded-xl bg-[#18181b] text-xs text-[#4ade80] overflow-x-auto border-2 border-[#18181b] leading-relaxed font-mono">
+              <pre className="p-4 rounded-xl bg-[#111318] text-xs text-[#4ade80] overflow-x-auto border-2 border-[var(--border-charcoal)] leading-relaxed font-mono shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)]">
                 {JSON.stringify(payloadData, null, 2)}
               </pre>
             </motion.div>
@@ -736,25 +736,25 @@ export default function TacticalEngineCanvas({
               transition={{ duration: 0.2 }}
               className="space-y-3 font-mono text-xs"
             >
-              <div className="text-[#18181b] font-bold flex items-center gap-1.5">
+              <div className="text-[var(--text-primary)] font-bold flex items-center gap-1.5">
                 <Database className="w-4 h-4 text-[#d97706]" aria-hidden="true" />
                 <span>Notion Database Synchronized Page:</span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                <div className="p-3 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b]">
-                  <span className="text-[#71717a] block text-xs">PARENT DB</span>
-                  <span className="text-[#18181b] font-bold">📥 Requests DB</span>
+                <div className="p-3 rounded-xl bg-[var(--bg-panel-elevated)] border-2 border-[var(--border-charcoal)]">
+                  <span className="text-[var(--text-muted)] block text-xs">PARENT DB</span>
+                  <span className="text-[var(--text-primary)] font-bold">📥 Requests DB</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b]">
-                  <span className="text-[#71717a] block text-xs">SYNC STATUS</span>
-                  <span className="text-[#059669] font-bold">Live Synchronized</span>
+                <div className="p-3 rounded-xl bg-[var(--bg-panel-elevated)] border-2 border-[var(--border-charcoal)]">
+                  <span className="text-[var(--text-muted)] block text-xs">SYNC STATUS</span>
+                  <span className="text-[#059669] dark:text-[#10b981] font-bold">Live Synchronized</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b]">
-                  <span className="text-[#71717a] block text-xs">AUTHENTICATION</span>
-                  <span className="text-[#18181b] font-bold">Bot Token</span>
+                <div className="p-3 rounded-xl bg-[var(--bg-panel-elevated)] border-2 border-[var(--border-charcoal)]">
+                  <span className="text-[var(--text-muted)] block text-xs">AUTHENTICATION</span>
+                  <span className="text-[var(--text-primary)] font-bold">Bot Token</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#fcfbfa] border-2 border-[#18181b]">
-                  <span className="text-[#71717a] block text-xs">AUDIT RUN ID</span>
+                <div className="p-3 rounded-xl bg-[var(--bg-panel-elevated)] border-2 border-[var(--border-charcoal)]">
+                  <span className="text-[var(--text-muted)] block text-xs">AUDIT RUN ID</span>
                   <span className="text-[#dc2626] font-bold">
                     {selectedEvent?.id ? `RUN-${selectedEvent.id.replace('REQ-', '')}` : 'RUN-042'}
                   </span>
