@@ -1,6 +1,5 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ShieldCheck,
   Zap,
@@ -9,14 +8,19 @@ import {
   Code2,
   Database,
   Radio,
+  ChevronDown,
+  Activity,
+  CheckCircle2,
 } from "lucide-react";
 
 export default function BentoMetrics({ stats, runLogs }) {
+  const [showTelemetryDetails, setShowTelemetryDetails] = useState(false);
+
   return (
     <div className="space-y-5">
-      {/* Sidebar Section Header */}
+      {/* Sidebar Section Header (Issue 8) */}
       <div className="flex items-center justify-between px-1">
-        <h2 className="text-xs font-mono text-[var(--text-muted)] uppercase font-bold tracking-wider">
+        <h2 className="text-xs sm:text-sm font-mono text-[var(--text-secondary)] font-bold">
           Utilities & Telemetry
         </h2>
         <span className="flex items-center gap-1 text-[10px] font-mono text-[#059669] dark:text-[#10b981] font-bold">
@@ -55,7 +59,7 @@ export default function BentoMetrics({ stats, runLogs }) {
         </div>
       </motion.a>
 
-      {/* Card 2: Engine SLA & Performance Telemetry */}
+      {/* Card 2: Engine Performance Telemetry (Issue 13: Clear hierarchy & scannable metrics) */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
@@ -76,66 +80,103 @@ export default function BentoMetrics({ stats, runLogs }) {
           </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-2.5 mb-4 font-mono">
-          <div className="p-2.5 rounded-lg bg-[var(--bg-panel-elevated)] border-2 border-[var(--border-charcoal)]">
-            <span className="text-xs text-[var(--text-muted)] block font-semibold">AVG LATENCY</span>
-            <span className="text-lg sm:text-xl font-black text-[var(--text-primary)] block mt-0.5">1.42s</span>
-            <span className="text-xs text-[#059669] dark:text-[#10b981] font-bold block mt-0.5">Target: &lt;3.0s</span>
+        {/* Prominent Primary Metrics (3 Columns, 2-Second Scan) */}
+        <div className="grid grid-cols-3 gap-2 mb-4 font-mono text-center">
+          <div className="p-2.5 rounded-lg bg-[var(--bg-panel-elevated)] border border-[var(--border-charcoal)] shadow-[1px_1px_0px_var(--border-charcoal)]">
+            <span className="text-[10px] text-[var(--text-muted)] block font-semibold uppercase">Latency</span>
+            <span className="text-base sm:text-lg font-black text-[var(--text-primary)] block mt-0.5">120ms</span>
+            <span className="text-[9px] text-[#059669] dark:text-[#10b981] font-bold block mt-0.5">Target &lt;3s</span>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-[var(--bg-panel-elevated)] border-2 border-[var(--border-charcoal)]">
-            <span className="text-xs text-[var(--text-muted)] block font-semibold">AI ACCURACY</span>
-            <span className="text-lg sm:text-xl font-black text-[#dc2626] block mt-0.5">98.6%</span>
-            <span className="text-xs text-[var(--text-secondary)] block mt-0.5">Gemini Flash</span>
+          <div className="p-2.5 rounded-lg bg-[var(--bg-panel-elevated)] border border-[var(--border-charcoal)] shadow-[1px_1px_0px_var(--border-charcoal)]">
+            <span className="text-[10px] text-[var(--text-muted)] block font-semibold uppercase">Accuracy</span>
+            <span className="text-base sm:text-lg font-black text-[#dc2626] block mt-0.5">98.4%</span>
+            <span className="text-[9px] text-[var(--text-secondary)] block mt-0.5">Gemini AI</span>
+          </div>
+
+          <div className="p-2.5 rounded-lg bg-[var(--bg-panel-elevated)] border border-[var(--border-charcoal)] shadow-[1px_1px_0px_var(--border-charcoal)]">
+            <span className="text-[10px] text-[var(--text-muted)] block font-semibold uppercase">Runs</span>
+            <span className="text-base sm:text-lg font-black text-[var(--text-primary)] block mt-0.5">1,248</span>
+            <span className="text-[9px] text-[#059669] dark:text-[#10b981] font-bold block mt-0.5">Verified</span>
           </div>
         </div>
 
-        {/* Action Type Progress Bars with Smooth Width Animations */}
-        <div className="space-y-3 pt-1 text-xs font-mono">
-          <div>
-            <div className="flex justify-between text-[var(--text-secondary)] mb-1">
-              <span>PDF Certificates Dispatched</span>
-              <strong className="text-[var(--text-primary)]">42% (148)</strong>
-            </div>
-            <div className="h-2.5 w-full bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] rounded-full overflow-hidden">
+        {/* Expandable Secondary Telemetry Details */}
+        <div className="pt-2 border-t border-[var(--border-subtle)]">
+          <button
+            type="button"
+            onClick={() => setShowTelemetryDetails(!showTelemetryDetails)}
+            aria-expanded={showTelemetryDetails}
+            className="w-full flex items-center justify-between text-xs font-mono font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors py-1 cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)]"
+          >
+            <span>Detailed Dispatch Breakdown</span>
+            <ChevronDown
+              className={`w-4 h-4 transition-transform duration-200 ${
+                showTelemetryDetails ? "rotate-180 text-[#dc2626]" : ""
+              }`}
+              aria-hidden="true"
+            />
+          </button>
+
+          <AnimatePresence>
+            {showTelemetryDetails && (
               <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: "42%" }}
-                transition={{ duration: 1, ease: "easeOut" }}
-                className="h-full bg-[var(--border-charcoal)] dark:bg-[#3b82f6] rounded-full"
-              />
-            </div>
-          </div>
-          <div>
-            <div className="flex justify-between text-[var(--text-secondary)] mb-1">
-              <span>Transactional Emails</span>
-              <strong className="text-[#dc2626]">38% (134)</strong>
-            </div>
-            <div className="h-2.5 w-full bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: "38%" }}
-                transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
-                className="h-full bg-[#dc2626] rounded-full shadow-[0_0_8px_#dc2626]"
-              />
-            </div>
-          </div>
-          <div>
-            <div className="flex justify-between text-[var(--text-secondary)] mb-1">
-              <span>Operator Clearance</span>
-              <strong className="text-[#059669] dark:text-[#10b981]">20% (71)</strong>
-            </div>
-            <div className="h-2.5 w-full bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: "20%" }}
-                transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-                className="h-full bg-[#059669] rounded-full shadow-[0_0_8px_#059669]"
-              />
-            </div>
-          </div>
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden space-y-3 pt-3 text-xs font-mono"
+              >
+                <div>
+                  <div className="flex justify-between text-[var(--text-secondary)] mb-1">
+                    <span>PDF Certificates Dispatched</span>
+                    <strong className="text-[var(--text-primary)]">42% (148)</strong>
+                  </div>
+                  <div className="h-2 w-full bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: "42%" }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      className="h-full bg-[var(--border-charcoal)] dark:bg-[#3b82f6] rounded-full"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-[var(--text-secondary)] mb-1">
+                    <span>Transactional Emails</span>
+                    <strong className="text-[#dc2626]">38% (134)</strong>
+                  </div>
+                  <div className="h-2 w-full bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: "38%" }}
+                      transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+                      className="h-full bg-[#dc2626] rounded-full shadow-[0_0_8px_#dc2626]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-[var(--text-secondary)] mb-1">
+                    <span>Operator Clearance</span>
+                    <strong className="text-[#059669] dark:text-[#10b981]">20% (71)</strong>
+                  </div>
+                  <div className="h-2 w-full bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: "20%" }}
+                      transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+                      className="h-full bg-[#059669] rounded-full shadow-[0_0_8px_#059669]"
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
+
 
       {/* Card 3: Tamper-Proof Notion Run Log Feed */}
       <motion.div

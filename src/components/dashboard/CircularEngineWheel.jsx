@@ -28,10 +28,12 @@ export default function CircularEngineWheel({
   const [isHovered, setIsHovered] = useState(false);
 
   // 5 orbital node positions spaced equally around 360 degrees (0, 72, 144, 216, 288)
-  const radius = 135; // Radius in pixels for orbit nodes
+  // Generous radius to prevent any overlap between nodes, connecting lines, and central hub (Issue 10)
+  const radius = 160;
+  const viewBoxCenter = 220;
 
   return (
-    <div className="flex flex-col items-center justify-center relative select-none py-2">
+    <div className="flex flex-col items-center justify-center relative select-none py-2 w-full overflow-hidden">
       {/* Top Controls Bar */}
       <div className="w-full flex items-center justify-between px-2 mb-3 text-xs font-mono">
         <div className="flex items-center gap-2">
@@ -54,10 +56,10 @@ export default function CircularEngineWheel({
           {/* Play/Pause Rotation Toggle */}
           <motion.button
             type="button"
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.92 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setIsRotating(!isRotating)}
-            className="px-2.5 py-1 rounded-md bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] text-[var(--text-primary)] font-bold text-[11px] flex items-center gap-1 shadow-[1px_1px_0px_var(--border-charcoal)] hover:bg-[var(--bg-panel)] transition-all cursor-pointer"
+            className="btn-secondary btn-secondary-sm text-[11px] font-mono flex items-center gap-1 cursor-pointer"
             title={isRotating ? "Pause Orbit Wheel" : "Resume Orbit Wheel"}
           >
             {isRotating ? (
@@ -76,10 +78,10 @@ export default function CircularEngineWheel({
           {/* Speed Toggle */}
           <motion.button
             type="button"
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.92 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setRotationSpeed((prev) => (prev === 32 ? 18 : prev === 18 ? 48 : 32))}
-            className="px-2 py-1 rounded-md bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-[var(--text-secondary)] font-bold text-[11px] hover:border-[var(--border-charcoal)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
+            className="btn-secondary btn-secondary-sm text-[11px] font-mono cursor-pointer"
             title="Cycle Orbit Wheel Speed"
           >
             {rotationSpeed === 48 ? "0.5x" : rotationSpeed === 32 ? "1x" : "2x"}
@@ -87,187 +89,190 @@ export default function CircularEngineWheel({
         </div>
       </div>
 
-      {/* Main Wheel Viewport */}
-      <div
-        className="relative w-[340px] h-[340px] sm:w-[380px] sm:h-[380px] flex items-center justify-center"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* Background Radar Rings & Crosshairs */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          viewBox="0 0 380 380"
-          fill="none"
-          aria-hidden="true"
+      {/* Main Wheel Viewport - Increased container size for spacious layout (Issue 10) */}
+      <div className="w-full flex items-center justify-center overflow-visible py-2">
+        <div
+          className="relative w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] flex items-center justify-center scale-[0.92] xs:scale-100 transition-transform origin-center"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
-          {/* Outer Dashed Orbit Track */}
-          <circle
-            cx="190"
-            cy="190"
-            r={radius}
-            stroke="currentColor"
-            className="text-[var(--border-charcoal)]"
-            strokeWidth="1.5"
-            strokeDasharray="4 4"
-            opacity="0.3"
-          />
+          {/* Background Radar Rings & Crosshairs */}
+          <svg
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            viewBox="0 0 440 440"
+            fill="none"
+            aria-hidden="true"
+          >
+            {/* Outer Dashed Orbit Track */}
+            <circle
+              cx={viewBoxCenter}
+              cy={viewBoxCenter}
+              r={radius}
+              stroke="currentColor"
+              className="text-[var(--border-charcoal)]"
+              strokeWidth="1.5"
+              strokeDasharray="5 5"
+              opacity="0.3"
+            />
 
-          {/* Inner Secondary Ring */}
-          <circle
-            cx="190"
-            cy="190"
-            r={radius * 0.55}
-            stroke="currentColor"
-            className="text-[var(--border-charcoal)]"
-            strokeWidth="1"
-            strokeDasharray="2 4"
-            opacity="0.2"
-          />
+            {/* Inner Secondary Ring */}
+            <circle
+              cx={viewBoxCenter}
+              cy={viewBoxCenter}
+              r={radius * 0.55}
+              stroke="currentColor"
+              className="text-[var(--border-charcoal)]"
+              strokeWidth="1"
+              strokeDasharray="3 4"
+              opacity="0.2"
+            />
 
-          {/* Subtle Crosshairs */}
-          <line
-            x1="190"
-            y1="20"
-            x2="190"
-            y2="360"
-            stroke="currentColor"
-            className="text-[var(--border-charcoal)]"
-            strokeWidth="1"
-            strokeDasharray="3 3"
-            opacity="0.15"
-          />
-          <line
-            x1="20"
-            y1="190"
-            x2="360"
-            y2="190"
-            stroke="currentColor"
-            className="text-[var(--border-charcoal)]"
-            strokeWidth="1"
-            strokeDasharray="3 3"
-            opacity="0.15"
-          />
-        </svg>
+            {/* Subtle Crosshairs */}
+            <line
+              x1={viewBoxCenter}
+              y1="20"
+              x2={viewBoxCenter}
+              y2="420"
+              stroke="currentColor"
+              className="text-[var(--border-charcoal)]"
+              strokeWidth="1"
+              strokeDasharray="4 4"
+              opacity="0.15"
+            />
+            <line
+              x1="20"
+              y1={viewBoxCenter}
+              x2="420"
+              y2={viewBoxCenter}
+              stroke="currentColor"
+              className="text-[var(--border-charcoal)]"
+              strokeWidth="1"
+              strokeDasharray="4 4"
+              opacity="0.15"
+            />
+          </svg>
 
-        {/* Pulsing Core Ambient Glow */}
-        <div className="absolute w-44 h-44 rounded-full bg-[#dc2626]/15 dark:bg-[#dc2626]/20 blur-2xl pointer-events-none animate-pulse" />
+          {/* Pulsing Core Ambient Glow */}
+          <div className="absolute w-44 h-44 rounded-full bg-[#dc2626]/15 dark:bg-[#dc2626]/20 blur-2xl pointer-events-none animate-pulse" />
 
-        {/* ROTATING ORBIT CONTAINER */}
-        <motion.div
-          animate={
-            isRotating
-              ? { rotate: 360 }
-              : {}
-          }
-          transition={
-            isRotating
-              ? {
-                  repeat: Infinity,
-                  duration: isHovered ? rotationSpeed * 2.5 : rotationSpeed,
-                  ease: "linear",
-                }
-              : { duration: 0 }
-          }
-          className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-auto"
-        >
-          {/* Orbit Nodes placed radially */}
-          {stages.map((stage, idx) => {
-            const angleDeg = idx * 72 - 90;
-            const angleRad = (angleDeg * Math.PI) / 180;
-            const x = Math.round(radius * Math.cos(angleRad));
-            const y = Math.round(radius * Math.sin(angleRad));
-            const isSelected = activeStage === stage.id;
-
-            return (
-              <div
-                key={stage.id}
-                style={{
-                  transform: `translate(${x}px, ${y}px)`,
-                }}
-                className="absolute z-20"
-              >
-                {/* Counter-Rotate so labels & icons stay upright while wheel spins */}
-                <motion.div
-                  animate={
-                    isRotating
-                      ? { rotate: -360 }
-                      : {}
+          {/* ROTATING ORBIT CONTAINER */}
+          <motion.div
+            animate={
+              isRotating
+                ? { rotate: 360 }
+                : {}
+            }
+            transition={
+              isRotating
+                ? {
+                    repeat: Infinity,
+                    duration: isHovered ? rotationSpeed * 2.5 : rotationSpeed,
+                    ease: "linear",
                   }
-                  transition={
-                    isRotating
-                      ? {
-                          repeat: Infinity,
-                          duration: isHovered ? rotationSpeed * 2.5 : rotationSpeed,
-                          ease: "linear",
-                        }
-                      : { duration: 0 }
-                  }
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.92 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveStage(stage.id);
+                : { duration: 0 }
+            }
+            className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-auto"
+          >
+            {/* Orbit Nodes placed radially with centered coordinates (Issue 10) */}
+            {stages.map((stage, idx) => {
+              const angleDeg = idx * 72 - 90;
+              const angleRad = (angleDeg * Math.PI) / 180;
+              const x = Math.round(radius * Math.cos(angleRad));
+              const y = Math.round(radius * Math.sin(angleRad));
+              const isSelected = activeStage === stage.id;
+
+              return (
+                <div
+                  key={stage.id}
+                  style={{
+                    left: "50%",
+                    top: "50%",
+                    transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
                   }}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setActiveStage(stage.id);
-                    }
-                  }}
-                  className={`px-3 py-2 rounded-xl border-2 transition-all cursor-pointer flex items-center gap-2 shadow-[2px_2px_0px_var(--border-charcoal)] ${
-                    isSelected
-                      ? "bg-[var(--bg-panel)] border-[var(--border-charcoal)] shadow-[4px_4px_0px_#dc2626] dark:shadow-[0_0_15px_rgba(220,38,38,0.4),2px_2px_0px_#dc2626] scale-105"
-                      : "bg-[var(--bg-panel-elevated)] border-[var(--border-charcoal)] hover:bg-[var(--bg-panel)] hover:shadow-[3px_3px_0px_var(--border-charcoal)]"
-                  }`}
+                  className="absolute z-20"
                 >
-                  <div
-                    className="w-7 h-7 rounded-lg text-white flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_var(--border-charcoal)]"
-                    style={{ backgroundColor: stage.color || "#18181b" }}
+                  {/* Counter-Rotate so labels & icons stay upright while wheel spins */}
+                  <motion.div
+                    animate={
+                      isRotating
+                        ? { rotate: -360 }
+                        : {}
+                    }
+                    transition={
+                      isRotating
+                        ? {
+                            repeat: Infinity,
+                            duration: isHovered ? rotationSpeed * 2.5 : rotationSpeed,
+                            ease: "linear",
+                          }
+                        : { duration: 0 }
+                    }
+                    whileHover={{ scale: 1.12 }}
+                    whileTap={{ scale: 0.94 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveStage(stage.id);
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setActiveStage(stage.id);
+                      }
+                    }}
+                    className={`px-3 py-2 rounded-lg border-2 transition-all cursor-pointer flex items-center gap-2 shadow-[2px_2px_0px_var(--border-charcoal)] focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] ${
+                      isSelected
+                        ? "bg-[var(--bg-panel)] border-[var(--border-charcoal)] shadow-[3px_3px_0px_#dc2626] dark:shadow-[0_0_15px_rgba(220,38,38,0.4),2px_2px_0px_#dc2626] scale-105"
+                        : "bg-[var(--bg-panel-elevated)] border-[var(--border-charcoal)] hover:bg-[var(--bg-panel)] hover:shadow-[3px_3px_0px_var(--border-charcoal)]"
+                    }`}
                   >
-                    <stage.icon className="w-3.5 h-3.5 text-white" aria-hidden="true" />
-                  </div>
-
-                  <div className="text-left font-mono min-w-0 max-w-[90px] sm:max-w-[100px]">
-                    <div className="text-[11px] font-bold text-[var(--text-primary)] truncate leading-tight">
-                      {stage.title}
+                    <div
+                      className="w-7 h-7 rounded-md text-white flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_var(--border-charcoal)]"
+                      style={{ backgroundColor: stage.color || "#18181b" }}
+                    >
+                      <stage.icon className="w-3.5 h-3.5 text-white" aria-hidden="true" />
                     </div>
-                    <div className="text-[9px] font-semibold text-[var(--text-muted)] truncate">
-                      {stage.sub}
+
+                    <div className="text-left font-mono">
+                      <div className="text-xs font-bold text-[var(--text-primary)] leading-tight whitespace-nowrap">
+                        {stage.title}
+                      </div>
+                      <div className="text-[10px] font-semibold text-[var(--text-secondary)] whitespace-nowrap">
+                        {stage.sub}
+                      </div>
                     </div>
-                  </div>
 
-                  {isSelected && (
-                    <span className="w-2 h-2 rounded-full bg-[#dc2626] animate-pulse flex-shrink-0 shadow-[0_0_6px_#dc2626]" />
-                  )}
-                </motion.div>
-              </div>
-            );
-          })}
-        </motion.div>
+                    {isSelected && (
+                      <span className="w-2 h-2 rounded-full bg-[#dc2626] animate-pulse flex-shrink-0 shadow-[0_0_6px_#dc2626]" />
+                    )}
+                  </motion.div>
+                </div>
+              );
+            })}
+          </motion.div>
 
-        {/* STATIC CENTER HUB */}
-        <div className="relative z-30 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[3.5px_3.5px_0px_var(--border-charcoal)] dark:shadow-[0_0_25px_rgba(220,38,38,0.3)] flex flex-col items-center justify-center text-center p-2">
-          {/* Animated subtle border beacon ring */}
-          <div className="w-7 h-7 rounded-lg bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center shadow-[1px_1px_0px_#dc2626] mb-1">
-            <Zap className="w-4 h-4 text-white" strokeWidth={2.5} aria-hidden="true" />
+          {/* STATIC CENTER HUB - Streamlined to prevent crowding (Issue 10) */}
+          <div className="relative z-30 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[3px_3px_0px_var(--border-charcoal)] dark:shadow-[0_0_25px_rgba(220,38,38,0.3)] flex flex-col items-center justify-center text-center p-2">
+            <div className="w-6 h-6 rounded-md bg-[#18181b] dark:bg-[#dc2626] text-white flex items-center justify-center shadow-[1px_1px_0px_#dc2626] mb-0.5">
+              <Zap className="w-3.5 h-3.5 text-white" strokeWidth={2.5} aria-hidden="true" />
+            </div>
+            <span className="text-[10px] font-black text-[var(--text-primary)] uppercase tracking-tight">
+              AutoDesk<span className="text-[#dc2626]">.AI</span>
+            </span>
+            <span className="text-[8px] font-mono font-bold text-[var(--text-muted)] px-1.5 py-0.2 rounded bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] mt-0.5">
+              STAGE {activeStage}/5
+            </span>
+            <span className="text-[9px] font-mono font-bold text-[#059669] dark:text-[#10b981] flex items-center gap-1 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse shadow-[0_0_6px_#059669]" />
+              <span>AUTONOMOUS</span>
+            </span>
           </div>
-          <span className="text-[10px] font-black text-[var(--text-primary)] uppercase tracking-tight">
-            AutoDesk<span className="text-[#dc2626]">.AI</span>
-          </span>
-          <span className="text-[8px] font-mono font-bold text-[var(--text-muted)] px-1.5 py-0.2 rounded bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] mt-0.5">
-            STAGE {activeStage}/5
-          </span>
-          <span className="text-[9px] font-mono font-bold text-[#059669] dark:text-[#10b981] flex items-center gap-1 mt-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse shadow-[0_0_6px_#059669]" />
-            <span>AUTONOMOUS</span>
-          </span>
         </div>
       </div>
 
-      {/* Helper text on wheel interaction */}
-      <div className="text-center mt-2 text-[11px] font-mono text-[var(--text-muted)] flex items-center justify-center gap-2">
+      {/* Helper text on wheel interaction - Minimum 12-14px for readability (Issue 6) */}
+      <div className="text-center mt-3 text-xs sm:text-sm font-mono text-[var(--text-secondary)] flex items-center justify-center gap-2 px-2">
         <span>💡 Hover on wheel to inspect stages • Click any node to select</span>
       </div>
     </div>

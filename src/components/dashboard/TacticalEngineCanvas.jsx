@@ -249,24 +249,6 @@ export default function TacticalEngineCanvas({
               Enter natural language student requests. The engine categorizes with Gemini AI, synchronizes Notion, and executes actions.
             </p>
           </div>
-
-          {/* Daemon Quick Trigger Button */}
-          <motion.button
-            type="button"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={handleTriggerDaemonPoll}
-            disabled={daemonLoading}
-            className="btn-secondary btn-secondary-sm text-xs font-mono flex items-center gap-1.5 self-start sm:self-auto shadow-[1.5px_1.5px_0px_var(--border-charcoal)]"
-            title="Poll Notion Database for Operator Approvals"
-          >
-            {daemonLoading ? (
-              <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#dc2626]" />
-            ) : (
-              <Activity className="w-3.5 h-3.5 text-[#059669]" />
-            )}
-            <span>Poll Notion Approvals</span>
-          </motion.button>
         </div>
 
         <AnimatePresence>
@@ -295,28 +277,63 @@ export default function TacticalEngineCanvas({
           )}
         </AnimatePresence>
 
-        {/* Quick Fill Presets */}
-        <div className="mb-5">
-          <span className="text-xs font-mono uppercase font-bold text-[var(--text-muted)] block mb-2">
-            Quick Test Presets:
-          </span>
+        {/* Quick Fill Presets & Workflow Actions (Issues 3, 4, 5, 9, 12) */}
+        <div className="mb-5 space-y-2.5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-xs font-mono font-bold text-[var(--text-muted)]">
+              Quick Test Presets
+            </span>
+
+            {/* Daemon Quick Trigger Button — Positioned in workflow action area (Issue 9) */}
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={handleTriggerDaemonPoll}
+              disabled={daemonLoading}
+              className="btn-secondary btn-secondary-sm text-xs font-mono flex items-center gap-1.5 shadow-[1.5px_1.5px_0px_var(--border-charcoal)] cursor-pointer"
+              title="Poll Notion Database for Operator Approvals"
+            >
+              {daemonLoading ? (
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#dc2626]" />
+              ) : (
+                <Activity className="w-3.5 h-3.5 text-[#059669]" />
+              )}
+              <span>Poll Notion Approvals</span>
+            </motion.button>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-            {presets.map((p, idx) => (
-              <motion.button
-                key={idx}
-                type="button"
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => handleApplyPreset(p)}
-                className="btn-secondary btn-secondary-sm w-full text-xs font-mono text-left justify-start py-2.5 px-3 font-semibold h-full truncate shadow-[1.5px_1.5px_0px_var(--border-charcoal)]"
-                title={`Preset ${idx + 1}: ${p.label}`}
-              >
-                <span className="font-bold text-[#dc2626] mr-1.5 flex-shrink-0">P{idx + 1}:</span>
-                <span className="truncate">{p.label}</span>
-              </motion.button>
-            ))}
+            {presets.map((p, idx) => {
+              const isCurrentSelected =
+                rawMessage === p.msg && userName === p.name;
+              return (
+                <motion.button
+                  key={idx}
+                  type="button"
+                  whileHover={{ scale: 1.02, y: -1 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => handleApplyPreset(p)}
+                  className={`btn-secondary btn-secondary-sm w-full text-xs font-mono text-left py-2.5 px-3 h-full flex items-start gap-2 transition-all shadow-[1.5px_1.5px_0px_var(--border-charcoal)] whitespace-normal break-words cursor-pointer ${
+                    isCurrentSelected
+                      ? "border-[#dc2626] bg-[var(--bg-card-hover)] shadow-[2.5px_2.5px_0px_#dc2626]"
+                      : ""
+                  }`}
+                  title={`Preset ${idx + 1}: ${p.label}`}
+                >
+                  <Play className="w-3 h-3 text-[#dc2626] fill-current flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <div className="flex-1 min-w-0">
+                    <span className="font-bold text-[#dc2626] mr-1">P{idx + 1}:</span>
+                    <span className="text-[var(--text-primary)] font-semibold leading-snug break-words">
+                      {p.label}
+                    </span>
+                  </div>
+                </motion.button>
+              );
+            })}
           </div>
         </div>
+
 
         {/* Form Inputs */}
         <form onSubmit={handleRunPipeline} className="space-y-4">
@@ -541,36 +558,38 @@ export default function TacticalEngineCanvas({
         {/* Output Panel Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-[var(--border-charcoal)]">
           <div className="flex items-center gap-2">
-            <h3 className="text-xs font-mono font-bold uppercase text-[var(--text-primary)]">
-              Incident Output & Clearance:
+            <h3 className="text-xs sm:text-sm font-mono font-bold text-[var(--text-primary)]">
+              Incident Output & Clearance
             </h3>
-            <span className="px-2.5 py-0.5 rounded bg-[#18181b] dark:bg-[#dc2626] text-white text-xs font-mono font-bold shadow-[1px_1px_0px_#dc2626]">
+            <span className="px-2 py-0.5 rounded bg-[#18181b] dark:bg-[#dc2626] text-white text-xs font-mono font-bold shadow-[1px_1px_0px_#dc2626]">
               {selectedEvent?.id || "REQ-108"}
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 p-1 rounded-lg bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-xs font-mono">
+          <div className="tab-list" role="tablist" aria-label="Incident Output Views">
             {[
               { id: "TACTICAL", label: "Analysis" },
               { id: "PAYLOAD", label: "JSON Schema" },
               { id: "NOTION_SYNC", label: "Notion DB" },
-            ].map((tab) => (
-              <motion.button
-                key={tab.id}
-                type="button"
-                whileTap={{ scale: 0.96 }}
-                onClick={() => setViewMode(tab.id)}
-                className={`px-3 py-1 rounded-md text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] relative ${
-                  viewMode === tab.id
-                    ? "bg-[#18181b] dark:bg-[#dc2626] text-white shadow-[1.5px_1.5px_0px_#dc2626]"
-                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                }`}
-              >
-                {tab.label}
-              </motion.button>
-            ))}
+            ].map((tab) => {
+              const isTabActive = viewMode === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  role="tab"
+                  aria-selected={isTabActive}
+                  tabIndex={isTabActive ? 0 : -1}
+                  type="button"
+                  onClick={() => setViewMode(tab.id)}
+                  className="tab-item"
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
         </div>
+
 
         {/* View Mode 1: TACTICAL / ANALYSIS */}
         <AnimatePresence mode="wait">

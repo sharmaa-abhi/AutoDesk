@@ -217,7 +217,7 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                   {/* Preset Buttons */}
                   <div>
                     <span className="text-xs font-mono text-[var(--text-muted)] font-bold block mb-1.5">
-                      QUICK TEST PRESETS:
+                      Quick Test Presets
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                       {sampleMessages.map((sample, i) => (
@@ -230,15 +230,19 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                             setMessage(sample.msg);
                             if (sample.eventId) setSelectedEventId(sample.eventId);
                           }}
-                          className="btn-secondary btn-secondary-sm text-xs font-mono text-left justify-start py-2 px-2.5 truncate"
+                          className="btn-secondary btn-secondary-sm text-xs font-mono text-left justify-start py-2 px-2.5 whitespace-normal break-words h-full cursor-pointer flex items-start gap-1.5"
                           title={sample.msg}
                         >
-                          <span className="font-bold text-[#dc2626] mr-1">P{i + 1}:</span>
-                          <span className="truncate">{sample.title}</span>
+                          <Play className="w-2.5 h-2.5 text-[#dc2626] fill-current flex-shrink-0 mt-0.5" aria-hidden="true" />
+                          <div className="flex-1 min-w-0">
+                            <span className="font-bold text-[#dc2626] mr-1">P{i + 1}:</span>
+                            <span className="leading-snug break-words">{sample.title}</span>
+                          </div>
                         </motion.button>
                       ))}
                     </div>
                   </div>
+
 
                   {error && (
                     <motion.div
