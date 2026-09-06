@@ -1,7 +1,6 @@
-import Navbar from "@/components/Navbar";
-import TeamCard from "@/components/TeamCard";
-import TechStack from "@/components/TechStack";
-import Footer from "@/components/Footer";
+import { Navbar, Footer } from "@/components/layout";
+import { TeamCard, TechStack } from "@/components/landing";
+
 
 export const metadata = {
   title: "About — AutoDesk Engine",

@@ -1,10 +1,12 @@
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import HowItWorks from "@/components/HowItWorks";
-import Features from "@/components/Features";
-import Architecture from "@/components/Architecture";
-import StatsStrip from "@/components/StatsStrip";
-import Footer from "@/components/Footer";
+import { Navbar, Footer } from "@/components/layout";
+import {
+  Hero,
+  StatsStrip,
+  HowItWorks,
+  Features,
+  Architecture,
+} from "@/components/landing";
+
 
 export default function Home() {
   return (

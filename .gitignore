@@ -22,6 +22,11 @@ coverage/
 *.pem
 *.tsbuildinfo
 next-env.d.ts
+*.tmp
+
+# Local Runtime Data Store
+.data/
+
 
 # Debug logs
 npm-debug.log*
