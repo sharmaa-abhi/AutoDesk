@@ -479,16 +479,6 @@ export default function FullPageCircularCockpit({
                     whileTap={{ scale: 0.96 }}
                     className="w-[220px] sm:w-[240px] p-4 rounded-2xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[3.5px_3.5px_0px_var(--border-charcoal)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.85),2px_2px_0px_var(--border-charcoal)] hover:shadow-[6px_6px_0px_var(--border-charcoal)] dark:hover:shadow-[0_16px_36px_rgba(0,0,0,0.95),0_0_20px_rgba(220,38,38,0.3)] transition-all cursor-pointer relative overflow-hidden group"
                   >
-                    {/* 3-Second Hover Dwell Progress Bar */}
-                    {hoveredSatId === sat.id && !rotatingSatId && (
-                      <motion.div
-                        key="dwell-progress"
-                        initial={{ width: "0%" }}
-                        animate={{ width: "100%" }}
-                        transition={{ duration: 3, ease: "linear" }}
-                        className="absolute top-0 left-0 h-[3.5px] bg-gradient-to-r from-amber-500 via-[#dc2626] to-[#059669] z-50 shadow-[0_0_8px_rgba(220,38,38,0.5)]"
-                      />
-                    )}
 
                     {/* Clockwise Rotation Indicator Badge when active */}
                     {rotatingSatId === sat.id && (

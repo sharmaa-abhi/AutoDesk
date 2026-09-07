@@ -278,16 +278,6 @@ export default function CircularEngineWheel({
                           : "bg-[var(--bg-panel-elevated)] border-[var(--border-charcoal)] hover:bg-[var(--bg-panel)] hover:shadow-[3px_3px_0px_var(--border-charcoal)]"
                       }`}
                     >
-                      {/* 3-Second Hover Progress Indicator */}
-                      {hoveredStageId === stage.id && !rotatingStageId && (
-                        <motion.div
-                          key="stage-dwell"
-                          initial={{ width: "0%" }}
-                          animate={{ width: "100%" }}
-                          transition={{ duration: 3, ease: "linear" }}
-                          className="absolute top-0 left-0 h-[2.5px] bg-gradient-to-r from-amber-500 via-[#dc2626] to-[#059669] z-30"
-                        />
-                      )}
 
                       <div
                         className="w-7 h-7 rounded-md text-white flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_var(--border-charcoal)]"
