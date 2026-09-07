@@ -548,8 +548,8 @@ export default function Architecture() {
             </div>
           </div>
 
-          {/* Right Column: Step Inspector & Explanation Card */}
-          <div className="lg:col-span-5 space-y-6 sticky top-24">
+          {/* Right Column: Step Inspector, Pillars, and Live Telemetry */}
+          <div className="lg:col-span-5 space-y-6">
             
             {/* Live Step Inspector (Issue 7 & 10: Clear hierarchy, de-cramped spacing, scannable JSON) */}
             <div className="dev-card bg-[var(--bg-panel)] p-6 sm:p-7 rounded-2xl border-2 border-[var(--border-charcoal)] shadow-[4px_4px_0px_var(--border-charcoal)] space-y-6">

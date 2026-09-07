@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Client } from '@notionhq/client';
-import { getResolvedDatabaseId } from '@/lib/notion';
+import { getResolvedDatabaseId, getResolvedDataSourceId } from '@/lib/notion';
 
 export async function GET() {
   try {
@@ -16,7 +16,7 @@ export async function GET() {
 
     const notion = new Client({ auth: notionApiKey });
 
-    // Test creating a live verification entry
+    // Test creating a live verification entry with full rich properties
     const testPage = await notion.pages.create({
       parent: { database_id: dbId },
       properties: {
@@ -29,6 +29,36 @@ export async function GET() {
             },
           ],
         },
+        'Record Type': {
+          select: { name: 'Run Log' },
+        },
+        Status: {
+          select: { name: 'Dispatched' },
+        },
+        Category: {
+          select: { name: 'GENERAL_QUERY' },
+        },
+        Priority: {
+          select: { name: 'MEDIUM' },
+        },
+        'Student Name': {
+          rich_text: [{ text: { content: 'AutoDesk System Auditor' } }],
+        },
+        'Student Email': {
+          email: 'audit@autodesk-engine.io',
+        },
+        'Event ID': {
+          rich_text: [{ text: { content: 'system-diagnostic-2026' } }],
+        },
+        'AI Confidence': {
+          number: 1.0,
+        },
+        'Attendance Verified': {
+          checkbox: true,
+        },
+        'Action Summary': {
+          rich_text: [{ text: { content: 'Automated healthcheck and schema verification executed successfully.' } }],
+        },
       },
       children: [
         {
@@ -38,7 +68,7 @@ export async function GET() {
             rich_text: [
               {
                 text: {
-                  content: '✅ Notion Database connection verified successfully!',
+                  content: '✅ Notion Database connection and rich schema verified successfully!',
                 },
               },
             ],
@@ -50,10 +80,22 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      message: 'Notion Database successfully connected and verified!',
+      message: 'Notion Database successfully connected and verified with rich structured schema!',
       databaseId: dbId,
       createdPageId: testPage.id,
       pageUrl: testPage.url,
+      propertiesConfigured: [
+        'Record Type',
+        'Status',
+        'Category',
+        'Priority',
+        'Student Name',
+        'Student Email',
+        'Event ID',
+        'AI Confidence',
+        'Attendance Verified',
+        'Action Summary'
+      ]
     });
   } catch (error) {
     return NextResponse.json(

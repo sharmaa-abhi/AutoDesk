@@ -131,6 +131,7 @@ export async function POST(request) {
         status: aiResult.status || 'WAITING_APPROVAL',
         rawMessage: safeMessage,
         eventId: eventProfile.id,
+        attendanceVerified: aiResult.attendanceVerified,
       });
 
       let emailResult = null;
