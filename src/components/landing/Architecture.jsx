@@ -232,7 +232,7 @@ export default function Architecture() {
   const [activeSimulation, setActiveSimulation] = useState("all"); // 'all' | 'auto' | 'human' | 'spam'
 
   return (
-    <section id="architecture" className="py-20 px-4 sm:px-6 relative overflow-hidden">
+    <section id="pipeline" className="py-20 px-4 sm:px-6 relative overflow-hidden scroll-mt-16">
       <div className="max-w-6xl mx-auto space-y-10 relative z-10">
         
         {/* Header Section */}
@@ -257,55 +257,88 @@ export default function Architecture() {
             Human-in-the-Loop review, and tamper-proof audit proof sealing.
           </p>
 
-          {/* Interactive Simulation Controls */}
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            <span className="text-xs font-mono font-bold text-[var(--text-muted)] mr-1 flex items-center gap-1">
-              <Play className="w-3.5 h-3.5 text-[#dc2626]" /> Flow Simulator:
-            </span>
+          {/* Interactive Flow Simulator Controls — Tablist Pattern (Issue 13) */}
+          <div className="pt-3 flex flex-col items-center gap-2.5">
+            <div className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-muted)]">
+              <Play className="w-3.5 h-3.5 text-[#dc2626]" aria-hidden="true" />
+              <span className="font-semibold">Select a path to preview the automation flow:</span>
+            </div>
 
-            <button
-              onClick={() => setActiveSimulation("auto")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1.5 border-2 ${
-                activeSimulation === "auto"
-                  ? "bg-[#ecfdf5] dark:bg-emerald-950/50 border-[#059669] text-[#065f46] dark:text-emerald-400 shadow-[2px_2px_0px_#059669]"
-                  : "bg-[var(--bg-panel)] border-[var(--border-charcoal)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              }`}
+            <div
+              role="tablist"
+              aria-label="Flow Simulator Paths"
+              className="inline-flex p-1.5 rounded-xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[2.5px_2.5px_0px_var(--border-charcoal)] flex-wrap items-center justify-center gap-1.5"
             >
-              <CheckCircle2 className="w-3.5 h-3.5 text-[var(--text-success)]" />
-              <span>Path A: Verified Auto-Dispatch</span>
-            </button>
+              <button
+                type="button"
+                role="tab"
+                id="tab-sim-auto"
+                aria-controls="pipeline-flow-panel"
+                aria-selected={activeSimulation === "auto"}
+                onClick={() => setActiveSimulation("auto")}
+                className={`px-3.5 py-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] ${
+                  activeSimulation === "auto"
+                    ? "bg-[var(--border-charcoal)] text-white shadow-[0_2px_8px_rgba(0,0,0,0.25)] dark:bg-[#dc2626] dark:text-white"
+                    : "bg-[var(--bg-panel-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)]"
+                }`}
+              >
+                <CheckCircle2 className={`w-3.5 h-3.5 ${activeSimulation === "auto" ? "text-emerald-400" : "text-[var(--text-success)]"}`} aria-hidden="true" />
+                <span>Path A: Verified Auto-Dispatch</span>
+              </button>
 
-            <button
-              onClick={() => setActiveSimulation("human")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1.5 border-2 ${
-                activeSimulation === "human"
-                  ? "bg-[#fee2e2] dark:bg-red-950/50 border-[#dc2626] text-[#991b1b] dark:text-red-400 shadow-[2px_2px_0px_#dc2626]"
-                  : "bg-[var(--bg-panel)] border-[var(--border-charcoal)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              }`}
-            >
-              <AlertTriangle className="w-3.5 h-3.5 text-[var(--text-danger)]" />
-              <span>Path B: High-Risk Human Review</span>
-            </button>
+              <button
+                type="button"
+                role="tab"
+                id="tab-sim-human"
+                aria-controls="pipeline-flow-panel"
+                aria-selected={activeSimulation === "human"}
+                onClick={() => setActiveSimulation("human")}
+                className={`px-3.5 py-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] ${
+                  activeSimulation === "human"
+                    ? "bg-[var(--border-charcoal)] text-white shadow-[0_2px_8px_rgba(0,0,0,0.25)] dark:bg-[#dc2626] dark:text-white"
+                    : "bg-[var(--bg-panel-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)]"
+                }`}
+              >
+                <AlertTriangle className={`w-3.5 h-3.5 ${activeSimulation === "human" ? "text-amber-400" : "text-[var(--text-danger)]"}`} aria-hidden="true" />
+                <span>Path B: High-Risk Human Review</span>
+              </button>
 
-            <button
-              onClick={() => setActiveSimulation("spam")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1.5 border-2 ${
-                activeSimulation === "spam"
-                  ? "bg-purple-50 dark:bg-purple-950/50 border-purple-600 text-purple-700 dark:text-purple-300 shadow-[2px_2px_0px_#7c3aed]"
-                  : "bg-[var(--bg-panel)] border-[var(--border-charcoal)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              }`}
-            >
-              <ShieldAlert className="w-3.5 h-3.5 text-[#7c3aed]" />
-              <span>Path C: Anti-Spam Guard Block</span>
-            </button>
+              <button
+                type="button"
+                role="tab"
+                id="tab-sim-spam"
+                aria-controls="pipeline-flow-panel"
+                aria-selected={activeSimulation === "spam"}
+                onClick={() => setActiveSimulation("spam")}
+                className={`px-3.5 py-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] ${
+                  activeSimulation === "spam"
+                    ? "bg-[var(--border-charcoal)] text-white shadow-[0_2px_8px_rgba(0,0,0,0.25)] dark:bg-[#dc2626] dark:text-white"
+                    : "bg-[var(--bg-panel-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)]"
+                }`}
+              >
+                <ShieldAlert className={`w-3.5 h-3.5 ${activeSimulation === "spam" ? "text-purple-300" : "text-[#7c3aed]"}`} aria-hidden="true" />
+                <span>Path C: Anti-Spam Guard Block</span>
+              </button>
 
-            <button
-              onClick={() => setActiveSimulation("all")}
-              title="Reset view"
-              className="p-1.5 rounded-lg border-2 border-[var(--border-charcoal)] bg-[var(--bg-panel)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] transition-all"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
+              <button
+                type="button"
+                role="tab"
+                id="tab-sim-all"
+                aria-controls="pipeline-flow-panel"
+                aria-selected={activeSimulation === "all"}
+                onClick={() => setActiveSimulation("all")}
+                title="Reset all paths view"
+                aria-label="Reset all paths view"
+                className={`p-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1.5 cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] ${
+                  activeSimulation === "all"
+                    ? "bg-[var(--border-charcoal)] text-white shadow-[0_2px_8px_rgba(0,0,0,0.25)] dark:bg-[#dc2626] dark:text-white"
+                    : "bg-[var(--bg-panel-elevated)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)]"
+                }`}
+              >
+                <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
+                <span className="hidden sm:inline">Reset</span>
+              </button>
+            </div>
           </div>
         </motion.div>
 
@@ -313,7 +346,12 @@ export default function Architecture() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Flowchart Diagram Canvas with Responsive Safety */}
-          <div className="lg:col-span-7 dev-card bg-[var(--bg-panel)] p-5 sm:p-8 relative rounded-2xl border-2 border-[var(--border-charcoal)] shadow-[4px_4px_0px_var(--border-charcoal)] overflow-x-auto">
+          <div
+            id="pipeline-flow-panel"
+            role="tabpanel"
+            aria-label="Pipeline Architecture Diagram"
+            className="lg:col-span-7 dev-card bg-[var(--bg-panel)] p-5 sm:p-8 relative rounded-2xl border-2 border-[var(--border-charcoal)] shadow-[4px_4px_0px_var(--border-charcoal)] overflow-x-auto"
+          >
             
             {/* Background Blueprint Grid */}
             <div className="absolute inset-0 grid-paper opacity-50 pointer-events-none" />
@@ -409,11 +447,11 @@ export default function Architecture() {
                           : "border-[var(--border-charcoal)] bg-[var(--bg-card-hover)]/30"
                       }`}
                     >
-                      <div className="text-[var(--text-danger)] text-xs font-mono font-bold flex items-center gap-1.5 uppercase tracking-wide">
-                        <AlertTriangle className="w-3.5 h-3.5 animate-pulse" />
+                      <div className="text-[var(--text-danger)] text-sm sm:text-base font-mono font-bold flex items-center gap-2">
+                        <AlertTriangle className="w-4 h-4 shrink-0 animate-pulse text-[var(--text-danger)]" />
                         <span>Needs Approval (High Risk)</span>
                       </div>
-                      <span className="text-xs font-mono text-[var(--text-muted)] -mt-2">
+                      <span className="text-xs font-mono text-[var(--text-muted)] -mt-1.5">
                         Confidence &lt; 90% or Ambiguous
                       </span>
 
@@ -433,8 +471,9 @@ export default function Architecture() {
                         isCompact
                       />
                       
-                      <div className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2.5 py-1 rounded border border-amber-500/30">
-                        Admin Action Required
+                      <div className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-3 py-1.5 rounded-lg border border-amber-500/30 flex items-center gap-1.5">
+                        <ShieldAlert className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                        <span>Admin Action Required</span>
                       </div>
                     </div>
 
@@ -448,11 +487,11 @@ export default function Architecture() {
                           : "border-[var(--border-charcoal)] bg-[var(--bg-card-hover)]/30"
                       }`}
                     >
-                      <div className="text-[var(--text-success)] text-xs font-mono font-bold flex items-center gap-1.5 uppercase tracking-wide">
-                        <CheckCircle2 className="w-3.5 h-3.5 animate-pulse" />
+                      <div className="text-[var(--text-success)] text-sm sm:text-base font-mono font-bold flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 shrink-0 animate-pulse text-[var(--text-success)]" />
                         <span>Verified (Auto Execute)</span>
                       </div>
-                      <span className="text-xs font-mono text-[var(--text-muted)] -mt-2">
+                      <span className="text-xs font-mono text-[var(--text-muted)] -mt-1.5">
                         Confidence ≥ 90% &amp; Attendance OK
                       </span>
 
@@ -492,13 +531,13 @@ export default function Architecture() {
                   {/* Final Proof Banner */}
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="mt-6 w-full max-w-md px-4 py-3 rounded-xl bg-[#ecfdf5] dark:bg-emerald-950/50 border-2 border-[#059669] text-[#065f46] dark:text-emerald-300 text-xs font-mono font-bold shadow-[3px_3px_0px_var(--border-charcoal)] dark:shadow-[0_0_18px_rgba(5,150,105,0.35)] flex items-center justify-between"
+                    className="mt-6 w-full max-w-md px-4 py-3 rounded-xl bg-[#ecfdf5] dark:bg-emerald-950/50 border-2 border-[#059669] text-[#065f46] dark:text-emerald-300 text-xs sm:text-sm font-mono font-bold shadow-[3px_3px_0px_var(--border-charcoal)] dark:shadow-[0_0_18px_rgba(5,150,105,0.35)] flex items-center justify-between"
                   >
                     <div className="flex items-center gap-2">
                       <span className="status-dot status-dot-live status-dot-pulse" />
-                      <span>🏁 Tamper-Proof Run Log Proof Sealed</span>
+                      <span>Tamper-Proof Run Log Proof Sealed</span>
                     </div>
-                    <span className="text-xs bg-[#059669] text-white px-2 py-0.5 rounded font-mono font-semibold">
+                    <span className="text-xs bg-[#059669] text-white px-2.5 py-1 rounded-md font-mono font-semibold">
                       HMAC-SHA256
                     </span>
                   </motion.div>
@@ -511,44 +550,44 @@ export default function Architecture() {
           {/* Right Column: Step Inspector & Explanation Card */}
           <div className="lg:col-span-5 space-y-6 sticky top-24">
             
-            {/* Live Step Inspector */}
-            <div className="dev-card bg-[var(--bg-panel)] p-6 rounded-2xl border-2 border-[var(--border-charcoal)] shadow-[4px_4px_0px_var(--border-charcoal)] space-y-5">
+            {/* Live Step Inspector (Issue 7 & 10: Clear hierarchy, de-cramped spacing, scannable JSON) */}
+            <div className="dev-card bg-[var(--bg-panel)] p-6 sm:p-7 rounded-2xl border-2 border-[var(--border-charcoal)] shadow-[4px_4px_0px_var(--border-charcoal)] space-y-6">
               
-              <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-3">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] text-[#dc2626]">
-                    <Terminal className="w-4 h-4" />
+              <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] text-[#dc2626]">
+                    <Terminal className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                    <h3 className="font-mono text-sm sm:text-base font-bold text-[var(--text-primary)] tracking-normal">
                       Pipeline Inspector
                     </h3>
-                    <span className="text-xs text-[var(--text-muted)] font-mono">
-                      Click any node on the left to inspect
+                    <span className="text-xs text-[var(--text-muted)] font-mono block mt-0.5">
+                      Click any node on the left to inspect parameters and payload
                     </span>
                   </div>
                 </div>
 
                 {selectedNode && (
-                  <span className="px-2.5 py-0.5 rounded-full font-mono text-xs font-bold border" style={{ borderColor: selectedNode.accent, color: selectedNode.accent }}>
+                  <span className="px-2.5 py-1 rounded-full font-mono text-xs font-bold border shrink-0" style={{ borderColor: selectedNode.accent, color: selectedNode.accent }}>
                     {selectedNode.stepNum}
                   </span>
                 )}
               </div>
 
               {selectedNode ? (
-                <div className="space-y-4">
+                <div className="space-y-5">
                   {/* Node Header */}
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <div className="p-2 rounded-lg text-white font-bold" style={{ backgroundColor: selectedNode.accent }}>
-                        <selectedNode.icon className="w-4 h-4" />
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-xl text-white font-bold shrink-0 shadow-sm" style={{ backgroundColor: selectedNode.accent }}>
+                        <selectedNode.icon className="w-5 h-5" />
                       </div>
-                      <div>
-                        <h4 className="text-base font-bold text-[var(--text-primary)]">
+                      <div className="min-w-0">
+                        <h4 className="text-base sm:text-lg font-bold text-[var(--text-primary)] truncate">
                           {selectedNode.label}
                         </h4>
-                        <p className="text-xs font-mono text-[var(--text-secondary)]">
+                        <p className="text-xs sm:text-sm font-mono text-[var(--text-secondary)] truncate">
                           {selectedNode.sub}
                         </p>
                       </div>
@@ -556,37 +595,37 @@ export default function Architecture() {
                   </div>
 
                   {/* Latency & Category Badges */}
-                  <div className="flex items-center gap-2 flex-wrap text-xs font-mono">
-                    <span className="px-2 py-0.5 rounded bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-[var(--text-primary)] font-semibold flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-[var(--text-muted)]" />
+                  <div className="flex items-center gap-2.5 flex-wrap text-xs font-mono py-1">
+                    <span className="px-2.5 py-1 rounded-md bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-[var(--text-primary)] font-semibold flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-[var(--text-muted)]" />
                       Latency: {selectedNode.latency || "< 10ms"}
                     </span>
-                    <span className="px-2 py-0.5 rounded bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-[var(--text-primary)] font-semibold">
+                    <span className="px-2.5 py-1 rounded-md bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-[var(--text-primary)] font-semibold">
                       Category: {selectedNode.category}
                     </span>
                   </div>
 
                   {/* What Happens Here */}
-                  <div className="space-y-1 text-xs">
-                    <span className="font-mono font-bold text-[var(--text-muted)] uppercase tracking-wider block">
+                  <div className="space-y-2">
+                    <span className="font-mono text-xs font-bold text-[var(--text-muted)] tracking-normal block">
                       Description &amp; Role:
                     </span>
-                    <p className="text-[var(--text-secondary)] leading-relaxed bg-[var(--bg-panel-elevated)] p-3 rounded-lg border border-[var(--border-subtle)]">
+                    <p className="text-sm text-[var(--text-secondary)] leading-relaxed bg-[var(--bg-panel-elevated)] p-4 rounded-xl border border-[var(--border-subtle)]">
                       {selectedNode.details?.description}
                     </p>
                   </div>
 
                   {/* Sample Payload Data JSON */}
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs font-mono">
-                      <span className="font-bold text-[var(--text-muted)] flex items-center gap-1">
+                      <span className="font-bold text-[var(--text-muted)] flex items-center gap-1.5">
                         <Code2 className="w-3.5 h-3.5 text-[#dc2626]" /> Live Payload / Telemetry:
                       </span>
                       <span className="text-xs text-[var(--text-muted)]">JSON</span>
                     </div>
 
-                    <div className="bg-[#0f1117] text-[#38bdf8] p-3.5 rounded-xl text-xs font-mono border border-slate-800 overflow-x-auto max-h-56 shadow-inner">
-                      <pre className="text-xs leading-snug">
+                    <div className="bg-[#0f1117] text-[#38bdf8] p-4 rounded-xl text-xs sm:text-[13px] font-mono border border-slate-800 overflow-x-auto max-h-60 shadow-inner">
+                      <pre className="leading-relaxed">
                         {JSON.stringify(selectedNode.details?.samplePayload, null, 2)}
                       </pre>
                     </div>
@@ -594,47 +633,47 @@ export default function Architecture() {
 
                   {/* Audit & Security Guarantee */}
                   {selectedNode.details?.auditGuarantee && (
-                    <div className="p-3 rounded-lg bg-emerald-50/60 dark:bg-emerald-950/30 border border-[#059669]/30 text-xs font-mono text-[#065f46] dark:text-emerald-300 flex items-start gap-2">
+                    <div className="p-4 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-[#059669]/30 text-xs sm:text-sm font-mono text-[#065f46] dark:text-emerald-300 flex items-start gap-2.5">
                       <ShieldCheck className="w-4 h-4 text-[#059669] shrink-0 mt-0.5" />
                       <div>
-                        <strong className="block">Security &amp; Audit Guarantee:</strong>
-                        <span>{selectedNode.details.auditGuarantee}</span>
+                        <strong className="block font-bold">Security &amp; Audit Guarantee:</strong>
+                        <span className="leading-relaxed">{selectedNode.details.auditGuarantee}</span>
                       </div>
                     </div>
                   )}
 
                 </div>
               ) : (
-                <div className="text-center py-10 text-[var(--text-muted)] text-sm font-mono">
+                <div className="text-center py-12 text-[var(--text-muted)] text-sm font-mono">
                   Select any component in the flowchart to view live parameters and schema.
                 </div>
               )}
 
             </div>
 
-            {/* Quick Summary / Key Highlights */}
-            <div className="dev-card bg-[var(--bg-panel)] p-5 rounded-2xl border-2 border-[var(--border-charcoal)] shadow-[3px_3px_0px_var(--border-charcoal)] space-y-3">
-              <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-[#dc2626]" /> 3 Core Architectural Pillars
+            {/* Quick Summary / Key Highlights (Issue 10: 3 Core Architectural Pillars de-cramped) */}
+            <div className="dev-card bg-[var(--bg-panel)] p-6 sm:p-7 rounded-2xl border-2 border-[var(--border-charcoal)] shadow-[3px_3px_0px_var(--border-charcoal)] space-y-4">
+              <h4 className="text-sm sm:text-base font-mono font-bold text-[var(--text-primary)] flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#dc2626] shrink-0" /> 3 Core Architectural Pillars
               </h4>
 
-              <div className="space-y-2.5 text-xs text-[var(--text-secondary)]">
-                <div className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#dc2626] mt-1.5 shrink-0" />
+              <div className="space-y-3.5 text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
+                <div className="flex items-start gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-[#dc2626] mt-1.5 shrink-0" />
                   <p>
-                    <strong className="text-[var(--text-primary)]">Anti-Spam 24h Guard:</strong> Client request MD5 hash banata hai, duplicate payload 24 ghante tak engine ko touch nahi kar sakte.
+                    <strong className="text-[var(--text-primary)] font-semibold">Anti-Spam 24h Guard:</strong> Client request MD5 hash banata hai, duplicate payload 24 ghante tak engine ko touch nahi kar sakte.
                   </p>
                 </div>
-                <div className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#d97706] mt-1.5 shrink-0" />
+                <div className="flex items-start gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-[#d97706] mt-1.5 shrink-0" />
                   <p>
-                    <strong className="text-[var(--text-primary)]">Smart Risk Router:</strong> Agar AI confidence 90% se kam ya unverified ho toh automation direct dispatch nahi karta — Human Cockpit me escalate hota hai.
+                    <strong className="text-[var(--text-primary)] font-semibold">Smart Risk Router:</strong> Agar AI confidence 90% se kam ya unverified ho toh automation direct dispatch nahi karta — Human Cockpit me escalate hota hai.
                   </p>
                 </div>
-                <div className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#059669] mt-1.5 shrink-0" />
+                <div className="flex items-start gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-[#059669] mt-1.5 shrink-0" />
                   <p>
-                    <strong className="text-[var(--text-primary)]">Tamper-Proof Run Log:</strong> Har action ka cryptographic run ID aur verification status Notion database me seal ho jata hai.
+                    <strong className="text-[var(--text-primary)] font-semibold">Tamper-Proof Run Log:</strong> Har action ka cryptographic run ID aur verification status Notion database me seal ho jata hai.
                   </p>
                 </div>
               </div>

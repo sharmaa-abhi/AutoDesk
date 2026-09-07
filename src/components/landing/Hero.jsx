@@ -144,7 +144,7 @@ export default function Hero() {
             {/* Shimmer Light Reflection effect */}
             <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] group-hover:translate-x-[300%] transition-transform duration-700 pointer-events-none" />
             <Plus className="w-4 h-4 stroke-[3] group-hover:rotate-90 transition-transform duration-300" aria-hidden="true" focusable="false" />
-            <span>Submit Live Ticket</span>
+            <span>Submit Ticket</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" aria-hidden="true" focusable="false" />
           </motion.button>
 
@@ -182,8 +182,8 @@ export default function Hero() {
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 px-1">
-            <span className="text-xs font-mono font-bold text-[var(--text-muted)] flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-4 px-1">
+            <span className="text-sm font-mono font-bold text-[var(--text-primary)] flex items-center gap-2">
               <span className="status-dot status-dot-live status-dot-pulse" aria-hidden="true" />
               <span>5-Stage Real-Time Pipeline Architecture</span>
             </span>

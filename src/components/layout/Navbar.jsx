@@ -10,7 +10,8 @@ import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
   { name: "Overview", href: "/" },
-  { name: "Live Cockpit", href: "/dashboard", badge: "ACTIVE" },
+  { name: "Pipeline", href: "/#pipeline" },
+  { name: "Live Cockpit", href: "/dashboard", badge: "Active" },
   { name: "About Team", href: "/about" },
 ];
 
@@ -156,14 +157,17 @@ export default function Navbar() {
           <div className="pt-2 border-t border-[var(--border-subtle)] flex flex-col gap-2">
             <button
               type="button"
+              aria-haspopup="dialog"
+              aria-controls="ticket-dialog"
+              aria-expanded={modalOpen}
               onClick={() => {
                 setMobileOpen(false);
                 setModalOpen(true);
               }}
-              className="btn-primary w-full py-2.5 text-xs font-mono justify-center"
+              className="btn-primary w-full py-2.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5"
             >
               <Plus className="w-3.5 h-3.5 text-white" aria-hidden="true" focusable="false" />
-              <span>Submit Student Ticket</span>
+              <span>Submit Ticket</span>
             </button>
             <Link
               href="/dashboard"
