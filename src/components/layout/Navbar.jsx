@@ -55,8 +55,8 @@ export default function Navbar() {
 
           {/* Operational Status Pill */}
           <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-md bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-secondary)]">
-            <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse shadow-[0_0_8px_#059669]" aria-hidden="true" />
-            <span>Notion Bot Engine: <strong className="text-[#059669] dark:text-[#10b981] font-bold">READY (24/7)</strong></span>
+            <span className="status-dot status-dot-live status-dot-pulse" aria-hidden="true" />
+            <span>Notion Bot Engine: <strong className="text-[var(--text-success)] font-bold">Ready (24/7)</strong></span>
           </div>
         </div>
 
@@ -77,11 +77,14 @@ export default function Navbar() {
                 <span>{link.name}</span>
                 {link.badge && (
                   <span
-                    className={`text-[10px] font-mono px-1.5 py-0.5 rounded font-bold ${
-                      isActive ? "bg-[#dc2626] text-white" : "bg-[#ecfdf5] dark:bg-emerald-950/40 text-[#065f46] dark:text-emerald-400 border border-[#059669]/40"
+                    className={`inline-flex items-center gap-1 text-xs font-mono px-1.5 py-0.5 rounded-sm font-semibold transition-colors ${
+                      isActive
+                        ? "bg-[#dc2626] text-white"
+                        : "status-badge status-badge-live"
                     }`}
                   >
-                    {link.badge}
+                    <span className="status-dot status-dot-live w-1.5 h-1.5" aria-hidden="true" />
+                    <span>Active</span>
                   </span>
                 )}
               </Link>
@@ -103,16 +106,16 @@ export default function Navbar() {
             <ExternalLink className="w-3 h-3 text-[var(--text-muted)]" aria-hidden="true" focusable="false" />
           </a>
 
-          {/* Secondary Header CTA */}
+          {/* Primary Header CTA */}
           <button
             type="button"
             aria-haspopup="dialog"
             aria-controls="ticket-dialog"
             aria-expanded={modalOpen}
             onClick={() => setModalOpen(true)}
-            className="btn-secondary btn-secondary-sm text-xs font-mono font-bold flex items-center gap-1.5 shadow-[2px_2px_0px_var(--border-charcoal)]"
+            className="btn-primary btn-primary-sm text-xs font-mono font-bold flex items-center gap-1.5 shadow-[2px_2px_0px_var(--border-charcoal)]"
           >
-            <Plus className="w-3.5 h-3.5 text-[#dc2626] stroke-[3]" aria-hidden="true" focusable="false" />
+            <Plus className="w-3.5 h-3.5 text-white stroke-[3]" aria-hidden="true" focusable="false" />
             <span>Submit Ticket</span>
           </button>
 
@@ -157,9 +160,9 @@ export default function Navbar() {
                 setMobileOpen(false);
                 setModalOpen(true);
               }}
-              className="btn-secondary w-full py-2.5 text-xs font-mono justify-center"
+              className="btn-primary w-full py-2.5 text-xs font-mono justify-center"
             >
-              <Plus className="w-3.5 h-3.5 text-[#dc2626]" aria-hidden="true" focusable="false" />
+              <Plus className="w-3.5 h-3.5 text-white" aria-hidden="true" focusable="false" />
               <span>Submit Student Ticket</span>
             </button>
             <Link

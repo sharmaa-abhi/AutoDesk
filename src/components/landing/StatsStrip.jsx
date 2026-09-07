@@ -12,25 +12,25 @@ const stats = [
     label: "Incidents Processed",
     highlight: "text-[var(--text-primary)]",
     accent: "#3b82f6",
-    pill: "LIVE FEED",
+    pill: "Live Feed",
   },
   {
     icon: Clock,
     value: 99.8,
     suffix: "%",
     label: "Autonomous Uptime",
-    highlight: "text-[#059669] dark:text-[#10b981]",
+    highlight: "text-[var(--text-success)]",
     accent: "#059669",
-    pill: "24/7 ACTIVE",
+    pill: "24/7 Active",
   },
   {
     icon: Award,
     value: 342,
     suffix: "",
     label: "Certificates Dispatched",
-    highlight: "text-[#dc2626] dark:text-[#f87171]",
+    highlight: "text-[var(--text-danger)]",
     accent: "#dc2626",
-    pill: "VERIFIED",
+    pill: "Verified",
   },
   {
     icon: Zap,
@@ -39,7 +39,7 @@ const stats = [
     label: "Average Latency",
     highlight: "text-[var(--text-primary)]",
     accent: "#eab308",
-    pill: "OPTIMAL",
+    pill: "Optimal",
   },
 ];
 
@@ -129,10 +129,10 @@ export default function StatsStrip() {
               />
 
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] text-[var(--text-primary)]">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] text-[var(--text-primary)]">
                   {stat.pill}
                 </span>
-                <span className="w-2 h-2 rounded-full shadow-[0_0_6px_currentColor]" style={{ backgroundColor: stat.accent, color: stat.accent }} />
+                <span className="status-dot w-2 h-2" style={{ backgroundColor: stat.accent }} />
               </div>
 
               <motion.div

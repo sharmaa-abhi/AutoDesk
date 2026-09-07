@@ -50,7 +50,7 @@ export default function TechStack() {
         >
           <span className="text-xs font-black text-[var(--text-primary)]">{tech.name}</span>
           <span
-            className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border"
+            className="text-xs font-mono font-bold px-2 py-0.5 rounded border"
             style={{ color: tech.color, borderColor: `${tech.color}44`, backgroundColor: `${tech.color}15` }}
           >
             {tech.category}

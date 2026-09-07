@@ -22,7 +22,6 @@
   --radius-lg: 12px;  /* Large panels, containers */
   --radius-xl: 16px;  /* Special dialogs, modals */
 
-
   /* Accents */
   --accent-red: #dc2626;
   --accent-red-hover: #b91c1c;
@@ -31,11 +30,36 @@
   --accent-blue: #2563eb;
   --accent-violet: #7c3aed;
 
-  /* Typography Colors — High Contrast Charcoal & Muted Slate */
+  /* Standardized Typography Scale (8 Tiers — Min body/descriptive text: 12px) */
+  --text-xs: 0.75rem;    /* 12px - Badges, metadata, code tokens */
+  --text-sm: 0.875rem;   /* 14px - Secondary body, compact captions, labels */
+  --text-base: 1rem;     /* 16px - Standard body copy, inputs */
+  --text-lg: 1.125rem;   /* 18px - Subheadings, card titles */
+  --text-xl: 1.25rem;    /* 20px - Prominent card headers */
+  --text-2xl: 1.5rem;    /* 24px - Section subheaders, dialog titles */
+  --text-3xl: 1.875rem;  /* 30px - Section titles (mobile), stat figures */
+  --text-4xl: 2.25rem;   /* 36px - Section titles (desktop) */
+  --text-5xl: 3rem;      /* 48px - Hero display titles */
+
+  /* Semantic Text Colors — High Contrast Charcoal & Slate */
   --text-primary: #18181b;
   --text-secondary: #52525b;
   --text-muted: #71717a;
+  --text-success: #059669;
+  --text-warning: #b45309;
+  --text-danger: #dc2626;
   --text-white: #ffffff;
+
+  /* Standardized Spacing Scale (4px Increments) */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
 
   /* Editorial Developer Shadows */
   --shadow-card: 2px 2px 0px #18181b;
@@ -61,10 +85,13 @@
   --border-subtle: #1e222d;
   --border-mid: #383e50;
 
-  /* Typography Colors — Luminescent Off-White & Crisp Slate */
+  /* Semantic Typography Colors — Luminescent Off-White & Slate */
   --text-primary: #f4f4f6;
   --text-secondary: #a1a1aa;
   --text-muted: #71717a;
+  --text-success: #10b981;
+  --text-warning: #f59e0b;
+  --text-danger: #ef4444;
   --text-white: #ffffff;
 
   /* Rich Deep Cybernetic Shadows with Layered Ambient Depth & Red Edge Accent */
@@ -92,6 +119,9 @@
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
+  --color-text-success: var(--text-success);
+  --color-text-warning: var(--text-warning);
+  --color-text-danger: var(--text-danger);
   --color-text-white: var(--text-white);
 
   --color-border-charcoal: var(--border-charcoal);
@@ -105,7 +135,6 @@
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
   --radius-xl: var(--radius-xl);
-
 }
 
 /* ===== BASE STYLES ===== */
@@ -563,28 +592,92 @@ body {
   outline-offset: 1px;
 }
 
-/* ===== STATUS BADGES ===== */
+/* ===== UNIFIED STATUS SYSTEM (ISSUES 5 & 8) ===== */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem; /* 12px min */
+  font-weight: 600;
+  line-height: 1;
+}
+
+.status-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.status-dot-live {
+  background-color: var(--text-success);
+  box-shadow: 0 0 6px var(--text-success);
+}
+
+.status-dot-pulse {
+  animation: status-beacon 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes status-beacon {
+  0% { transform: scale(1); opacity: 0.9; }
+  70%, 100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Subtle Unified Status Badge: secondary to primary CTA */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 0.75rem; /* 12px */
+  font-weight: 600;
+  line-height: 1.2;
+  border: 1px solid transparent;
+}
+
+.status-badge-live {
+  background-color: rgba(5, 150, 105, 0.08);
+  color: var(--text-success);
+  border-color: rgba(5, 150, 105, 0.25);
+}
+
+.dark .status-badge-live {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: var(--text-success);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.status-badge-subtle {
+  background-color: var(--bg-card-hover);
+  color: var(--text-secondary);
+  border-color: var(--border-subtle);
+}
+
+/* Backward-compatible badge classes with softened hierarchy */
 .badge-live {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.2rem 0.6rem;
+  padding: 0.2rem 0.55rem;
   border-radius: var(--radius-xs);
-  background-color: rgba(5, 150, 105, 0.12);
-  color: #10b981;
-  border: 1.5px solid #059669;
+  background-color: rgba(5, 150, 105, 0.1);
+  color: var(--text-success);
+  border: 1px solid rgba(5, 150, 105, 0.3);
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .badge-live-dot {
   width: 0.4rem;
   height: 0.4rem;
   border-radius: 9999px;
-  background-color: #10b981;
-  box-shadow: 0 0 8px #10b981;
+  background-color: var(--text-success);
+  box-shadow: 0 0 6px var(--text-success);
 }
 
 .badge-tag {

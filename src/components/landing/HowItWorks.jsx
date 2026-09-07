@@ -20,42 +20,42 @@ const steps = [
     title: "1. Trigger",
     desc: "Webhook / Form / Cron fires automatically upon student complaint",
     accent: "#3b82f6",
-    tag: "INGESTION",
+    tag: "Ingestion",
   },
   {
     icon: Cpu,
     title: "2. Backend Engine",
     desc: "Node.js service validates, sanitizes, and hashes for deduplication",
     accent: "#6366f1",
-    tag: "SANITIZE",
+    tag: "Sanitize",
   },
   {
     icon: Brain,
     title: "3. AI Classification",
     desc: "Gemini extracts intent, attendance entity, priority, and action type",
     accent: "#8b5cf6",
-    tag: "GEMINI 3.6",
+    tag: "Gemini 3.6",
   },
   {
     icon: Database,
     title: "4. Notion Database",
     desc: "Live request page created automatically via Notion REST API",
     accent: "#ec4899",
-    tag: "NOTION SYNC",
+    tag: "Notion Sync",
   },
   {
     icon: UserCheck,
     title: "5. Human Approval",
     desc: "Admin clears pending incidents with 1-click in Notion cockpit",
     accent: "#f59e0b",
-    tag: "HUMAN-IN-LOOP",
+    tag: "Human-in-Loop",
   },
   {
     icon: Mail,
     title: "6. Real Action & Log",
     desc: "Certificate generated, transactional email sent, run log sealed",
     accent: "#10b981",
-    tag: "DISPATCH & AUDIT",
+    tag: "Dispatch & Audit",
   },
 ];
 
@@ -95,7 +95,7 @@ export default function HowItWorks() {
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] text-xs font-mono text-[var(--text-primary)] shadow-[2px_2px_0px_var(--border-charcoal)]">
             <Sparkles className="w-3.5 h-3.5 text-[#dc2626] animate-spin" style={{ animationDuration: "6s" }} />
-            <span className="font-bold">SYSTEM PIPELINE</span>
+            <span className="font-bold">System Pipeline</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[var(--text-primary)] tracking-tight">
             How The Autonomous Engine Works
@@ -119,7 +119,7 @@ export default function HowItWorks() {
               variants={itemVariants}
               whileHover={{ y: -8, scale: 1.025 }}
               transition={{ type: "spring", stiffness: 350, damping: 20 }}
-              className="dev-card bg-[var(--bg-panel)] p-6 relative flex flex-col justify-between group overflow-hidden transition-all hover:shadow-[6px_6px_0px_var(--border-charcoal)] dark:hover:shadow-[0_12px_32px_rgba(0,0,0,0.9),0_0_20px_rgba(220,38,38,0.25)]"
+              className="dev-card bg-[var(--bg-panel)] p-6 sm:p-7 pb-6 sm:pb-7 relative flex flex-col justify-between group overflow-hidden transition-all hover:shadow-[6px_6px_0px_var(--border-charcoal)] dark:hover:shadow-[0_12px_32px_rgba(0,0,0,0.9),0_0_20px_rgba(220,38,38,0.25)]"
             >
               {/* Dynamic top color highlight with pulse sweep */}
               <div
@@ -141,9 +141,9 @@ export default function HowItWorks() {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 mb-1.5">
+                <div className="flex items-center gap-2 mb-2">
                   <span
-                    className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border"
+                    className="text-xs font-mono font-bold px-2 py-0.5 rounded border"
                     style={{ color: step.accent, borderColor: `${step.accent}55`, backgroundColor: `${step.accent}15` }}
                   >
                     {step.tag}
@@ -153,21 +153,37 @@ export default function HowItWorks() {
                 <h3 className="text-base font-bold text-[var(--text-primary)] mb-2 group-hover:text-[#dc2626] transition-colors">
                   {step.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
                   {step.desc}
                 </p>
               </div>
 
-              {/* Bottom Card Footer Indicator */}
-              <div className="mt-4 pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between text-[11px] font-mono text-[var(--text-muted)]">
-                <span>Status: <strong className="text-[#059669] dark:text-[#10b981]">Automated</strong></span>
-                <span className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-[#dc2626] font-bold">
+              {/* Bottom Card Footer Indicator with Balanced Rhythm */}
+              <div className="mt-6 pt-4 pb-1 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs font-mono text-[var(--text-muted)]">
+                <span className="status-indicator">
+                  <span className="status-dot status-dot-live" aria-hidden="true" />
+                  <span>Status: <strong className="text-[var(--text-success)] font-semibold">Automated</strong></span>
+                </span>
+                <span className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-[var(--text-danger)] font-bold text-xs">
                   Active ➔
                 </span>
               </div>
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Visual Pipeline Connector Bridge: Links Step 06 to Tamper-Proof Audit */}
+        <div className="flex flex-col items-center -my-3" aria-hidden="true">
+          <div className="w-0.5 h-6 bg-gradient-to-b from-[var(--border-subtle)] to-[var(--text-success)]" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-panel)] border border-[var(--border-charcoal)] text-xs font-mono font-semibold text-[var(--text-secondary)] shadow-sm z-10">
+            <span>Step 06 Dispatch</span>
+            <span className="text-[var(--text-muted)]">➔</span>
+            <span className="text-[var(--text-success)] font-bold flex items-center gap-1">
+              <span className="status-dot status-dot-live" /> Tamper-Proof Audit Seal
+            </span>
+          </div>
+          <div className="w-0.5 h-6 bg-[var(--text-success)]" />
+        </div>
 
         {/* Tamper-Proof Audit Banner */}
         <motion.div
@@ -176,7 +192,7 @@ export default function HowItWorks() {
           whileHover={{ scale: 1.015, y: -3 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="dev-card bg-[var(--bg-panel)] p-5 sm:p-6 flex flex-col sm:flex-row items-center gap-4 max-w-3xl mx-auto cursor-default shadow-[3.5px_3.5px_0px_var(--border-charcoal)] hover:shadow-[6px_6px_0px_#059669] dark:hover:shadow-[0_12px_30px_rgba(0,0,0,0.9),0_0_20px_rgba(5,150,105,0.3)] transition-all relative overflow-hidden"
+          className="dev-card bg-[var(--bg-panel)] p-6 sm:p-7 flex flex-col sm:flex-row items-center gap-4 max-w-3xl mx-auto cursor-default shadow-[3.5px_3.5px_0px_var(--border-charcoal)] hover:shadow-[6px_6px_0px_#059669] dark:hover:shadow-[0_12px_30px_rgba(0,0,0,0.9),0_0_20px_rgba(5,150,105,0.3)] transition-all relative overflow-hidden"
         >
           {/* Subtle live radar ping effect */}
           <div className="absolute top-0 right-0 w-24 h-24 bg-[#059669]/10 rounded-full blur-xl pointer-events-none" />
@@ -189,13 +205,14 @@ export default function HowItWorks() {
             <ScrollText className="w-6 h-6 text-white" aria-hidden="true" focusable="false" />
           </motion.div>
           <div className="text-center sm:text-left flex-1">
-            <h4 className="font-bold text-[var(--text-primary)] text-sm flex items-center justify-center sm:justify-start gap-2 flex-wrap">
+            <h4 className="font-bold text-[var(--text-primary)] text-sm sm:text-base flex items-center justify-center sm:justify-start gap-2 flex-wrap">
               <span>Tamper-Proof Run Log Verification</span>
-              <span className="badge-live text-[9px] bg-[#ecfdf5] dark:bg-emerald-950/40 text-[#065f46] dark:text-emerald-400 border border-[#059669]/40 font-mono font-bold px-2 py-0.5 rounded">
-                BOT TOKEN PROOF
+              <span className="status-badge status-badge-live text-xs font-mono font-bold">
+                <span className="status-dot status-dot-live" aria-hidden="true" />
+                <span>Bot Token Proof</span>
               </span>
             </h4>
-            <p className="text-[var(--text-secondary)] text-xs sm:text-sm mt-1 leading-relaxed">
+            <p className="text-[var(--text-secondary)] text-xs sm:text-sm mt-1.5 leading-relaxed">
               Every action automatically writes a timestamped execution row to Notion — written via the Notion Integration Bot token, never manually entered.
             </p>
           </div>

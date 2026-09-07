@@ -245,7 +245,7 @@ export default function Architecture() {
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] text-xs font-mono text-[var(--text-primary)] shadow-[2px_2px_0px_var(--border-charcoal)]">
             <Sparkles className="w-3.5 h-3.5 text-[#dc2626] animate-spin" style={{ animationDuration: "6s" }} />
-            <span className="font-bold tracking-wider">ENTERPRISE SYSTEM ARCHITECTURE</span>
+            <span className="font-bold tracking-wider">Enterprise System Architecture</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[var(--text-primary)] tracking-tight">
@@ -253,8 +253,8 @@ export default function Architecture() {
           </h2>
           
           <p className="text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
-            Har ek incoming ticket ka complete life cycle — Ingestion se lekar AI reasoning, smart policy routing, 
-            Human-in-the-Loop review, aur tamper-proof audit proof sealing tak.
+            The complete lifecycle of every inbound ticket — from ingestion and AI reasoning to policy routing, 
+            Human-in-the-Loop review, and tamper-proof audit proof sealing.
           </p>
 
           {/* Interactive Simulation Controls */}
@@ -271,7 +271,7 @@ export default function Architecture() {
                   : "bg-[var(--bg-panel)] border-[var(--border-charcoal)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#059669]" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-[var(--text-success)]" />
               <span>Path A: Verified Auto-Dispatch</span>
             </button>
 
@@ -283,7 +283,7 @@ export default function Architecture() {
                   : "bg-[var(--bg-panel)] border-[var(--border-charcoal)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
-              <AlertTriangle className="w-3.5 h-3.5 text-[#dc2626]" />
+              <AlertTriangle className="w-3.5 h-3.5 text-[var(--text-danger)]" />
               <span>Path B: High-Risk Human Review</span>
             </button>
 
@@ -312,13 +312,13 @@ export default function Architecture() {
         {/* Main Grid: Flowchart Left/Center + Live Inspector Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Flowchart Diagram Canvas */}
-          <div className="lg:col-span-7 dev-card bg-[var(--bg-panel)] p-5 sm:p-8 relative rounded-2xl border-2 border-[var(--border-charcoal)] shadow-[4px_4px_0px_var(--border-charcoal)] overflow-hidden">
+          {/* Flowchart Diagram Canvas with Responsive Safety */}
+          <div className="lg:col-span-7 dev-card bg-[var(--bg-panel)] p-5 sm:p-8 relative rounded-2xl border-2 border-[var(--border-charcoal)] shadow-[4px_4px_0px_var(--border-charcoal)] overflow-x-auto">
             
             {/* Background Blueprint Grid */}
             <div className="absolute inset-0 grid-paper opacity-50 pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col items-center">
+            <div className="relative z-10 flex flex-col items-center min-w-[320px] py-1">
               
               {/* STAGE 1: Student User */}
               <FlowCard
@@ -348,7 +348,7 @@ export default function Architecture() {
               />
 
               {activeSimulation === "spam" ? (
-                <div className="my-4 px-4 py-2 rounded-xl bg-purple-100 dark:bg-purple-950/60 border-2 border-purple-600 text-purple-800 dark:text-purple-300 font-mono text-xs font-bold flex items-center gap-2 animate-bounce shadow-[2px_2px_0px_#7c3aed]">
+                <div className="my-5 px-4 py-3 rounded-xl bg-purple-100 dark:bg-purple-950/60 border-2 border-purple-600 text-purple-800 dark:text-purple-300 font-mono text-xs font-bold flex items-center gap-2 animate-bounce shadow-[2px_2px_0px_#7c3aed]">
                   <ShieldAlert className="w-4 h-4 text-purple-600" />
                   <span>24h MD5 Guard: Duplicate detected! Request blocked immediately & logged.</span>
                 </div>
@@ -375,18 +375,18 @@ export default function Architecture() {
                   />
 
                   {/* Branching SVG Pipeline Connectors */}
-                  <div className="w-full relative my-3">
-                    <svg className="w-full h-8 overflow-visible" viewBox="0 0 400 32" fill="none">
+                  <div className="w-full relative my-3 sm:my-4">
+                    <svg className="w-full h-10 overflow-visible" viewBox="0 0 400 36" fill="none">
                       {/* Center to Left Branch Line */}
                       <path
-                        d="M 200 0 L 200 12 Q 200 24 100 24 L 100 32"
+                        d="M 200 0 L 200 14 Q 200 26 100 26 L 100 36"
                         stroke={activeSimulation === "auto" ? "var(--border-subtle)" : "#dc2626"}
                         strokeWidth={activeSimulation === "human" ? "3" : "2"}
                         strokeDasharray={activeSimulation === "auto" ? "4 4" : "none"}
                       />
                       {/* Center to Right Branch Line */}
                       <path
-                        d="M 200 0 L 200 12 Q 200 24 300 24 L 300 32"
+                        d="M 200 0 L 200 14 Q 200 26 300 26 L 300 36"
                         stroke={activeSimulation === "human" ? "var(--border-subtle)" : "#059669"}
                         strokeWidth={activeSimulation === "auto" ? "3" : "2"}
                         strokeDasharray={activeSimulation === "human" ? "4 4" : "none"}
@@ -396,12 +396,12 @@ export default function Architecture() {
                     </svg>
                   </div>
 
-                  {/* Two Parallel Branches */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full mt-1">
+                  {/* Two Parallel Branches with Enhanced Spacing & Clarity */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 w-full mt-2">
                     
                     {/* LEFT BRANCH: High Risk & Human Review */}
                     <div
-                      className={`flex flex-col items-center gap-3 p-3 sm:p-4 rounded-xl border-2 transition-all ${
+                      className={`flex flex-col items-center gap-3.5 p-4 sm:p-5 rounded-xl border-2 transition-all ${
                         activeSimulation === "human"
                           ? "bg-red-50/50 dark:bg-red-950/20 border-[#dc2626] shadow-[0_0_15px_rgba(220,38,38,0.2)]"
                           : activeSimulation === "auto"
@@ -409,11 +409,11 @@ export default function Architecture() {
                           : "border-[var(--border-charcoal)] bg-[var(--bg-card-hover)]/30"
                       }`}
                     >
-                      <div className="text-[#dc2626] text-[11px] font-mono font-black flex items-center gap-1.5 uppercase tracking-wide">
+                      <div className="text-[var(--text-danger)] text-xs font-mono font-bold flex items-center gap-1.5 uppercase tracking-wide">
                         <AlertTriangle className="w-3.5 h-3.5 animate-pulse" />
                         <span>Needs Approval (High Risk)</span>
                       </div>
-                      <span className="text-[10px] font-mono text-[var(--text-muted)] -mt-2">
+                      <span className="text-xs font-mono text-[var(--text-muted)] -mt-2">
                         Confidence &lt; 90% or Ambiguous
                       </span>
 
@@ -433,14 +433,14 @@ export default function Architecture() {
                         isCompact
                       />
                       
-                      <div className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/30">
+                      <div className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2.5 py-1 rounded border border-amber-500/30">
                         Admin Action Required
                       </div>
                     </div>
 
                     {/* RIGHT BRANCH: Low Risk Auto Execution */}
                     <div
-                      className={`flex flex-col items-center gap-3 p-3 sm:p-4 rounded-xl border-2 transition-all ${
+                      className={`flex flex-col items-center gap-3.5 p-4 sm:p-5 rounded-xl border-2 transition-all ${
                         activeSimulation === "auto"
                           ? "bg-emerald-50/50 dark:bg-emerald-950/20 border-[#059669] shadow-[0_0_15px_rgba(5,150,105,0.25)]"
                           : activeSimulation === "human"
@@ -448,11 +448,11 @@ export default function Architecture() {
                           : "border-[var(--border-charcoal)] bg-[var(--bg-card-hover)]/30"
                       }`}
                     >
-                      <div className="text-[#059669] dark:text-[#10b981] text-[11px] font-mono font-black flex items-center gap-1.5 uppercase tracking-wide">
+                      <div className="text-[var(--text-success)] text-xs font-mono font-bold flex items-center gap-1.5 uppercase tracking-wide">
                         <CheckCircle2 className="w-3.5 h-3.5 animate-pulse" />
                         <span>Verified (Auto Execute)</span>
                       </div>
-                      <span className="text-[10px] font-mono text-[var(--text-muted)] -mt-2">
+                      <span className="text-xs font-mono text-[var(--text-muted)] -mt-2">
                         Confidence ≥ 90% &amp; Attendance OK
                       </span>
 
@@ -465,8 +465,8 @@ export default function Architecture() {
 
                       <ConnectorArrow color="#059669" active={activeSimulation !== "human"} />
 
-                      <div className="py-2.5 px-3 rounded-lg border border-dashed border-[#059669] text-[11px] font-mono text-[#059669] dark:text-emerald-400 flex items-center gap-1.5 bg-emerald-50/30 dark:bg-emerald-950/20">
-                        <Zap className="w-3 h-3 text-[#059669]" />
+                      <div className="py-2.5 px-3 rounded-lg border border-dashed border-[#059669] text-xs font-mono text-[var(--text-success)] flex items-center gap-1.5 bg-emerald-50/30 dark:bg-emerald-950/20">
+                        <Zap className="w-3.5 h-3.5 text-[var(--text-success)]" />
                         <span>Instant Resend Dispatch (&lt; 150ms)</span>
                       </div>
                     </div>
@@ -474,8 +474,8 @@ export default function Architecture() {
                   </div>
 
                   {/* Convergence Bridge */}
-                  <div className="my-4 px-4 py-1.5 rounded-full bg-[var(--bg-card-hover)] border-2 border-[var(--border-charcoal)] text-[var(--text-primary)] text-xs font-mono font-bold flex items-center gap-2 shadow-[2px_2px_0px_var(--border-charcoal)]">
-                    <span className="w-2 h-2 rounded-full bg-[#059669] animate-ping" />
+                  <div className="my-5 px-4 py-2 rounded-full bg-[var(--bg-card-hover)] border-2 border-[var(--border-charcoal)] text-[var(--text-primary)] text-xs font-mono font-bold flex items-center gap-2 shadow-[2px_2px_0px_var(--border-charcoal)]">
+                    <span className="status-dot status-dot-live status-dot-pulse" />
                     <span>Both Execution Paths Converge &amp; Audit Seal</span>
                   </div>
 
@@ -492,13 +492,13 @@ export default function Architecture() {
                   {/* Final Proof Banner */}
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="mt-5 w-full max-w-md px-4 py-3 rounded-xl bg-[#ecfdf5] dark:bg-emerald-950/50 border-2 border-[#059669] text-[#065f46] dark:text-emerald-300 text-xs font-mono font-bold shadow-[3px_3px_0px_var(--border-charcoal)] dark:shadow-[0_0_18px_rgba(5,150,105,0.35)] flex items-center justify-between"
+                    className="mt-6 w-full max-w-md px-4 py-3 rounded-xl bg-[#ecfdf5] dark:bg-emerald-950/50 border-2 border-[#059669] text-[#065f46] dark:text-emerald-300 text-xs font-mono font-bold shadow-[3px_3px_0px_var(--border-charcoal)] dark:shadow-[0_0_18px_rgba(5,150,105,0.35)] flex items-center justify-between"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#059669] animate-pulse shadow-[0_0_8px_#059669]" />
-                      <span>🏁 TAMPER-PROOF RUN LOG PROOF SEALED</span>
+                      <span className="status-dot status-dot-live status-dot-pulse" />
+                      <span>🏁 Tamper-Proof Run Log Proof Sealed</span>
                     </div>
-                    <span className="text-[10px] bg-[#059669] text-white px-2 py-0.5 rounded font-mono">
+                    <span className="text-xs bg-[#059669] text-white px-2 py-0.5 rounded font-mono font-semibold">
                       HMAC-SHA256
                     </span>
                   </motion.div>
@@ -530,7 +530,7 @@ export default function Architecture() {
                 </div>
 
                 {selectedNode && (
-                  <span className="px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold border" style={{ borderColor: selectedNode.accent, color: selectedNode.accent }}>
+                  <span className="px-2.5 py-0.5 rounded-full font-mono text-xs font-bold border" style={{ borderColor: selectedNode.accent, color: selectedNode.accent }}>
                     {selectedNode.stepNum}
                   </span>
                 )}
@@ -582,11 +582,11 @@ export default function Architecture() {
                       <span className="font-bold text-[var(--text-muted)] flex items-center gap-1">
                         <Code2 className="w-3.5 h-3.5 text-[#dc2626]" /> Live Payload / Telemetry:
                       </span>
-                      <span className="text-[10px] text-[var(--text-muted)]">JSON</span>
+                      <span className="text-xs text-[var(--text-muted)]">JSON</span>
                     </div>
 
                     <div className="bg-[#0f1117] text-[#38bdf8] p-3.5 rounded-xl text-xs font-mono border border-slate-800 overflow-x-auto max-h-56 shadow-inner">
-                      <pre className="text-[11px] leading-snug">
+                      <pre className="text-xs leading-snug">
                         {JSON.stringify(selectedNode.details?.samplePayload, null, 2)}
                       </pre>
                     </div>
@@ -667,7 +667,7 @@ function FlowCard({
       whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", stiffness: 350, damping: 20 }}
       className={`w-full ${
-        isCompact ? "max-w-xs px-3 py-2.5" : "max-w-md px-4 sm:px-5 py-3"
+        isCompact ? "max-w-xs px-3.5 py-3" : "max-w-md px-4 sm:px-5 py-3.5"
       } rounded-xl border-2 text-left transition-all relative overflow-hidden group cursor-pointer ${
         selected
           ? "border-[#dc2626] bg-[var(--bg-panel-elevated)] shadow-[4px_4px_0px_#dc2626] dark:shadow-[0_0_20px_rgba(220,38,38,0.35)]"
@@ -678,8 +678,8 @@ function FlowCard({
     >
       {/* Core AI Glow Badge */}
       {isCore && (
-        <div className="absolute top-0 right-0 px-2 py-0.5 bg-[#dc2626] text-white text-[9px] font-mono font-bold rounded-bl-lg shadow-[0_0_10px_#dc2626]">
-          CORE AI
+        <div className="absolute top-0 right-0 px-2 py-0.5 bg-[#dc2626] text-white text-xs font-mono font-bold rounded-bl-lg shadow-[0_0_10px_#dc2626]">
+          Core AI
         </div>
       )}
 
@@ -694,11 +694,11 @@ function FlowCard({
 
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[10px] font-mono font-bold text-[var(--text-muted)]">
+              <span className="text-xs font-mono font-bold text-[var(--text-muted)]">
                 {step.stepNum}
               </span>
               <span
-                className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded border"
+                className="text-xs font-mono font-semibold px-2 py-0.5 rounded border"
                 style={{
                   borderColor: `${step.accent}50`,
                   backgroundColor: `${step.accent}10`,
@@ -709,11 +709,11 @@ function FlowCard({
               </span>
             </div>
 
-            <div className="font-bold text-sm text-[var(--text-primary)] truncate mt-0.5">
+            <div className="font-bold text-sm sm:text-base text-[var(--text-primary)] truncate mt-0.5">
               {step.label}
             </div>
 
-            <div className="text-[var(--text-secondary)] text-[11px] font-mono truncate">
+            <div className="text-[var(--text-secondary)] text-xs font-mono truncate mt-0.5">
               {step.sub}
             </div>
           </div>
@@ -731,7 +731,7 @@ function FlowCard({
 
 function ConnectorArrow({ color = "#dc2626", active = true }) {
   return (
-    <div className="relative w-[2px] h-6 bg-[var(--border-subtle)] my-0.5 overflow-hidden rounded-full flex justify-center">
+    <div className="relative w-[2px] h-8 bg-[var(--border-subtle)] my-2 sm:my-2.5 overflow-hidden rounded-full flex justify-center">
       {active && (
         <motion.div
           animate={{ y: ["-100%", "200%"] }}

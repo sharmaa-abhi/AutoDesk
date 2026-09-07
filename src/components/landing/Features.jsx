@@ -8,28 +8,28 @@ const features = [
     icon: Brain,
     title: "AI-Powered Classification",
     desc: "Gemini API reads raw multi-lingual natural language input and extracts structured intent, category, and priority. Zero hardcoded regex.",
-    tag: "GEMINI 3.6 FLASH",
+    tag: "Gemini 3.6 Flash",
     accent: "#3b82f6",
   },
   {
     icon: UserCheck,
     title: "Human-in-the-Loop Cockpit",
     desc: "Ambiguous or sensitive actions automatically pause for human clearance inside Notion. Operators approve, reject, or resolve with full context.",
-    tag: "NOTION HQ",
+    tag: "Notion HQ",
     accent: "#f59e0b",
   },
   {
     icon: Mail,
     title: "Real-World Execution",
     desc: "The engine produces dynamic, tamper-proof HTML/SVG certificates and dispatches them via Resend or Gmail SMTP directly to students.",
-    tag: "EMAIL + CERT DISPATCH",
+    tag: "Email + Cert Dispatch",
     accent: "#10b981",
   },
   {
     icon: ShieldCheck,
     title: "Tamper-Proof Run Log",
     desc: "Every automated cycle writes a timestamped record via bot integration token. Anyone can verify in Notion — manual spoofing is strictly prevented.",
-    tag: "NOTION AUDIT PROOF",
+    tag: "Notion Audit Proof",
     accent: "#dc2626",
   },
 ];
@@ -70,7 +70,7 @@ export default function Features() {
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] text-xs font-mono text-[var(--text-primary)] shadow-[2px_2px_0px_var(--border-charcoal)]">
             <Sparkles className="w-3.5 h-3.5 text-[#dc2626] animate-spin" style={{ animationDuration: "6s" }} />
-            <span className="font-bold">CORE ARCHITECTURE</span>
+            <span className="font-bold">Core Architecture</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[var(--text-primary)] tracking-tight">
             Engineered For True Autonomy
@@ -94,7 +94,7 @@ export default function Features() {
               variants={itemVariants}
               whileHover={{ y: -8, scale: 1.02 }}
               transition={{ type: "spring", stiffness: 350, damping: 20 }}
-              className="dev-card bg-[var(--bg-panel)] p-7 relative flex flex-col justify-between group overflow-hidden transition-all hover:shadow-[6px_6px_0px_var(--border-charcoal)] dark:hover:shadow-[0_16px_36px_rgba(0,0,0,0.9),0_0_25px_rgba(220,38,38,0.25)]"
+              className="dev-card bg-[var(--bg-panel)] p-7 pb-8 relative flex flex-col justify-between group overflow-hidden transition-all hover:shadow-[6px_6px_0px_var(--border-charcoal)] dark:hover:shadow-[0_16px_36px_rgba(0,0,0,0.9),0_0_25px_rgba(220,38,38,0.25)]"
             >
               {/* Dynamic top Accent Line */}
               <div
@@ -111,7 +111,7 @@ export default function Features() {
                   >
                     <f.icon className="w-6 h-6 text-white" aria-hidden="true" focusable="false" />
                   </motion.div>
-                  <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] text-[var(--text-primary)] group-hover:bg-[var(--border-charcoal)] group-hover:text-white transition-all shadow-[1px_1px_0px_var(--border-charcoal)] flex items-center gap-1.5">
+                  <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-[var(--bg-card-hover)] border border-[var(--border-charcoal)] text-[var(--text-primary)] group-hover:bg-[var(--border-charcoal)] group-hover:text-white transition-all shadow-[1px_1px_0px_var(--border-charcoal)] flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: f.accent }} />
                     <span>{f.tag}</span>
                   </span>
@@ -121,14 +121,18 @@ export default function Features() {
                   <span>{f.title}</span>
                   <ArrowUpRight className="w-4 h-4 text-[var(--text-muted)] opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                 </h3>
-                <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
                   {f.desc}
                 </p>
               </div>
 
-              <div className="mt-6 pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs font-mono text-[var(--text-muted)]">
-                <span>Integrity: <strong className="text-[#059669] dark:text-[#10b981]">Audited</strong></span>
-                <span className="text-[11px] font-bold text-[var(--text-primary)] opacity-0 group-hover:opacity-100 transition-opacity">
+              {/* Bottom Card Footer Indicator with Balanced Rhythm */}
+              <div className="mt-8 pt-4 pb-1 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs font-mono text-[var(--text-muted)]">
+                <span className="status-indicator">
+                  <span className="status-dot status-dot-live" aria-hidden="true" />
+                  <span>Integrity: <strong className="text-[var(--text-success)] font-semibold">Audited</strong></span>
+                </span>
+                <span className="text-xs font-bold text-[var(--text-primary)] opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
                   Learn more ➔
                 </span>
               </div>

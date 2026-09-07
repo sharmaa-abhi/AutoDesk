@@ -159,7 +159,7 @@ export default function Hero() {
             >
               <Activity className="w-4 h-4 text-[#dc2626] group-hover:scale-125 transition-transform" aria-hidden="true" focusable="false" />
               <span>Open Live Cockpit</span>
-              <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse ml-1 shadow-[0_0_8px_#059669]" />
+              <span className="status-dot status-dot-live status-dot-pulse ml-1" aria-hidden="true" />
             </Link>
           </motion.div>
         </motion.div>
@@ -182,13 +182,13 @@ export default function Hero() {
             />
           </div>
 
-          <div className="flex items-center justify-between mb-3 px-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[var(--text-muted)] flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse shadow-[0_0_8px_#059669]" />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 px-1">
+            <span className="text-xs font-mono font-bold text-[var(--text-muted)] flex items-center gap-2">
+              <span className="status-dot status-dot-live status-dot-pulse" aria-hidden="true" />
               <span>5-Stage Real-Time Pipeline Architecture</span>
             </span>
-            <span className="text-[10px] font-mono font-bold text-[#059669] dark:text-emerald-400 bg-[#ecfdf5] dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-[#059669]/30">
-              ⚡ ~1.4s TOTAL LATENCY
+            <span className="status-badge status-badge-live self-start sm:self-auto text-xs font-mono font-bold">
+              ⚡ ~1.4s Total Latency
             </span>
           </div>
 

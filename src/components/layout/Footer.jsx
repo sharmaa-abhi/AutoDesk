@@ -64,8 +64,8 @@ export default function Footer() {
           {/* Right: Status & External Links */}
           <div className="flex items-center justify-center md:justify-end gap-3 font-mono text-xs">
             <div className="flex items-center gap-2 text-[var(--text-primary)] bg-[var(--bg-card-hover)] px-3 py-1.5 rounded-md border border-[var(--border-subtle)] shadow-[1px_1px_0px_var(--border-charcoal)]">
-              <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse shadow-[0_0_6px_#059669]" aria-hidden="true" />
-              <span>Status: <strong className="text-[#059669] dark:text-[#10b981] font-bold">100% Uptime</strong></span>
+              <span className="status-dot status-dot-live status-dot-pulse" aria-hidden="true" />
+              <span>Status: <strong className="text-[var(--text-success)] font-bold">100% Uptime</strong></span>
             </div>
             <div className="flex items-center gap-2">
               <a
