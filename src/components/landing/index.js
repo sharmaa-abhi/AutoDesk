@@ -5,3 +5,4 @@ export { default as Architecture } from './Architecture';
 export { default as StatsStrip } from './StatsStrip';
 export { default as TechStack } from './TechStack';
 export { default as TeamCard } from './TeamCard';
+export { default as ArchitectureTelemetry } from './ArchitectureTelemetry';

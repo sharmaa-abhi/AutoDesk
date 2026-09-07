@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ArchitectureTelemetry from "./ArchitectureTelemetry";
 import {
   User,
   Globe,
@@ -678,6 +679,12 @@ export default function Architecture() {
                 </div>
               </div>
             </div>
+
+            {/* Live Interactive Telemetry & Radar Engine (Occupies space with real-time animations) */}
+            <ArchitectureTelemetry
+              selectedNode={selectedNode}
+              activeSimulation={activeSimulation}
+            />
 
           </div>
 
