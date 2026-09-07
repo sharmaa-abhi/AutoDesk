@@ -14,6 +14,7 @@ import {
   Brain,
   Calendar,
   Zap,
+  Play,
 } from "lucide-react";
 import { EVENT_CATALOG, DEFAULT_EVENT_ID } from "@/lib/events";
 

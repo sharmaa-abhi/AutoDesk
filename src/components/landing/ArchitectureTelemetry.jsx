@@ -18,11 +18,11 @@ import {
 
 // Orbital pipeline nodes for radar visualization
 const RADAR_NODES = [
-  { id: "ingress", label: "Ingress", angle: 0, color: "#3b82f6", icon: Radio, latency: "12ms" },
-  { id: "antispam", label: "Anti-Spam", angle: 72, color: "#8b5cf6", icon: Lock, latency: "4ms" },
-  { id: "gemini", label: "Gemini 2.5", angle: 144, color: "#dc2626", icon: Cpu, latency: "380ms" },
-  { id: "hitl", label: "HITL Triage", angle: 216, color: "#d97706", icon: Layers, latency: "42ms" },
-  { id: "notion", label: "Notion Vault", angle: 288, color: "#059669", icon: Database, latency: "85ms" },
+  { id: "ingress", label: "Ingress", angle: 0, x: 105, y: 0, color: "#3b82f6", icon: Radio, latency: "12ms" },
+  { id: "antispam", label: "Anti-Spam", angle: 72, x: 32, y: 100, color: "#8b5cf6", icon: Lock, latency: "4ms" },
+  { id: "gemini", label: "Gemini 2.5", angle: 144, x: -85, y: 62, color: "#dc2626", icon: Cpu, latency: "380ms" },
+  { id: "hitl", label: "HITL Triage", angle: 216, x: -85, y: -62, color: "#d97706", icon: Layers, latency: "42ms" },
+  { id: "notion", label: "Notion Vault", angle: 288, x: 32, y: -100, color: "#059669", icon: Database, latency: "85ms" },
 ];
 
 export default function ArchitectureTelemetry({ selectedNode, activeSimulation }) {
@@ -227,10 +227,6 @@ export default function ArchitectureTelemetry({ selectedNode, activeSimulation }
 
                 {/* Orbiting Stage Nodes around Center */}
                 {RADAR_NODES.map((node, i) => {
-                  const radius = 105; // px from center
-                  const rad = (node.angle * Math.PI) / 180;
-                  const x = Math.cos(rad) * radius;
-                  const y = Math.sin(rad) * radius;
                   const isActive = activeStageIndex === i;
                   const NodeIcon = node.icon;
 
@@ -239,7 +235,7 @@ export default function ArchitectureTelemetry({ selectedNode, activeSimulation }
                       key={node.id}
                       className="absolute z-20"
                       style={{
-                        transform: `translate(${x}px, ${y}px)`,
+                        transform: `translate(${node.x}px, ${node.y}px)`,
                       }}
                       whileHover={{ scale: 1.15 }}
                       onClick={() => setActiveStageIndex(i)}
