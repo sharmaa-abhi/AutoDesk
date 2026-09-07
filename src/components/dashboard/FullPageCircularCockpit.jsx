@@ -528,9 +528,10 @@ export default function FullPageCircularCockpit({
                   {/* Satellite Content */}
                   {sat.render}
                 </motion.div>
-              </div>
-            );
-          })}
+              </motion.div>
+            </div>
+          );
+        })}
         </motion.div>
 
         {/* STATIC CENTER ENGINE CORE (SUN / HUB) */}
