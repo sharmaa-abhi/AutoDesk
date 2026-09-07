@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Globe,
@@ -26,6 +26,37 @@ export default function CircularEngineWheel({
   const [isRotating, setIsRotating] = useState(true);
   const [rotationSpeed, setRotationSpeed] = useState(32); // seconds per full 360deg
   const [isHovered, setIsHovered] = useState(false);
+
+  // 3-second hover dwell states: after hovering a template node for 3 seconds, it rotates clockwise
+  const [hoveredStageId, setHoveredStageId] = useState(null);
+  const [rotatingStageId, setRotatingStageId] = useState(null);
+  const [isDwellRotating, setIsDwellRotating] = useState(false);
+  const hoverTimeoutRef = useRef(null);
+
+  const handleStageMouseEnter = (id) => {
+    setHoveredStageId(id);
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    hoverTimeoutRef.current = setTimeout(() => {
+      setRotatingStageId(id);
+      setIsDwellRotating(true);
+    }, 3000);
+  };
+
+  const handleStageMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setHoveredStageId(null);
+    setRotatingStageId(null);
+    setIsDwellRotating(false);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    };
+  }, []);
 
   // 5 orbital node positions spaced equally around 360 degrees (0, 72, 144, 216, 288)
   // Generous radius to prevent any overlap between nodes, connecting lines, and central hub (Issue 10)
@@ -156,20 +187,21 @@ export default function CircularEngineWheel({
           <div className="absolute w-44 h-44 rounded-full bg-[#dc2626]/15 dark:bg-[#dc2626]/20 blur-2xl pointer-events-none animate-pulse" />
 
           {/* ROTATING ORBIT CONTAINER */}
+          {/* ROTATING ORBIT CONTAINER */}
           <motion.div
             animate={
-              isRotating
+              isRotating && (!hoveredStageId || isDwellRotating)
                 ? { rotate: 360 }
                 : {}
             }
             transition={
-              isRotating
+              isRotating && (!hoveredStageId || isDwellRotating)
                 ? {
                     repeat: Infinity,
-                    duration: isHovered ? rotationSpeed * 2.5 : rotationSpeed,
+                    duration: isDwellRotating ? 14 : isHovered ? rotationSpeed * 2.5 : rotationSpeed,
                     ease: "linear",
                   }
-                : { duration: 0 }
+                : { duration: 0.3 }
             }
             className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-auto"
           >
@@ -194,58 +226,89 @@ export default function CircularEngineWheel({
                   {/* Counter-Rotate so labels & icons stay upright while wheel spins */}
                   <motion.div
                     animate={
-                      isRotating
+                      isRotating && (!hoveredStageId || isDwellRotating)
                         ? { rotate: -360 }
                         : {}
                     }
                     transition={
-                      isRotating
+                      isRotating && (!hoveredStageId || isDwellRotating)
                         ? {
                             repeat: Infinity,
-                            duration: isHovered ? rotationSpeed * 2.5 : rotationSpeed,
+                            duration: isDwellRotating ? 14 : isHovered ? rotationSpeed * 2.5 : rotationSpeed,
                             ease: "linear",
                           }
-                        : { duration: 0 }
+                        : { duration: 0.3 }
                     }
-                    whileHover={{ scale: 1.12 }}
-                    whileTap={{ scale: 0.94 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveStage(stage.id);
-                    }}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setActiveStage(stage.id);
-                      }
-                    }}
-                    className={`px-3 py-2 rounded-lg border-2 transition-all cursor-pointer flex items-center gap-2 shadow-[2px_2px_0px_var(--border-charcoal)] focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] ${
-                      isSelected
-                        ? "bg-[var(--bg-panel)] border-[var(--border-charcoal)] shadow-[3px_3px_0px_#dc2626] dark:shadow-[0_0_15px_rgba(220,38,38,0.4),2px_2px_0px_#dc2626] scale-105"
-                        : "bg-[var(--bg-panel-elevated)] border-[var(--border-charcoal)] hover:bg-[var(--bg-panel)] hover:shadow-[3px_3px_0px_var(--border-charcoal)]"
-                    }`}
+                    className="relative"
                   >
-                    <div
-                      className="w-7 h-7 rounded-md text-white flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_var(--border-charcoal)]"
-                      style={{ backgroundColor: stage.color || "#18181b" }}
+                    <motion.div
+                      onMouseEnter={() => handleStageMouseEnter(stage.id)}
+                      onMouseLeave={handleStageMouseLeave}
+                      animate={
+                        rotatingStageId === stage.id
+                          ? { rotate: 360, scale: 1.1 }
+                          : hoveredStageId === stage.id
+                          ? { scale: 1.08, rotate: 0 }
+                          : { rotate: 0, scale: 1 }
+                      }
+                      transition={
+                        rotatingStageId === stage.id
+                          ? {
+                              rotate: { repeat: Infinity, duration: 2.2, ease: "linear" },
+                              scale: { duration: 0.3 },
+                            }
+                          : { duration: 0.3 }
+                      }
+                      whileTap={{ scale: 0.94 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveStage(stage.id);
+                      }}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setActiveStage(stage.id);
+                        }
+                      }}
+                      className={`px-3 py-2 rounded-lg border-2 transition-all cursor-pointer flex items-center gap-2 shadow-[2px_2px_0px_var(--border-charcoal)] focus-visible:outline-2 focus-visible:outline-[var(--border-charcoal)] relative overflow-hidden ${
+                        isSelected
+                          ? "bg-[var(--bg-panel)] border-[var(--border-charcoal)] shadow-[3px_3px_0px_#dc2626] dark:shadow-[0_0_15px_rgba(220,38,38,0.4),2px_2px_0px_#dc2626] scale-105"
+                          : "bg-[var(--bg-panel-elevated)] border-[var(--border-charcoal)] hover:bg-[var(--bg-panel)] hover:shadow-[3px_3px_0px_var(--border-charcoal)]"
+                      }`}
                     >
-                      <stage.icon className="w-3.5 h-3.5 text-white" aria-hidden="true" />
-                    </div>
+                      {/* 3-Second Hover Progress Indicator */}
+                      {hoveredStageId === stage.id && !rotatingStageId && (
+                        <motion.div
+                          key="stage-dwell"
+                          initial={{ width: "0%" }}
+                          animate={{ width: "100%" }}
+                          transition={{ duration: 3, ease: "linear" }}
+                          className="absolute top-0 left-0 h-[2.5px] bg-gradient-to-r from-amber-500 via-[#dc2626] to-[#059669] z-30"
+                        />
+                      )}
 
-                    <div className="text-left font-mono">
-                      <div className="text-xs font-bold text-[var(--text-primary)] leading-tight whitespace-nowrap">
-                        {stage.title}
+                      <div
+                        className="w-7 h-7 rounded-md text-white flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_var(--border-charcoal)]"
+                        style={{ backgroundColor: stage.color || "#18181b" }}
+                      >
+                        <stage.icon className="w-3.5 h-3.5 text-white" aria-hidden="true" />
                       </div>
-                      <div className="text-[10px] font-semibold text-[var(--text-secondary)] whitespace-nowrap">
-                        {stage.sub}
-                      </div>
-                    </div>
 
-                    {isSelected && (
-                      <span className="w-2 h-2 rounded-full bg-[#dc2626] animate-pulse flex-shrink-0 shadow-[0_0_6px_#dc2626]" />
-                    )}
+                      <div className="text-left font-mono">
+                        <div className="text-xs font-bold text-[var(--text-primary)] leading-tight whitespace-nowrap">
+                          {stage.title}
+                        </div>
+                        <div className="text-[10px] font-semibold text-[var(--text-secondary)] whitespace-nowrap">
+                          {stage.sub}
+                        </div>
+                      </div>
+
+                      {isSelected && (
+                        <span className="w-2 h-2 rounded-full bg-[#dc2626] animate-pulse flex-shrink-0 shadow-[0_0_6px_#dc2626]" />
+                      )}
+                    </motion.div>
                   </motion.div>
                 </div>
               );

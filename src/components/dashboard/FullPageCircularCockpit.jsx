@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Globe,
@@ -13,6 +13,7 @@ import {
   Play,
   Pause,
   RefreshCw,
+  RotateCw,
   Send,
   Check,
   X,
@@ -45,6 +46,37 @@ export default function FullPageCircularCockpit({
   const [isRotating, setIsRotating] = useState(true);
   const [speed, setSpeed] = useState(48); // seconds per full 360deg rotation (slow and continuous)
   const [isHovered, setIsHovered] = useState(false);
+
+  // 3-second hover dwell states: after hovering a template for 3 seconds, it rotates clockwise
+  const [hoveredSatId, setHoveredSatId] = useState(null);
+  const [rotatingSatId, setRotatingSatId] = useState(null);
+  const [isDwellRotating, setIsDwellRotating] = useState(false);
+  const hoverTimeoutRef = useRef(null);
+
+  const handleCardMouseEnter = (id) => {
+    setHoveredSatId(id);
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    hoverTimeoutRef.current = setTimeout(() => {
+      setRotatingSatId(id);
+      setIsDwellRotating(true);
+    }, 3000);
+  };
+
+  const handleCardMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setHoveredSatId(null);
+    setRotatingSatId(null);
+    setIsDwellRotating(false);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    };
+  }, []);
 
   // Form states for central generator
   const [userName, setUserName] = useState("");
@@ -379,18 +411,18 @@ export default function FullPageCircularCockpit({
         {/* ROTATING SATELLITE ORBIT CONTAINER */}
         <motion.div
           animate={
-            isRotating
+            isRotating && (!hoveredSatId || isDwellRotating)
               ? { rotate: 360 }
               : {}
           }
           transition={
-            isRotating
+            isRotating && (!hoveredSatId || isDwellRotating)
               ? {
                   repeat: Infinity,
-                  duration: isHovered ? speed * 2.8 : speed,
+                  duration: isDwellRotating ? 16 : isHovered ? speed * 2.8 : speed,
                   ease: "linear",
                 }
-              : { duration: 0 }
+              : { duration: 0.3 }
           }
           className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-auto"
         >
@@ -411,28 +443,66 @@ export default function FullPageCircularCockpit({
                 {/* COUNTER-ROTATE SO SATELLITE CARDS STAY UPRIGHT AND CLICKABLE */}
                 <motion.div
                   animate={
-                    isRotating
+                    isRotating && (!hoveredSatId || isDwellRotating)
                       ? { rotate: -360 }
                       : {}
                   }
                   transition={
-                    isRotating
+                    isRotating && (!hoveredSatId || isDwellRotating)
                       ? {
                           repeat: Infinity,
-                          duration: isHovered ? speed * 2.8 : speed,
+                          duration: isDwellRotating ? 16 : isHovered ? speed * 2.8 : speed,
                           ease: "linear",
                         }
-                      : { duration: 0 }
+                      : { duration: 0.3 }
                   }
-                  whileHover={{ scale: 1.08, y: -4 }}
-                  whileTap={{ scale: 0.96 }}
-                  className="w-[220px] sm:w-[240px] p-4 rounded-2xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[3.5px_3.5px_0px_var(--border-charcoal)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.85),2px_2px_0px_var(--border-charcoal)] hover:shadow-[6px_6px_0px_var(--border-charcoal)] dark:hover:shadow-[0_16px_36px_rgba(0,0,0,0.95),0_0_20px_rgba(220,38,38,0.3)] transition-all cursor-pointer relative overflow-hidden group"
+                  className="relative"
                 >
-                  {/* Top Color Accent Line */}
-                  <div
-                    className="absolute top-0 left-0 right-0 h-[3px]"
-                    style={{ backgroundColor: sat.accent }}
-                  />
+                  <motion.div
+                    onMouseEnter={() => handleCardMouseEnter(sat.id)}
+                    onMouseLeave={handleCardMouseLeave}
+                    animate={
+                      rotatingSatId === sat.id
+                        ? { rotate: 360, scale: 1.05 }
+                        : hoveredSatId === sat.id
+                        ? { scale: 1.05, y: -4, rotate: 0 }
+                        : { rotate: 0, scale: 1, y: 0 }
+                    }
+                    transition={
+                      rotatingSatId === sat.id
+                        ? {
+                            rotate: { repeat: Infinity, duration: 2.2, ease: "linear" },
+                            scale: { duration: 0.3 },
+                          }
+                        : { duration: 0.3 }
+                    }
+                    whileTap={{ scale: 0.96 }}
+                    className="w-[220px] sm:w-[240px] p-4 rounded-2xl bg-[var(--bg-panel)] border-2 border-[var(--border-charcoal)] shadow-[3.5px_3.5px_0px_var(--border-charcoal)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.85),2px_2px_0px_var(--border-charcoal)] hover:shadow-[6px_6px_0px_var(--border-charcoal)] dark:hover:shadow-[0_16px_36px_rgba(0,0,0,0.95),0_0_20px_rgba(220,38,38,0.3)] transition-all cursor-pointer relative overflow-hidden group"
+                  >
+                    {/* 3-Second Hover Dwell Progress Bar */}
+                    {hoveredSatId === sat.id && !rotatingSatId && (
+                      <motion.div
+                        key="dwell-progress"
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 3, ease: "linear" }}
+                        className="absolute top-0 left-0 h-[3.5px] bg-gradient-to-r from-amber-500 via-[#dc2626] to-[#059669] z-50 shadow-[0_0_8px_rgba(220,38,38,0.5)]"
+                      />
+                    )}
+
+                    {/* Clockwise Rotation Indicator Badge when active */}
+                    {rotatingSatId === sat.id && (
+                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-[#059669] text-white text-[9px] font-mono font-bold flex items-center gap-1 shadow-[0_0_10px_rgba(5,150,105,0.4)] z-50 animate-pulse">
+                        <RotateCw className="w-2.5 h-2.5 animate-spin" />
+                        <span>Rotating Clockwise</span>
+                      </div>
+                    )}
+
+                    {/* Top Color Accent Line */}
+                    <div
+                      className="absolute top-0 left-0 right-0 h-[3px]"
+                      style={{ backgroundColor: sat.accent }}
+                    />
 
                   {/* Satellite Header */}
                   <div className="flex items-center justify-between mb-2">
