@@ -12,8 +12,6 @@ import {
   Layers,
   Clock,
   Database,
-  Hash,
-  CheckCircle2,
 } from "lucide-react";
 
 // Orbital pipeline nodes for radar visualization
@@ -26,10 +24,9 @@ const RADAR_NODES = [
 ];
 
 export default function ArchitectureTelemetry({ selectedNode, activeSimulation }) {
-  const [activeTab, setActiveTab] = useState("RADAR"); // "RADAR" | "OSCILLOSCOPE" | "CRYPTO"
+  const [activeTab, setActiveTab] = useState("RADAR"); // "RADAR" | "OSCILLOSCOPE"
   const [isBursting, setIsBursting] = useState(false);
   const [processedEvents, setProcessedEvents] = useState(1482);
-  const [currentHash, setCurrentHash] = useState("0x7f4e91bc3a84d281ef5690b21a38914c");
   const [activeStageIndex, setActiveStageIndex] = useState(2);
   const [confidenceRate, setConfidenceRate] = useState(98.6);
   const [latencyValue, setLatencyValue] = useState(380);
@@ -37,19 +34,13 @@ export default function ArchitectureTelemetry({ selectedNode, activeSimulation }
   const rawScopeId = useId();
   const scopeId = rawScopeId.replace(/:/g, "_");
 
-  // Rolling hash simulation & continuous heartbeat
+  // Continuous heartbeat simulation
   useEffect(() => {
-    const hashInterval = setInterval(() => {
-      const chars = "0123456789abcdef";
-      let res = "0x";
-      for (let i = 0; i < 32; i++) {
-        res += chars[Math.floor(Math.random() * chars.length)];
-      }
-      setCurrentHash(res);
+    const interval = setInterval(() => {
       setProcessedEvents((prev) => prev + Math.floor(Math.random() * 2 + 1));
     }, 2800);
 
-    return () => clearInterval(hashInterval);
+    return () => clearInterval(interval);
   }, []);
 
   // Sync with selected node from flowchart
@@ -152,17 +143,6 @@ export default function ArchitectureTelemetry({ selectedNode, activeSimulation }
             }`}
           >
             📊 Waveform Scope
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab("CRYPTO")}
-            className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-              activeTab === "CRYPTO"
-                ? "bg-[var(--border-charcoal)] text-white dark:bg-[#dc2626] shadow-sm"
-                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-            }`}
-          >
-            🔐 SHA256 Ledger
           </button>
         </div>
 
@@ -380,69 +360,7 @@ export default function ArchitectureTelemetry({ selectedNode, activeSimulation }
             </motion.div>
           )}
 
-          {activeTab === "CRYPTO" && (
-            <motion.div
-              key="tab-crypto"
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-4"
-            >
-              {/* Cryptographic Proof & Ledger View */}
-              <div className="relative w-full h-[280px] sm:h-[300px] rounded-2xl bg-[#0a0c12] border-2 border-slate-800 p-4 sm:p-5 shadow-inner flex flex-col justify-between overflow-hidden">
-                <div>
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-                        <Lock className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <span className="font-mono text-xs font-bold text-slate-200 block">
-                          HMAC-SHA256 Cryptographic Seal
-                        </span>
-                        <span className="text-[10px] font-mono text-slate-400">
-                          Immutable Notion Database Block Proof
-                        </span>
-                      </div>
-                    </div>
-                    <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                      PROOF_VERIFIED
-                    </span>
-                  </div>
 
-                  {/* Hash Stream Box */}
-                  <div className="mt-4 p-3.5 rounded-xl bg-[#0e111a] border border-slate-800 space-y-2">
-                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
-                      <span className="flex items-center gap-1">
-                        <Hash className="w-3.5 h-3.5 text-[#dc2626]" /> Active Ledger Hash:
-                      </span>
-                      <span className="text-emerald-400 text-[10px]">SYNCED TO NOTION</span>
-                    </div>
-                    <div className="font-mono text-xs sm:text-[13px] text-amber-400 break-all font-semibold tracking-wide bg-black/40 p-2.5 rounded-lg border border-slate-800/80">
-                      {currentHash}
-                    </div>
-                  </div>
-
-                  <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] font-mono">
-                    <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-300">
-                      <span className="text-slate-500 block text-[9px]">ENCRYPTION STANDARD</span>
-                      <span>AES-256-GCM + SHA256</span>
-                    </div>
-                    <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-300">
-                      <span className="text-slate-500 block text-[9px]">BLOCK SIGNATURE</span>
-                      <span className="text-emerald-400">STRICT SEALED</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-800/80">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>Audit Trail guarantees tamper-free history across all student requests.</span>
-                </div>
-              </div>
-            </motion.div>
-          )}
         </AnimatePresence>
 
         {/* 4 Bottom Telemetry Metrics Cards */}
