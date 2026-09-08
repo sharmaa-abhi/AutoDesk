@@ -306,7 +306,7 @@ export default function TacticalEngineCanvas({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             {presets.map((p, idx) => {
               const isCurrentSelected =
-                rawMessage === p.msg && userName === p.name;
+                rawPrompt === p.msg && userName === p.name;
               return (
                 <motion.button
                   key={idx}
