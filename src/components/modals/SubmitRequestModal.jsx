@@ -83,16 +83,22 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
     {
       title: "GenAI Workshop Missing",
       eventId: "ai-masterclass",
+      userName: "Rahul Sharma",
+      userEmail: "rahul.sharma24@gmail.com",
       msg: "Sir, I attended both Day 1 and Day 2 of the GenAI Workshop. My attendance was marked at the venue, but I have not received my certificate email yet.",
     },
     {
       title: "Hackathon Finalist Merit",
       eventId: "automate-india-2026",
+      userName: "Mohit",
+      userEmail: "mohit99105294@gmail.com",
       msg: "Hello team, our team 'NeuralCoders' secured 2nd position in the National Hackathon 2026 track. Requesting official merit certificate dispatch.",
     },
     {
       title: "Web3 Attendance Discrepancy",
       eventId: "web3-builders",
+      userName: "Aarav Sharma",
+      userEmail: "aarav.s@college.edu",
       msg: "Respected organizers, I attended the complete Web3 Smart Contracts track yesterday. Kindly verify my attendance via project submission and issue badge.",
     },
   ];
@@ -230,6 +236,8 @@ export default function SubmitRequestModal({ isOpen, onClose }) {
                           onClick={() => {
                             setMessage(sample.msg);
                             if (sample.eventId) setSelectedEventId(sample.eventId);
+                            if (sample.userName) setName(sample.userName);
+                            if (sample.userEmail) setEmail(sample.userEmail);
                           }}
                           className="btn-secondary btn-secondary-sm text-xs font-mono text-left justify-start py-2 px-2.5 whitespace-normal break-words h-full cursor-pointer flex items-start gap-1.5"
                           title={sample.msg}
