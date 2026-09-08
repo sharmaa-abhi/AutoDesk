@@ -236,6 +236,13 @@ body {
   80%, 100% { transform: scale(2.4); opacity: 0; }
 }
 
+@keyframes dash {
+  to {
+    stroke-dashoffset: -380;
+  }
+}
+
+
 .animate-float {
   animation: float 5s ease-in-out infinite;
 }
