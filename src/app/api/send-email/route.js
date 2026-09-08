@@ -13,7 +13,7 @@ import {
   getLog,
   listLogs,
 } from '@/lib/resend';
-import { sendUniversalEmail } from '@/lib/mailer';
+import { sendUniversalEmail, sendBatchUniversalEmails } from '@/lib/mailer';
 
 /**
  * Validates that a required field is present in the request body.
@@ -72,7 +72,7 @@ export async function POST(request) {
 
     switch (action) {
       case 'batch':
-        result = await sendBatchEmails(body.emails || []);
+        result = await sendBatchUniversalEmails(body.emails || []);
         break;
 
       case 'get':
