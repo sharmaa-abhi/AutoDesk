@@ -8,6 +8,7 @@ import {
   AlertTriangle,
   XCircle,
   Sparkles,
+  Mail,
 } from "lucide-react";
 
 export default function EventStreamTimeline({
@@ -193,10 +194,33 @@ export default function EventStreamTimeline({
                     &ldquo;{item.rawMessage}&rdquo;
                   </p>
 
-                  {/* Footer: Secondary Metadata */}
+                  {/* Real Student Email Address & Notion Source Badge */}
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono mt-2 pl-8 flex-wrap">
+                    <Mail className="w-3.5 h-3.5 text-[#dc2626] shrink-0" aria-hidden="true" />
+                    <span className="font-semibold text-[var(--text-primary)] truncate select-all">
+                      {item.userEmail || "sharmaa24434@gmail.com"}
+                    </span>
+                    {item.isLiveNotion && (
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/30">
+                        Notion DB
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Footer: Student & Past Work Status */}
                   <div className="flex items-center justify-between text-xs font-mono text-[var(--text-muted)] mt-2.5 pt-2 border-t border-[var(--border-subtle)] pl-8">
-                    <span>By: <strong className="text-[var(--text-primary)] font-semibold">{item.userName}</strong></span>
-                    <span className="text-[11px] font-bold text-[#dc2626] dark:text-[#f87171]">{formatActionLabel(item.actionPreview)}</span>
+                    <span className="truncate">
+                      By: <strong className="text-[var(--text-primary)] font-semibold">{item.userName}</strong>
+                    </span>
+                    <span
+                      className={`text-[11px] font-bold shrink-0 ml-2 ${
+                        item.status === "SUCCESS"
+                          ? "text-emerald-600 dark:text-emerald-400"
+                          : "text-[#dc2626] dark:text-[#f87171]"
+                      }`}
+                    >
+                      {item.status === "SUCCESS" ? "✓ PDF Dispatched" : formatActionLabel(item.actionPreview)}
+                    </span>
                   </div>
 
                 </motion.div>

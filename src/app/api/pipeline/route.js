@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { classifyRequest } from '@/lib/gemini';
-import { createNotionRequest, logRunToNotion } from '@/lib/notion';
+import { createNotionRequest, logRunToNotion, fetchAllNotionRecords } from '@/lib/notion';
 import { sendUniversalEmail } from '@/lib/mailer';
 import { generateCertificateHTML } from '@/lib/certificate';
 import { checkAndSetDedup, getDedupStats } from '@/lib/store';
@@ -22,10 +22,19 @@ function isValidEmail(email) {
 
 export async function GET() {
   const stats = getDedupStats();
+  let notionData = { events: [], runLogs: [] };
+  try {
+    notionData = await fetchAllNotionRecords();
+  } catch (err) {
+    console.warn('Could not fetch Notion live records in GET /api/pipeline:', err.message);
+  }
+
   return NextResponse.json({
     status: 'ONLINE',
     service: 'AutoDesk Engine Pipeline',
     dedup: stats,
+    events: notionData.events || [],
+    runLogs: notionData.runLogs || [],
     timestamp: new Date().toISOString(),
   });
 }

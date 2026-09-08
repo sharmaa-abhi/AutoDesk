@@ -95,25 +95,25 @@ export default function TacticalEngineCanvas({
 
   const presets = [
     {
-      label: "GenAI Certificate Missing",
+      label: "Abhi Sharma Verification",
+      name: "Abhi Sharma",
+      email: "sharmaa24434@gmail.com",
+      eventId: "automate-india-2026",
+      msg: "Verification test for new Notion Database connection & operator approval queue. Requesting verified merit certificate dispatch.",
+    },
+    {
+      label: "GenAI Certificate Ingestion",
       name: "Rahul Sharma",
       email: "rahul.sharma24@gmail.com",
       eventId: "ai-masterclass",
       msg: "Sir, I attended both Day 1 and Day 2 of the GenAI & Agentic AI Workshop. My attendance was marked at the venue, but I have not received my completion certificate email yet. Please verify and issue.",
     },
     {
-      label: "Hackathon Finalist Delivery",
-      name: "Priya Verma",
-      email: "priya.verma.cse@iitd.ac.in",
+      label: "Live Test Webhook",
+      name: "Aarav Sharma",
+      email: "aarav.s@college.edu",
       eventId: "automate-india-2026",
-      msg: "Hello team, our team 'NeuralCoders' secured 2nd position in the National Hackathon 2026 track. Requesting official merit certificate dispatch to registered team email.",
-    },
-    {
-      label: "Web3 Attendance Fix",
-      name: "Sneha Patel",
-      email: "sneha.patel@dtu.ac.in",
-      eventId: "web3-builders",
-      msg: "Respected organizers, I attended the complete Web3 Smart Contracts track yesterday. During the closing session, the QR attendance scanner timed out. Kindly verify my attendance via the submitted project link and issue the verified badge.",
+      msg: "AutoDesk Engine live webhook verification test ticket. Processing student request for automated review and Notion synchronization.",
     },
   ];
 
