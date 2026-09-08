@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navbar, Footer } from "@/components/layout";
 import {
@@ -25,6 +25,36 @@ export default function DashboardPage() {
   });
 
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Fetch real Notion records on mount
+  useEffect(() => {
+    async function loadLiveNotionData() {
+      try {
+        const res = await fetch('/api/pipeline');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.events && data.events.length > 0) {
+          setEvents(data.events);
+          setSelectedEventId(data.events[0].id);
+          const completedCount = data.events.filter((e) => e.status === 'SUCCESS').length;
+          const pendingCount = data.events.filter((e) => e.status === 'WAITING_APPROVAL').length;
+          setStats((prev) => ({
+            ...prev,
+            completed: 240 + completedCount,
+            pending: pendingCount,
+            logged: 240 + data.events.length,
+          }));
+        }
+        if (data.runLogs && data.runLogs.length > 0) {
+          setRunLogs(data.runLogs);
+        }
+      } catch (err) {
+        console.warn('Could not fetch live Notion data on dashboard load:', err.message);
+      }
+    }
+
+    loadLiveNotionData();
+  }, []);
 
   const selectedEvent = events.find((e) => e.id === selectedEventId) || events[0];
 

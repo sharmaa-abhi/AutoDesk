@@ -141,8 +141,8 @@ export default function FullPageCircularCockpit({
             &ldquo;{selectedEvent?.rawMessage || "Waiting for student request..."}&rdquo;
           </p>
           <div className="flex items-center justify-between text-[10px] font-mono text-[var(--text-muted)] pt-1 border-t border-[var(--border-subtle)]">
-            <span>From: <strong className="text-[var(--text-primary)]">{selectedEvent?.userName || "Student"}</strong></span>
-            <span className="text-[#dc2626] font-bold">{selectedEvent?.time || "Now"}</span>
+            <span className="truncate mr-2">From: <strong className="text-[var(--text-primary)]">{selectedEvent?.userName || "Student"}</strong> <span className="text-[#dc2626]">({selectedEvent?.userEmail || "sharmaa24434@gmail.com"})</span></span>
+            <span className="text-[#dc2626] font-bold shrink-0">{selectedEvent?.time || "Now"}</span>
           </div>
         </div>
       ),
